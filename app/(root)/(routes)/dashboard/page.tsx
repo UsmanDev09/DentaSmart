@@ -25,7 +25,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-import { Clipboard } from "lucide-react";
+import { Clipboard, ClipboardListIcon, File } from "lucide-react";
 
 const Dashboard = () => {
   return (
@@ -34,83 +34,107 @@ const Dashboard = () => {
         <Card className="flex">
           <CardHeader>
             <CardTitle>
-              <Clipboard />
+              <ClipboardListIcon />
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
+          <CardContent className="">
+            {/* <Clipboard /> */}
+            <h3 className="text-[#21B9C6] text-xl font-bold">113,008</h3>
+            <span className="text-xs text-slate-400">
+              Total number of Patients
+            </span>
           </CardContent>
         </Card>
         <Card className="flex">
           <CardHeader>
             <CardTitle>
-              <Clipboard />
+              <ClipboardListIcon />
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
+          <CardContent className="">
+            {/* <Clipboard /> */}
+            <h3 className="text-[#21B9C6] text-xl font-bold">18,008</h3>
+            <span className="text-xs text-slate-400">
+              Total number of Doctors
+            </span>
           </CardContent>
         </Card>
         <Card className="flex">
           <CardHeader>
             <CardTitle>
-              <Clipboard />
+              <ClipboardListIcon />
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
+          <CardContent className="">
+            {/* <Clipboard /> */}
+            <h3 className="text-[#21B9C6] text-xl font-bold">12,008</h3>
+            <span className="text-xs text-slate-400">Pending Jobs</span>
           </CardContent>
         </Card>
         <Card className="flex">
           <CardHeader>
             <CardTitle>
-              <Clipboard />
+              <ClipboardListIcon />
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
+          <CardContent className="">
+            {/* <Clipboard /> */}
+            <h3 className="text-[#21B9C6] text-xl font-bold">300,008</h3>
+            <span className="text-xs text-slate-400">
+              Total number of Reports
+            </span>
           </CardContent>
         </Card>
       </div>
       <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader className="text-[#fff] bg-[#21B9C6]  border-none">
           <TableRow className=" font-bold">
             <TableHead className="text-[#fff]">Sr.#</TableHead>
-            <TableHead>Patient Name</TableHead>
-            <TableHead>Assigned to</TableHead>
-            <TableHead>Gender</TableHead>
-            <TableHead>Date of Checkup</TableHead>
-            <TableHead>Time</TableHead>
-            <TableHead>Total Reports</TableHead>
-            <TableHead>Details</TableHead>
+            <TableHead className="text-[#fff]">Patient Name</TableHead>
+            <TableHead className="text-[#fff]">Assigned to</TableHead>
+            <TableHead className="text-[#fff]">Gender</TableHead>
+            <TableHead className="text-[#fff]">Date of Checkup</TableHead>
+            <TableHead className="text-[#fff]">Time</TableHead>
+            <TableHead className="text-[#fff]">Total Reports</TableHead>
+            <TableHead className="text-[#fff]">Details</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow>
-            <TableCell className=""></TableCell>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
-            <TableCell className=""></TableCell>
+            <TableCell>1 </TableCell>
+            <TableCell>Mitchael</TableCell>
+            <TableCell>unknown</TableCell>
+            <TableCell>Male</TableCell>
+            <TableCell>3\1\2024</TableCell>
+            <TableCell>15:24</TableCell>
+            <TableCell>3</TableCell>
+            <TableCell>
+              <File />
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      <div className="flex flex-row justify-between">
+        <div>Showing 1 of 1 Entry</div>
+        <div>
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious href="#" />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#">1</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext href="#" />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      </div>
     </div>
   );
 };
