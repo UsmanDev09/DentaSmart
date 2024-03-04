@@ -15,58 +15,61 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+import { Clipboard } from "lucide-react";
 
 const Dashboard = () => {
   return (
-    <div className="flex ">
-      <div>
-        <Card>
+    <div className="flex flex-col gap-y-10 p-10 bg-[#F5F5F5]">
+      <div className="flex flex-row justify-around items-center">
+        <Card className="flex">
           <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card Description</CardDescription>
+            <CardTitle>
+              <Clipboard />
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p>Card Content</p>
           </CardContent>
-          <CardFooter>
-            <p>Card Footer</p>
-          </CardFooter>
         </Card>
-        <Card>
+        <Card className="flex">
           <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card Description</CardDescription>
+            <CardTitle>
+              <Clipboard />
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p>Card Content</p>
           </CardContent>
-          <CardFooter>
-            <p>Card Footer</p>
-          </CardFooter>
         </Card>
-        <Card>
+        <Card className="flex">
           <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card Description</CardDescription>
+            <CardTitle>
+              <Clipboard />
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p>Card Content</p>
           </CardContent>
-          <CardFooter>
-            <p>Card Footer</p>
-          </CardFooter>
         </Card>
-        <Card>
+        <Card className="flex">
           <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card Description</CardDescription>
+            <CardTitle>
+              <Clipboard />
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <p>Card Content</p>
           </CardContent>
-          <CardFooter>
-            <p>Card Footer</p>
-          </CardFooter>
         </Card>
       </div>
       <Table>
@@ -92,6 +95,22 @@ const Dashboard = () => {
           </TableRow>
         </TableBody>
       </Table>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">1</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 };
