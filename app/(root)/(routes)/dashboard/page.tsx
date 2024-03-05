@@ -15,83 +15,186 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+import { Clipboard, ClipboardListIcon, File } from "lucide-react";
 
 const Dashboard = () => {
   return (
-    <div className="flex ">
-      <div>
-        <Card>
+    <div className="flex flex-col gap-y-10 p-10 bg-[#F5F5F5]">
+      <div className="flex flex-row justify-around items-center">
+        <Card className="flex">
           <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card Description</CardDescription>
+            <CardTitle>
+              <ClipboardListIcon />
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
+          <CardContent className="">
+            {/* <Clipboard /> */}
+            <h3 className="text-[#21B9C6] text-xl font-bold mt-4">113,008</h3>
+            <span className="text-xs text-slate-400">
+              Total number of Patients
+            </span>
           </CardContent>
-          <CardFooter>
-            <p>Card Footer</p>
-          </CardFooter>
         </Card>
-        <Card>
+        <Card className="flex">
           <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card Description</CardDescription>
+            <CardTitle>
+              <ClipboardListIcon />
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
+          <CardContent className="">
+            {/* <Clipboard /> */}
+            <h3 className="text-[#21B9C6] text-xl font-bold mt-4">18,008</h3>
+            <span className="text-xs text-slate-400">
+              Total number of Doctors
+            </span>
           </CardContent>
-          <CardFooter>
-            <p>Card Footer</p>
-          </CardFooter>
         </Card>
-        <Card>
+        <Card className="flex">
           <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card Description</CardDescription>
+            <CardTitle>
+              <ClipboardListIcon />
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
+          <CardContent className="">
+            {/* <Clipboard /> */}
+            <h3 className="text-[#21B9C6] text-xl font-bold mt-4">12,008</h3>
+            <span className="text-xs text-slate-400">Pending Jobs</span>
           </CardContent>
-          <CardFooter>
-            <p>Card Footer</p>
-          </CardFooter>
         </Card>
-        <Card>
+        <Card className="flex">
           <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card Description</CardDescription>
+            <CardTitle>
+              <ClipboardListIcon />
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
+          <CardContent className="">
+            {/* <Clipboard /> */}
+            <h3 className="text-[#21B9C6] text-xl font-bold mt-4">300,008</h3>
+            <span className="text-xs text-slate-400">
+              Total number of Reports
+            </span>
           </CardContent>
-          <CardFooter>
-            <p>Card Footer</p>
-          </CardFooter>
         </Card>
       </div>
       <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader className="text-[#fff] bg-[#21B9C6]  border-none">
           <TableRow className=" font-bold">
             <TableHead className="text-[#fff]">Sr.#</TableHead>
-            <TableHead>Patient Name</TableHead>
-            <TableHead>Assigned to</TableHead>
-            <TableHead>Gender</TableHead>
-            <TableHead>Date of Checkup</TableHead>
-            <TableHead>Time</TableHead>
-            <TableHead>Total Reports</TableHead>
-            <TableHead>Details</TableHead>
+            <TableHead className="text-[#fff]">Patient Name</TableHead>
+            <TableHead className="text-[#fff]">Assigned to</TableHead>
+            <TableHead className="text-[#fff]">Gender</TableHead>
+            <TableHead className="text-[#fff]">Date of Checkup</TableHead>
+            <TableHead className="text-[#fff]">Time</TableHead>
+            <TableHead className="text-[#fff]">Total Reports</TableHead>
+            <TableHead className="text-[#fff]">Details</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           <TableRow>
-            <TableCell className=""></TableCell>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
-            <TableCell className=""></TableCell>
+            <TableCell>1 </TableCell>
+            <TableCell>Mitchael</TableCell>
+            <TableCell>unknown</TableCell>
+            <TableCell>Male</TableCell>
+            <TableCell>3\1\2024</TableCell>
+            <TableCell>15:24</TableCell>
+            <TableCell>3</TableCell>
+            <TableCell>
+              <File />
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>1 </TableCell>
+            <TableCell>Mitchael</TableCell>
+            <TableCell>unknown</TableCell>
+            <TableCell>Male</TableCell>
+            <TableCell>3\1\2024</TableCell>
+            <TableCell>15:24</TableCell>
+            <TableCell>3</TableCell>
+            <TableCell>
+              <File />
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>1 </TableCell>
+            <TableCell>Mitchael</TableCell>
+            <TableCell>unknown</TableCell>
+            <TableCell>Male</TableCell>
+            <TableCell>3\1\2024</TableCell>
+            <TableCell>15:24</TableCell>
+            <TableCell>3</TableCell>
+            <TableCell>
+              <File />
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>1 </TableCell>
+            <TableCell>Mitchael</TableCell>
+            <TableCell>unknown</TableCell>
+            <TableCell>Male</TableCell>
+            <TableCell>3\1\2024</TableCell>
+            <TableCell>15:24</TableCell>
+            <TableCell>3</TableCell>
+            <TableCell>
+              <File />
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>1 </TableCell>
+            <TableCell>Mitchael</TableCell>
+            <TableCell>unknown</TableCell>
+            <TableCell>Male</TableCell>
+            <TableCell>3\1\2024</TableCell>
+            <TableCell>15:24</TableCell>
+            <TableCell>3</TableCell>
+            <TableCell>
+              <File />
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>1 </TableCell>
+            <TableCell>Mitchael</TableCell>
+            <TableCell>unknown</TableCell>
+            <TableCell>Male</TableCell>
+            <TableCell>3\1\2024</TableCell>
+            <TableCell>15:24</TableCell>
+            <TableCell>3</TableCell>
+            <TableCell>
+              <File />
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>
+      <div className="flex flex-row justify-between">
+        <div>Showing 1 of 1 Entry</div>
+        <div>
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious href="#" />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#">1</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext href="#" />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      </div>
     </div>
   );
 };
