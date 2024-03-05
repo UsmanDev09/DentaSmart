@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const SignIn = () => {
   return (
-    <div className="flex h-full flex-row justify-center items-center bg-gradient-to-t from-white from-50% to-[#21B9C6] to-50%">
+    <div className="flex h-[100vh] flex-row justify-center items-center bg-gradient-to-t from-white from-50% to-[#21B9C6] to-50%">
       <div className="bg-white flex flex-row w-[436px] h-[522px] justify-center items-center border-2 shadow-sm rounded-xl">
         <div className="px-12 py-16 flex flex-col gap-y-1">
           <div className="flex flex-row justify-evenly mb-4">
