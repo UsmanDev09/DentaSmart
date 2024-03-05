@@ -5,11 +5,11 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 const Navbar = () => {
   return (
-    <div className="flex items-center justify-between bg-white ">
+    <div className="flex items-center justify-between bg-white px-10">
       <div className="flex ">
         <Image src="logo.svg" width={162} height={48} alt="" />
         <Tabs defaultValue="patients" className="w-[425px]">
-          <TabsList>
+          <TabsList className="">
             <TabsTrigger value="patients">Patients</TabsTrigger>
             <TabsTrigger value="analysis">Analysis</TabsTrigger>
           </TabsList>
