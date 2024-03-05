@@ -39,7 +39,7 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent className="">
             {/* <Clipboard /> */}
-            <h3 className="text-[#21B9C6] text-xl font-bold">113,008</h3>
+            <h3 className="text-[#21B9C6] text-xl font-bold mt-4">113,008</h3>
             <span className="text-xs text-slate-400">
               Total number of Patients
             </span>
@@ -53,7 +53,7 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent className="">
             {/* <Clipboard /> */}
-            <h3 className="text-[#21B9C6] text-xl font-bold">18,008</h3>
+            <h3 className="text-[#21B9C6] text-xl font-bold mt-4">18,008</h3>
             <span className="text-xs text-slate-400">
               Total number of Doctors
             </span>
@@ -67,7 +67,7 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent className="">
             {/* <Clipboard /> */}
-            <h3 className="text-[#21B9C6] text-xl font-bold">12,008</h3>
+            <h3 className="text-[#21B9C6] text-xl font-bold mt-4">12,008</h3>
             <span className="text-xs text-slate-400">Pending Jobs</span>
           </CardContent>
         </Card>
@@ -79,7 +79,7 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent className="">
             {/* <Clipboard /> */}
-            <h3 className="text-[#21B9C6] text-xl font-bold">300,008</h3>
+            <h3 className="text-[#21B9C6] text-xl font-bold mt-4">300,008</h3>
             <span className="text-xs text-slate-400">
               Total number of Reports
             </span>
@@ -100,6 +100,66 @@ const Dashboard = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
+          <TableRow>
+            <TableCell>1 </TableCell>
+            <TableCell>Mitchael</TableCell>
+            <TableCell>unknown</TableCell>
+            <TableCell>Male</TableCell>
+            <TableCell>3\1\2024</TableCell>
+            <TableCell>15:24</TableCell>
+            <TableCell>3</TableCell>
+            <TableCell>
+              <File />
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>1 </TableCell>
+            <TableCell>Mitchael</TableCell>
+            <TableCell>unknown</TableCell>
+            <TableCell>Male</TableCell>
+            <TableCell>3\1\2024</TableCell>
+            <TableCell>15:24</TableCell>
+            <TableCell>3</TableCell>
+            <TableCell>
+              <File />
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>1 </TableCell>
+            <TableCell>Mitchael</TableCell>
+            <TableCell>unknown</TableCell>
+            <TableCell>Male</TableCell>
+            <TableCell>3\1\2024</TableCell>
+            <TableCell>15:24</TableCell>
+            <TableCell>3</TableCell>
+            <TableCell>
+              <File />
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>1 </TableCell>
+            <TableCell>Mitchael</TableCell>
+            <TableCell>unknown</TableCell>
+            <TableCell>Male</TableCell>
+            <TableCell>3\1\2024</TableCell>
+            <TableCell>15:24</TableCell>
+            <TableCell>3</TableCell>
+            <TableCell>
+              <File />
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>1 </TableCell>
+            <TableCell>Mitchael</TableCell>
+            <TableCell>unknown</TableCell>
+            <TableCell>Male</TableCell>
+            <TableCell>3\1\2024</TableCell>
+            <TableCell>15:24</TableCell>
+            <TableCell>3</TableCell>
+            <TableCell>
+              <File />
+            </TableCell>
+          </TableRow>
           <TableRow>
             <TableCell>1 </TableCell>
             <TableCell>Mitchael</TableCell>
