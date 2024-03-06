@@ -1,6 +1,7 @@
 import ChatCard from "@/components/chat-card";
 import Date from "@/components/date";
 import { Button } from "@/components/ui/button";
+import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
 import {
   Table,
@@ -11,8 +12,7 @@ import {
   TableBody,
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-// import { TabsTrigger } from "@radix-ui/themes";
-import { ArrowRight, ChevronRight, Dot, DotIcon } from "lucide-react";
+import { ArrowRight, Check, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
 const PatientAnalysis = () => {
   return (
@@ -53,40 +53,63 @@ const PatientAnalysis = () => {
                 Medical history
               </h3>
               <Separator className="my-2" />
-              <div className="px-5">
+              <div className="px-4 py-2">
                 <ul className="text-lg font-bold list-disc">
                   <li>
                     Do you have any long term health condition or any disability
                     that you would like to make us aware of?
                   </li>
                 </ul>
-                <ul className="text-lg px-5 list-disc">
-                  <li>MI/Angina</li>
-                  <li>Artificial heart Valves</li>
-                  <li>Respiratory Disorder</li>
-                  <li>Epilepsy</li>
-                  <li>Fainting Disorders</li>
+                <ul className="text-lg list-disc">
+                  <li className="flex">
+                    <Check className="mr-2" /> MI/Angina
+                  </li>
+                  <li className="flex">
+                    <Check className="mr-2" />
+                    Artificial heart Valves
+                  </li>
+                  <li className="flex">
+                    <Check className="mr-2" />
+                    Respiratory Disorder
+                  </li>
+                  <li className="flex">
+                    <Check className="mr-2" />
+                    Epilepsy
+                  </li>
+                  <li className="flex">
+                    <Check className="mr-2" />
+                    Fainting Disorders
+                  </li>
                 </ul>
               </div>
-              <div className="p-5">
+              <div className="p-4">
                 <ul className="text-lg list-disc">
                   <li className="font-bold ">
                     Are you taking any of the following?
                   </li>
                 </ul>
-                <ul className="text-lg px-5 list-disc">
-                  <li>Aspirin</li>
-                  <li>Oral birth control drugs or other hormonal therapy</li>
+                <ul className="text-lg list-disc">
+                  <li className="flex">
+                    <Check className="mr-2" />
+                    Aspirin
+                  </li>
+                  <li className="flex">
+                    <Check className="mr-2" size={42} />
+                    Oral birth control drugs or other hormonal therapy
+                  </li>
                 </ul>
               </div>
-              <div className="px-5">
+              <div className="px-4">
                 <ul className=" list-disc">
                   <li className="text-lg font-bold">
                     Are you allergic or have any adverse reaction to
                   </li>
                 </ul>
-                <ul className="text-lg px-5 list-disc">
-                  <li>Codeine or other narcotics</li>
+                <ul className="text-lg list-disc">
+                  <li className="flex">
+                    <Check className="mr-2" />
+                    Codeine or other narcotics
+                  </li>
                 </ul>
               </div>
             </div>
@@ -126,7 +149,9 @@ const PatientAnalysis = () => {
                   </h5>
                   <Separator className="my-1" />
                   <div className="flex flex-col ">
-                    <div className="w-full bg-[#E3E3E3] p-1">Filling</div>
+                    <div className="w-full bg-[#E3E3E3] p-1 rounded-sm">
+                      Filling
+                    </div>
                     <ul className="grid grid-cols-2 list-disc px-5 py-1 gap-x-8">
                       <li>Defective</li>
                       <li>Loose</li>
@@ -135,7 +160,9 @@ const PatientAnalysis = () => {
                     </ul>
                   </div>
                   <div className="flex flex-col">
-                    <div className="w-full bg-[#E3E3E3] p-1">The Gum</div>
+                    <div className="w-full bg-[#E3E3E3] p-1 rounded-sm">
+                      The Gum
+                    </div>
                     <ul className="grid grid-cols-2 list-disc px-5 py-1 gap-x-8">
                       <li>Beeding Gum</li>
                       <li>Lumps and Swelling</li>
@@ -150,66 +177,88 @@ const PatientAnalysis = () => {
                   </h5>
                   <Table>
                     <TableHeader className="text-[#fff] bg-black  border-none">
-                      <TableRow className=" font-bold ">
-                        <TableHead className="text-[#fff]">Tooth #</TableHead>
-                        <TableHead className="text-[#fff]">Finding</TableHead>
-                        <TableHead className="text-[#fff]">Health</TableHead>
+                      <TableRow className=" ">
+                        <TableHead className="text-[#fff] font-bold">
+                          Tooth #
+                        </TableHead>
+                        <TableHead className="text-[#fff] font-bold">
+                          Finding
+                        </TableHead>
+                        <TableHead className="text-[#fff] font-bold">
+                          Health
+                        </TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       <TableRow>
                         <TableCell>02</TableCell>
-                        <TableCell>Implant</TableCell>
-                        <TableCell>89%</TableCell>
+                        <TableCell>
+                          <Combobox />
+                        </TableCell>
+                        <TableCell className="flex justify-between">
+                          89%
+                          <X className="text-[red] ml-6" />
+                        </TableCell>
                       </TableRow>
                     </TableBody>
                     <TableBody>
                       <TableRow>
                         <TableCell>06</TableCell>
-                        <TableCell>Restoration</TableCell>
-                        <TableCell>76%</TableCell>
+                        <TableCell>
+                          <Combobox />
+                        </TableCell>
+                        <TableCell className="flex justify-between">
+                          76%
+                          <X className="text-[red] ml-6" />
+                        </TableCell>
                       </TableRow>
                     </TableBody>
                     <TableBody>
                       <TableRow>
                         <TableCell>12</TableCell>
-                        <TableCell>Filling</TableCell>
-                        <TableCell>68%</TableCell>
+                        <TableCell>
+                          <Combobox />
+                        </TableCell>
+                        <TableCell className="flex justify-between">
+                          68%
+                          <X className="text-[red] ml-6" />
+                        </TableCell>
                       </TableRow>
                     </TableBody>
                     <TableBody>
                       <TableRow>
                         <TableCell>19</TableCell>
-                        <TableCell>Implant</TableCell>
-                        <TableCell>65.8%</TableCell>
+                        <TableCell>
+                          <Combobox />
+                        </TableCell>
+                        <TableCell className="flex justify-between">
+                          65.8%
+                          <X className="text-[red] ml-6" />
+                        </TableCell>
                       </TableRow>
                     </TableBody>
                     <TableBody>
                       <TableRow>
-                        <TableCell>21</TableCell>
-                        <TableCell>Filling</TableCell>
-                        <TableCell>62%</TableCell>
+                        <TableCell>10</TableCell>
+                        <TableCell>
+                          <Combobox />
+                        </TableCell>
+                        <TableCell className="flex justify-between">
+                          58%
+                          <X className="text-[red] ml-6" />
+                        </TableCell>
                       </TableRow>
                     </TableBody>
                     <TableBody>
                       <TableRow>
-                        <TableCell>21</TableCell>
-                        <TableCell>Filling</TableCell>
-                        <TableCell>62%</TableCell>
-                      </TableRow>
-                    </TableBody>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>21</TableCell>
-                        <TableCell>Filling</TableCell>
-                        <TableCell>62%</TableCell>
-                      </TableRow>
-                    </TableBody>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>19</TableCell>
-                        <TableCell>Implant</TableCell>
-                        <TableCell>65.8%</TableCell>
+                        <TableCell>17</TableCell>
+                        <TableCell>
+                          <Combobox />
+                        </TableCell>
+                        <TableCell className="flex justify-between">
+                          65%
+                          <X className="text-[red]" />
+                        </TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>
@@ -231,8 +280,8 @@ const PatientAnalysis = () => {
       </div>
       <div className="bg-white border">
         <div className="flex flex-col p-5">
-          <h2 className="text-3xl font-bold my-5">History</h2>
-          <div className="flex flex-row gap-x-4">
+          <h2 className="text-3xl font-bold ">History</h2>
+          <div className="flex flex-row gap-x-4 my-4">
             <Date />
             <Date />
           </div>

@@ -7,7 +7,10 @@ const ChatCard = () => {
       <div className="flex border-l-[6px] border-[#21B9C6] bg-[#F5F5F5] justify-between p-2 rounded-lg gap-x-10">
         <div className="gap-y-6 flex flex-col justify-between">
           <h4 className="flex">
-            <Stethoscope className="text-[#21B9C6]" />
+            <Stethoscope
+              size={35}
+              className="text-[#21B9C6] mr-2 bg-[#b6dedc] border rounded-full p-1"
+            />
             Hello, Albert!
           </h4>
           <div className="flex justify-start">
