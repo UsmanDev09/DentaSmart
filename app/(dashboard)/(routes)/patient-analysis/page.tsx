@@ -11,6 +11,18 @@ import {
   TableCell,
   TableBody,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowRight, Check, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
@@ -41,9 +53,28 @@ const PatientAnalysis = () => {
               Date: <p className="ml-2 text-black">01/01/2023</p>
             </span>
           </div>
-          <button className=" font-bold bg-[#21B9C6] text-white px-4 rounded-full cursor-pointer mr-1">
-            Submit
-          </button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="login" className="rounded-full px-6 text-lg">
+                Submit
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-2xl">
+                  Are you sure you want to Submit?
+                </AlertDialogTitle>
+              </AlertDialogHeader>
+              <AlertDialogFooter className="flex justify-center">
+                <AlertDialogCancel className="bg-red-600 rounded-full text-white px-12 hover:bg-red-600 hover:text-white">
+                  No
+                </AlertDialogCancel>
+                <AlertDialogAction className=" bg-[#21B9C6] rounded-full text-white px-12 hover:bg-[#21B9C6]">
+                  Yes
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
         <Separator className="mt-2" />
         <div className="flex mt-5 gap-x-4">
