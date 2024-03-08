@@ -3,6 +3,7 @@ import Date from "@/components/date";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
+
 import {
   Table,
   TableHead,
@@ -11,21 +12,32 @@ import {
   TableCell,
   TableBody,
 } from "@/components/ui/table";
+
 import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+import {
+  ChatDialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  ChatDialogTrigger,
+} from "@/components/ui/chat-dialog";
+
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowRight, Check, ChevronRight, X } from "lucide-react";
+import { ArrowRight, Check, ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
+import PatientChatResponse from "@/components/patient-chat-response";
+import AiChatResponse from "@/components/ai-chat-response";
 const PatientAnalysis = () => {
   return (
     <div className="flex">
@@ -144,14 +156,54 @@ const PatientAnalysis = () => {
                 </ul>
               </div>
             </div>
-            <Button
-              variant="outline"
-              size="lg"
-              className="flex justify-between bg-white p-5 rounded-xl"
-            >
-              <h1 className="text-2xl">Chat</h1>
-              <ArrowRight className="text-[#21B9C6]" />
-            </Button>
+            <ChatDialog>
+              <ChatDialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="flex justify-between bg-white py-7 px-5 rounded-xl border-none"
+                >
+                  <h1 className="text-2xl">Chat</h1>
+                  <ArrowRight className="text-[#21B9C6]" size={30} />
+                </Button>
+              </ChatDialogTrigger>
+              <DialogContent className="bg-[#EBF1F8]">
+                <DialogHeader>
+                  <DialogTitle className="flex items-center text-4xl mx-auto mb-3">
+                    Ai Smart Dentist
+                  </DialogTitle>
+                  <DialogDescription className="flex flex-col bg-[#EBF1F8] gap-1 overflow-y-auto">
+                    <PatientChatResponse
+                      comment="Hello, Ai! How are you doing?"
+                      time="12:09"
+                    />
+                    <AiChatResponse
+                      comment="I am Good How may i help you."
+                      time="12:10"
+                    />
+                    <PatientChatResponse
+                      comment="I have pain in thooth"
+                      time="12:11"
+                    />
+                    <AiChatResponse
+                      comment="Do you have any additional concerns?"
+                      time="12:12"
+                    />
+                    <AiChatResponse
+                      comment="Do you have any previous X-ray/Mouth Image?"
+                      time="12:13"
+                    />
+                    <PatientChatResponse
+                      comment="I have attached"
+                      time="12:14"
+                      imageUrl="/chatPic1.svg"
+                      imageUrl2="/chatPic2.svg"
+                      imageUrl3="/chatPic3.svg"
+                    />
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </ChatDialog>
           </div>
           <div className="flex flex-col justify-between bg-white border rounded-sm p-3 w-full">
             <div className="flex flex-col">
@@ -226,7 +278,7 @@ const PatientAnalysis = () => {
                         <TableCell>
                           <Combobox />
                         </TableCell>
-                        <TableCell className="flex justify-between">
+                        <TableCell className="flex justify-between text-lg items-center ">
                           89%
                           <X className="text-[red] ml-6" />
                         </TableCell>
@@ -238,7 +290,7 @@ const PatientAnalysis = () => {
                         <TableCell>
                           <Combobox />
                         </TableCell>
-                        <TableCell className="flex justify-between">
+                        <TableCell className="flex justify-between text-lg items-center">
                           76%
                           <X className="text-[red] ml-6" />
                         </TableCell>
@@ -250,7 +302,7 @@ const PatientAnalysis = () => {
                         <TableCell>
                           <Combobox />
                         </TableCell>
-                        <TableCell className="flex justify-between">
+                        <TableCell className="flex justify-between text-lg items-center">
                           68%
                           <X className="text-[red] ml-6" />
                         </TableCell>
@@ -262,7 +314,7 @@ const PatientAnalysis = () => {
                         <TableCell>
                           <Combobox />
                         </TableCell>
-                        <TableCell className="flex justify-between">
+                        <TableCell className="flex justify-between text-lg items-center">
                           65.8%
                           <X className="text-[red] ml-6" />
                         </TableCell>
@@ -274,7 +326,7 @@ const PatientAnalysis = () => {
                         <TableCell>
                           <Combobox />
                         </TableCell>
-                        <TableCell className="flex justify-between">
+                        <TableCell className="flex justify-between text-lg items-center">
                           58%
                           <X className="text-[red] ml-6" />
                         </TableCell>
@@ -286,7 +338,7 @@ const PatientAnalysis = () => {
                         <TableCell>
                           <Combobox />
                         </TableCell>
-                        <TableCell className="flex justify-between">
+                        <TableCell className="flex justify-between text-lg items-center">
                           65%
                           <X className="text-[red]" />
                         </TableCell>
