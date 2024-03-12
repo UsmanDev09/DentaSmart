@@ -1,8 +1,8 @@
-import { Check, ChevronDown } from "lucide-react";
+import { Check, Edit, Edit2, Trash, Trash2 } from "lucide-react";
 
-const PatientProblems = () => {
+const PatientProblemsEditable = () => {
   return (
-    <div className="p-4 bg-white rounded-xl mb-4">
+    <div className="p-4 bg-white rounded-xl mb-4 w-[450px]">
       <div className="flex justify-between">
         <div className="">
           <h5 className="text-sm font-semibold">Problem</h5>
@@ -12,7 +12,11 @@ const PatientProblems = () => {
           </h4>
         </div>
         <div className="flex flex-col items-end gap-2 text-right">
-          <ChevronDown className="text-right" />
+          <div className="text-right flex gap-x-2">
+            <Trash2 className="text-red-600" />
+            <Edit className="text-[#21B9C6]" />
+          </div>
+
           <h4 className="text-lg font-semibold">Reversible pulpitis</h4>
           <button className=" text-sm text-red-600 bg-[#EC07071A] bg-opacity-10 rounded-full p-2">
             2 days Left
@@ -49,4 +53,4 @@ const PatientProblems = () => {
   );
 };
 
-export default PatientProblems;
+export default PatientProblemsEditable;
