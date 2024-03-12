@@ -1,8 +1,14 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertCircle, BellDot } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/notification-popover";
+
 const Navbar = () => {
   return (
     <div className="flex items-center justify-between bg-white px-10 border shadow-sm">
@@ -19,10 +25,36 @@ const Navbar = () => {
           <TabsContent value="password">Change your password here.</TabsContent> */}
         </Tabs>
       </div>
-      <div className="flex flex-row">
-        <Link href="#">
-          <BellDot className="mt-2 mr-2" />
-        </Link>
+      <div className="flex flex-row items-center">
+        {/* <Link href="#"> */}
+        <Popover>
+          <PopoverTrigger className="relative">
+            <BellDot className="mr-2" />
+          </PopoverTrigger>
+          <PopoverContent className="flex flex-col gap-2 absolute -right-4 top-1">
+            <Button variant="link">
+              <Image
+                src="profile.svg"
+                width={32}
+                height={32}
+                alt=""
+                className="mr-2"
+              />
+              New Patient added
+            </Button>
+            <Button variant="link">
+              <Image
+                src="profile.svg"
+                width={32}
+                height={32}
+                alt=""
+                className="mr-2"
+              />
+              New Patient added
+            </Button>
+          </PopoverContent>
+        </Popover>
+        {/* </Link> */}
         <Button variant="link">
           <Image
             src="profile.svg"
