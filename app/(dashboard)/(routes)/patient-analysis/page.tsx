@@ -3,6 +3,7 @@ import Date from "@/components/date";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
+import XrayImageEditor from "@/components/file-robot";
 
 import {
   Table,
@@ -220,13 +221,7 @@ const PatientAnalysis = () => {
               <Separator />
               <div className="flex">
                 <div className="flex flex-col w-[50%]">
-                  <Image
-                    src="/xray.jpg"
-                    width="500"
-                    height={224}
-                    alt=""
-                    className="my-5"
-                  />
+                  <XrayImageEditor imageURL="/xray.jpg" />
                   <h5 className="text-lg text-[#21B9C6] font-bold">
                     Presenting Complaints
                   </h5>
