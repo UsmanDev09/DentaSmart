@@ -16,6 +16,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/themes": "^2.0.3",
+    "canvas": "^2.11.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "cmdk": "^0.2.1",
@@ -27,6 +28,7 @@
     "react-datepicker": "^6.2.0",
     "react-datetime": "^3.2.0",
     "react-dom": "^18",
+    "react-filerobot-image-editor": "^4.7.1",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7"
   },
