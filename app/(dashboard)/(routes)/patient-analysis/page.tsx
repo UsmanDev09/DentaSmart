@@ -1,9 +1,11 @@
+"use client";
 import ChatCard from "@/components/chat-card";
 import Date from "@/components/date";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
 import XrayImageEditor from "@/components/file-robot";
+import { useRouter } from "next/navigation";
 
 import {
   Table,
@@ -36,10 +38,14 @@ import {
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowRight, Check, ChevronLeft, ChevronRight, X } from "lucide-react";
-import Image from "next/image";
 import PatientChatResponse from "@/components/patient-chat-response";
 import AiChatResponse from "@/components/ai-chat-response";
 const PatientAnalysis = () => {
+  const router = useRouter();
+  const onSubmit = () => {
+    router.push("/patient");
+  };
+
   return (
     <div className="flex">
       <div className="p-10">
@@ -254,7 +260,7 @@ const PatientAnalysis = () => {
                     <Separator className="my-1" />
                   </h5>
                   <Table>
-                    <TableHeader className="text-[#fff] bg-black  border-none">
+                    <TableHeader className="text-[#fff] bg-black border-none">
                       <TableRow className=" ">
                         <TableHead className="text-[#fff] font-bold">
                           Tooth #
@@ -342,7 +348,7 @@ const PatientAnalysis = () => {
                   </Table>
                   <Button
                     variant="login"
-                    className="hover:border-indigo-400 hover:border-2"
+                    className=" transition hover:opacity-90 "
                   >
                     Edit Findings
                   </Button>
@@ -352,6 +358,15 @@ const PatientAnalysis = () => {
             <div className="flex flex-row justify-between items-center bg-[#E3E3E3] p-2 border rounded-sm shadow:sm">
               <ChevronRight className="text-[#21B9C6]" />
               <h5 className="text-md text-slate-600"> 03 July 2022</h5>
+            </div>
+            <div className="flex justify-end my-5">
+              <Button
+                variant="login"
+                className="rounded-full px-8 py-3 text-base transition hover:opacity-80 font-semibold"
+                onClick={onSubmit}
+              >
+                Add Report
+              </Button>
             </div>
           </div>
         </div>
