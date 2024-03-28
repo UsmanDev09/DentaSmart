@@ -9,19 +9,31 @@ const PatientReport = () => {
   const router = useRouter();
 
   const onBack = () => {
+    router.push("/patient-analysis");
+  };
+  const onSubmit = () => {
     router.push("/patient");
   };
   return (
-    <div className="p-6">
-      <Button
-        className="hover:underline flex text-xl items-center"
-        variant="ghost"
-        onClick={() => onBack()}
-      >
-        <ChevronLeft className="font-bold w-8 h-8 mr-1" />
-        Back
-      </Button>
-      <div className="flex flex-col p-10 flex-wrap">
+    <div className="px-8 py-6">
+      <div className="flex justify-between items-center">
+        <Button
+          className="hover:underline flex text-xl items-center"
+          variant="ghost"
+          onClick={() => onBack()}
+        >
+          <ChevronLeft className="font-bold w-8 h-8 mr-1" />
+          Back
+        </Button>
+        <Button
+          variant="login"
+          className="hover:underline px-6 rounded-full text-xl flex items-center"
+          onClick={onSubmit}
+        >
+          Submit
+        </Button>
+      </div>
+      <div className="flex flex-col px-6 py-8 flex-wrap">
         <div className="flex border-b-2 mb-4">
           <h1 className=" flex text-3xl font-bold text-[#21B9C6]">
             Alfred Rodgriguez
