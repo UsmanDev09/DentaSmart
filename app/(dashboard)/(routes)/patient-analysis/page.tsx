@@ -1,9 +1,11 @@
+"use client";
 import ChatCard from "@/components/chat-card";
 import Date from "@/components/date";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
 import XrayImageEditor from "@/components/file-robot";
+import { useRouter } from "next/navigation";
 
 import {
   Table,
@@ -36,10 +38,14 @@ import {
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowRight, Check, ChevronLeft, ChevronRight, X } from "lucide-react";
-import Image from "next/image";
 import PatientChatResponse from "@/components/patient-chat-response";
 import AiChatResponse from "@/components/ai-chat-response";
 const PatientAnalysis = () => {
+  const router = useRouter();
+  const onSubmit = () => {
+    router.push("/patient");
+  };
+
   return (
     <div className="flex">
       <div className="p-10">
@@ -68,7 +74,10 @@ const PatientAnalysis = () => {
           </div>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="login" className="rounded-full px-6 text-lg">
+              <Button
+                variant="login"
+                className="rounded-full px-6 font-semibold text-lg"
+              >
                 Submit
               </Button>
             </AlertDialogTrigger>
@@ -206,8 +215,8 @@ const PatientAnalysis = () => {
               </DialogContent>
             </ChatDialog>
           </div>
-          <div className="flex flex-col justify-between bg-white border rounded-sm p-3 w-full">
-            <div className="flex flex-col">
+          <div className="flex flex-col justify-between w-full">
+            <div className="flex flex-col bg-white border rounded-sm p-3">
               <Tabs defaultValue="analysis">
                 <TabsList>
                   <TabsTrigger value="analysis" className="bg-white">
@@ -222,7 +231,7 @@ const PatientAnalysis = () => {
               <div className="flex">
                 <div className="flex flex-col w-[50%]">
                   <XrayImageEditor imageURL="/xray.jpg" />
-                  <h5 className="text-lg text-[#21B9C6] font-bold">
+                  <h5 className="text-xl text-[#21B9C6] font-bold">
                     Presenting Complaints
                   </h5>
                   <Separator className="my-1" />
@@ -249,12 +258,12 @@ const PatientAnalysis = () => {
                   </div>
                 </div>
                 <div className="flex flex-col m-3 gap-y-2 w-[50%]">
-                  <h5 className="text-lg text-[#21B9C6] font-bold">
+                  <h5 className="text-xl text-[#21B9C6] font-bold">
                     Findings
                     <Separator className="my-1" />
                   </h5>
                   <Table>
-                    <TableHeader className="text-[#fff] bg-black  border-none">
+                    <TableHeader className="text-[#fff] bg-black border-none">
                       <TableRow className=" ">
                         <TableHead className="text-[#fff] font-bold">
                           Tooth #
@@ -342,21 +351,30 @@ const PatientAnalysis = () => {
                   </Table>
                   <Button
                     variant="login"
-                    className="hover:border-indigo-400 hover:border-2"
+                    className=" transition hover:opacity-90 text-base"
                   >
                     Edit Findings
                   </Button>
                 </div>
               </div>
+              <div className="flex flex-row justify-between items-center bg-[#E3E3E3] p-1 my-4 border rounded-sm shadow:sm">
+                <ChevronRight className="text-[#21B9C6] w-10 h-10" />
+                <h5 className="text-md text-slate-600 mr-4"> 03 July 2022</h5>
+              </div>
             </div>
-            <div className="flex flex-row justify-between items-center bg-[#E3E3E3] p-2 border rounded-sm shadow:sm">
-              <ChevronRight className="text-[#21B9C6]" />
-              <h5 className="text-md text-slate-600"> 03 July 2022</h5>
+            <div className="flex justify-end my-5 mr-1">
+              <Button
+                variant="login"
+                className="rounded-full px-16 py-7 text-xl transition hover:opacity-80 font-semibold"
+                onClick={onSubmit}
+              >
+                Next
+              </Button>
             </div>
           </div>
         </div>
       </div>
-      <div className="bg-white border">
+      <div className="bg-white border pr-1">
         <div className="flex flex-col p-5">
           <h2 className="text-3xl font-bold ">History</h2>
           <div className="flex flex-row gap-x-4 my-4">
