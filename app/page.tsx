@@ -1,11 +1,7 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+"use client";
+import { Check, ClipboardListIcon, Filter, Search } from "lucide-react";
+import AnalyticalCard from "@/components/analytics-card";
+
 import {
   Table,
   TableBody,
@@ -25,108 +21,244 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-import { Clipboard, ClipboardListIcon, File } from "lucide-react";
-import AnalyticalCard from "@/components/analytics-card";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/notification-popover";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 
 const Dashboard = () => {
+  const router = useRouter();
+  const onCheck = () => {
+    router.push("/patient-analysis");
+  };
+
   return (
     <div className="flex flex-col gap-y-10 p-10 bg-[#F5F5F5]">
-      <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-row justify-between items-center flex-wrap">
         <AnalyticalCard />
         <AnalyticalCard />
         <AnalyticalCard />
         <AnalyticalCard />
       </div>
-      <Table>
-        <TableHeader className="text-[#fff] bg-[#21B9C6]  border-none">
-          <TableRow className=" font-bold">
-            <TableHead className="text-[#fff]">Sr.#</TableHead>
-            <TableHead className="text-[#fff]">Patient Name</TableHead>
-            <TableHead className="text-[#fff]">Assigned to</TableHead>
-            <TableHead className="text-[#fff]">Gender</TableHead>
-            <TableHead className="text-[#fff]">Date of Checkup</TableHead>
-            <TableHead className="text-[#fff]">Time</TableHead>
-            <TableHead className="text-[#fff]">Total Reports</TableHead>
-            <TableHead className="text-[#fff]">Details</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell>1 </TableCell>
-            <TableCell>Mitchael</TableCell>
-            <TableCell>unknown</TableCell>
-            <TableCell>Male</TableCell>
-            <TableCell>3\1\2024</TableCell>
-            <TableCell>15:24</TableCell>
-            <TableCell>3</TableCell>
-            <TableCell>
-              <File />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>1 </TableCell>
-            <TableCell>Mitchael</TableCell>
-            <TableCell>unknown</TableCell>
-            <TableCell>Male</TableCell>
-            <TableCell>3\1\2024</TableCell>
-            <TableCell>15:24</TableCell>
-            <TableCell>3</TableCell>
-            <TableCell>
-              <File />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>1 </TableCell>
-            <TableCell>Mitchael</TableCell>
-            <TableCell>unknown</TableCell>
-            <TableCell>Male</TableCell>
-            <TableCell>3\1\2024</TableCell>
-            <TableCell>15:24</TableCell>
-            <TableCell>3</TableCell>
-            <TableCell>
-              <File />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>1 </TableCell>
-            <TableCell>Mitchael</TableCell>
-            <TableCell>unknown</TableCell>
-            <TableCell>Male</TableCell>
-            <TableCell>3\1\2024</TableCell>
-            <TableCell>15:24</TableCell>
-            <TableCell>3</TableCell>
-            <TableCell>
-              <File />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>1 </TableCell>
-            <TableCell>Mitchael</TableCell>
-            <TableCell>unknown</TableCell>
-            <TableCell>Male</TableCell>
-            <TableCell>3\1\2024</TableCell>
-            <TableCell>15:24</TableCell>
-            <TableCell>3</TableCell>
-            <TableCell>
-              <File />
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>1 </TableCell>
-            <TableCell>Mitchael</TableCell>
-            <TableCell>unknown</TableCell>
-            <TableCell>Male</TableCell>
-            <TableCell>3\1\2024</TableCell>
-            <TableCell>15:24</TableCell>
-            <TableCell>3</TableCell>
-            <TableCell>
-              <File />
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-      <div className="flex flex-row justify-between">
-        <div>Showing 1 of 1 Entry</div>
+      <div className="bg-white p-4 border shadow rounded">
+        <div className="flex justify-between items-center mb-3">
+          <h2 className=" text-[#21B9C6] text-2xl font-semibold">
+            Patient Listing
+          </h2>
+          <div className="flex items-center ">
+            <input
+              type="search"
+              placeholder="Search"
+              className="rounded-sm text-black bg-[#f0eeee] py-2 px-4 w-96 relative border border-slate-300 placeholder:text-black"
+            />
+            <Search className="absolute right-16 w-7 h-7" />
+          </div>
+        </div>
+        <Table>
+          <TableHeader className="text-[#fff] bg-[#21B9C6]  border-none">
+            <TableRow className=" font-bold">
+              <TableHead className="text-[#fff]">Sr.#</TableHead>
+              <TableHead className="text-[#fff]">Patient Name</TableHead>
+              <TableHead className="text-[#fff]">Assigned to</TableHead>
+
+              <TableHead className="text-[#fff] flex items-center">
+                <Popover>
+                  <PopoverTrigger className="flex items-center relative">
+                    Status
+                    <Filter className="ml-2 h-5 w-5" />
+                  </PopoverTrigger>
+                  <PopoverContent className="absolute left-4">
+                    <div>
+                      <div className="flex items-center gap-2 my-2">
+                        <Checkbox id="status" className="w-3 h-3" />
+                        <label
+                          htmlFor="status"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Completed
+                        </label>
+                      </div>
+                      <div className="flex items-center gap-2 my-2">
+                        <Checkbox id="status" className="w-3 h-3" />
+                        <label
+                          htmlFor="status"
+                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                          Pending
+                        </label>
+                      </div>
+                    </div>
+                    <Button
+                      variant="login"
+                      className=" px-8 rounded-xl my-2 mx-[36px] text-sm"
+                    >
+                      Done
+                    </Button>
+                  </PopoverContent>
+                </Popover>
+              </TableHead>
+              <TableHead className="text-[#fff]">Gender</TableHead>
+              <TableHead className="text-[#fff]">Date of Checkup</TableHead>
+              <TableHead className=" text-[#fff]">
+                <Popover>
+                  <PopoverTrigger className="flex items-center relative">
+                    Time <Filter className="ml-2 h-5 w-5" />
+                  </PopoverTrigger>
+                  <PopoverContent className="flex flex-col gap-y-5 absolute left-4">
+                    <h6>Select Time Range</h6>
+                    <div className="flex justify-evenly">
+                      <input className="w-[80px] border" type="text" /> -
+                      <input className="w-[80px] border" type="text" />
+                    </div>
+                    <Button variant="login" className="rounded-xl">
+                      Search
+                    </Button>
+                  </PopoverContent>
+                </Popover>
+              </TableHead>
+              <TableHead className="text-[#fff]">Total Reports</TableHead>
+              <TableHead className="text-[#fff]">Details</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell>1 </TableCell>
+              <TableCell>Mitchael</TableCell>
+              <TableCell>Unknown</TableCell>
+              <TableCell>Pending</TableCell>
+              <TableCell>Male</TableCell>
+              <TableCell>3\1\2024</TableCell>
+              <TableCell>15:24</TableCell>
+              <TableCell>3</TableCell>
+              <TableCell>
+                <ClipboardListIcon
+                  onClick={onCheck}
+                  className="text-[#21B9C6] cursor-pointer"
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>1 </TableCell>
+              <TableCell>Mitchael</TableCell>
+              <TableCell>Unknown</TableCell>
+              <TableCell>Pending</TableCell>
+              <TableCell>Male</TableCell>
+              <TableCell>3\1\2024</TableCell>
+              <TableCell>15:24</TableCell>
+              <TableCell>3</TableCell>
+              <TableCell>
+                <ClipboardListIcon
+                  onClick={onCheck}
+                  className="text-[#21B9C6] cursor-pointer"
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>1 </TableCell>
+              <TableCell>Mitchael</TableCell>
+              <TableCell>Unknown</TableCell>
+              <TableCell>Pending</TableCell>
+              <TableCell>Male</TableCell>
+              <TableCell>3\1\2024</TableCell>
+              <TableCell>15:24</TableCell>
+              <TableCell>3</TableCell>
+              <TableCell>
+                <ClipboardListIcon
+                  onClick={onCheck}
+                  className="text-[#21B9C6] cursor-pointer"
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>1 </TableCell>
+              <TableCell>Mitchael</TableCell>
+              <TableCell>Unknown</TableCell>
+              <TableCell>Pending</TableCell>
+              <TableCell>Male</TableCell>
+              <TableCell>3\1\2024</TableCell>
+              <TableCell>15:24</TableCell>
+              <TableCell>3</TableCell>
+              <TableCell>
+                <ClipboardListIcon
+                  onClick={onCheck}
+                  className="text-[#21B9C6] cursor-pointer"
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>1 </TableCell>
+              <TableCell>Mitchael</TableCell>
+              <TableCell>Unknown</TableCell>
+              <TableCell>Pending</TableCell>
+              <TableCell>Male</TableCell>
+              <TableCell>3\1\2024</TableCell>
+              <TableCell>15:24</TableCell>
+              <TableCell>3</TableCell>
+              <TableCell>
+                <ClipboardListIcon
+                  onClick={onCheck}
+                  className="text-[#21B9C6] cursor-pointer"
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>1 </TableCell>
+              <TableCell>Mitchael</TableCell>
+              <TableCell>Unknown</TableCell>
+              <TableCell>Pending</TableCell>
+              <TableCell>Male</TableCell>
+              <TableCell>3\1\2024</TableCell>
+              <TableCell>15:24</TableCell>
+              <TableCell>3</TableCell>
+              <TableCell>
+                <ClipboardListIcon
+                  onClick={onCheck}
+                  className="text-[#21B9C6] cursor-pointer"
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>1 </TableCell>
+              <TableCell>Mitchael</TableCell>
+              <TableCell>Unknown</TableCell>
+              <TableCell>Pending</TableCell>
+              <TableCell>Male</TableCell>
+              <TableCell>3\1\2024</TableCell>
+              <TableCell>15:24</TableCell>
+              <TableCell>3</TableCell>
+              <TableCell>
+                <ClipboardListIcon
+                  onClick={onCheck}
+                  className="text-[#21B9C6] cursor-pointer"
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>1 </TableCell>
+              <TableCell>Mitchael</TableCell>
+              <TableCell>Unknown</TableCell>
+              <TableCell>Pending</TableCell>
+              <TableCell>Male</TableCell>
+              <TableCell>3\1\2024</TableCell>
+              <TableCell>15:24</TableCell>
+              <TableCell>3</TableCell>
+              <TableCell>
+                <ClipboardListIcon
+                  onClick={onCheck}
+                  className="text-[#21B9C6] cursor-pointer"
+                />
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex flex-row justify-between items-center">
+        <div className="ml-1">Showing 10 of 10 Entries</div>
         <div>
           <Pagination>
             <PaginationContent>
