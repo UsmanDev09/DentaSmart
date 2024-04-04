@@ -1,11 +1,10 @@
-"use client";
 import ChatCard from "@/components/chat-card";
 import Date from "@/components/date";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
 import XrayImageEditor from "@/components/file-robot";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 import {
   Table,
@@ -40,11 +39,9 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowRight, Check, ChevronLeft, ChevronRight, X } from "lucide-react";
 import PatientChatResponse from "@/components/patient-chat-response";
 import AiChatResponse from "@/components/ai-chat-response";
-const PatientAnalysis = () => {
-  const router = useRouter();
-  const onSubmit = () => {
-    router.push("/patient");
-  };
+import Link from "next/link";
+async function PatientAnalysis() {
+
 
   return (
     <div className="flex">
@@ -363,13 +360,12 @@ const PatientAnalysis = () => {
               </div>
             </div>
             <div className="flex justify-end my-5 mr-1">
-              <Button
-                variant="login"
+              <Link
                 className="rounded-full px-16 py-7 text-xl transition hover:opacity-80 font-semibold"
-                onClick={onSubmit}
+                href="/patient"
               >
                 Next
-              </Button>
+              </Link>
             </div>
           </div>
         </div>

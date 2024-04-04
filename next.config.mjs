@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  env: {
+    CLIENT_URL: process.env.CLIENT_URL,
+  },
   experimental: {
     appDir: true,
     esmExternals: "loose", // required to make Konva & react-konva work
@@ -12,3 +15,5 @@ const nextConfig = {
 };
 
 export default nextConfig;
+
+

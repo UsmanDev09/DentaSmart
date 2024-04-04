@@ -1,38 +1,22 @@
-"use client";
+import Link from "next/link";
 import PatientBio from "@/components/patient-bio";
 import PatientProblems from "@/components/patient-problem";
 import PatientXray from "@/components/patient-xray";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 const Patient = () => {
-  // const { id } = query;
-
-  // const onBack = () => {
-  //   router.push("/patient-analysis");
-  // };
-  // const handleNavigation = () => {
-  //   if (typeof window !== "undefined")
-  //     window.location.replace("/patient-analysis");
-  // };
-  const router = useRouter();
-
-  const onBack = () => {
-    router.push("/patient-report");
-  };
 
   return (
     <div className="sm:py-6 sm:px-8 px-1 py-4">
-      <Button
+      <Link
         // onClick={() => handleNavigation()}
-        variant="ghost"
         className="hover:underline text-xl flex items-center"
-        onClick={onBack}
+        href="/patient-report"
       >
         <ChevronLeft className="mr-1 font-bold h-8 w-8" />
         Back
-      </Button>
+      </Link>
 
       <div className="md:p-10 px-2 py-4 flex gap-6 flex-wrap md:justify-around sm:justify-center">
         <div className="sm:w-[450px] w-[370px] flex-wrap">

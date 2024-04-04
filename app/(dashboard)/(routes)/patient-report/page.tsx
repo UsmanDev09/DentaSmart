@@ -1,37 +1,29 @@
-"use client";
 import PatientProblemsEditable from "@/components/patient-problem-editable";
 import RiskReports from "@/components/risks-reports";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 const PatientReport = () => {
-  const router = useRouter();
 
-  const onBack = () => {
-    router.push("/patient-analysis");
-  };
-  const onSubmit = () => {
-    router.push("/patient");
-  };
+  
   return (
     <div className="px-8 py-6">
       <div className="flex justify-between items-center">
-        <Button
+        <Link
           className="hover:underline flex text-xl items-center"
-          variant="ghost"
-          onClick={() => onBack()}
+          href="/patient-analysis"
         >
           <ChevronLeft className="font-bold w-8 h-8 mr-1" />
           Back
-        </Button>
-        <Button
-          variant="login"
+        </Link>
+        <Link
           className="hover:underline px-6 rounded-full text-xl flex items-center"
-          onClick={onSubmit}
+          href="/patient"
         >
           Submit
-        </Button>
+        </Link>
       </div>
       <div className="flex flex-col px-6 py-8 flex-wrap">
         <div className="flex border-b-2 mb-4">

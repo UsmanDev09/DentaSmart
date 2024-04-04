@@ -1,4 +1,3 @@
-"use client";
 import { Check, ClipboardListIcon, Filter, Search } from "lucide-react";
 import AnalyticalCard from "@/components/analytics-card";
 
@@ -26,16 +25,26 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/notification-popover";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import axios from "axios";
+import { useEffect } from "react";
+import { cookies } from "next/headers";
 
-const Dashboard = () => {
-  const router = useRouter();
-  const onCheck = () => {
-    router.push("/patient-analysis");
-  };
+export async function Dashboard() {
+  const token = cookies().get('token');
+  const response = await fetch('http://103.217.176.51:8000/v1/dentist_dashboard', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token?.value}`
+    },  
+    
+  })
+  const json = await response.json()
+  console.log(json)
+
 
   return (
     <div className="flex flex-col gap-y-10 p-10 bg-[#F5F5F5]">
@@ -136,10 +145,11 @@ const Dashboard = () => {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <ClipboardListIcon
-                  onClick={onCheck}
-                  className="text-[#21B9C6] cursor-pointer"
-                />
+                <Link href='/patient-analysis'>
+                  <ClipboardListIcon
+                    className="text-[#21B9C6] cursor-pointer"
+                  />
+                </Link>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -152,10 +162,11 @@ const Dashboard = () => {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <ClipboardListIcon
-                  onClick={onCheck}
-                  className="text-[#21B9C6] cursor-pointer"
-                />
+                <Link href='/patient-analysis'>
+                  <ClipboardListIcon
+                    className="text-[#21B9C6] cursor-pointer"
+                  />
+                </Link>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -168,10 +179,11 @@ const Dashboard = () => {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <ClipboardListIcon
-                  onClick={onCheck}
-                  className="text-[#21B9C6] cursor-pointer"
-                />
+                <Link href='/patient-analysis'>
+                  <ClipboardListIcon
+                    className="text-[#21B9C6] cursor-pointer"
+                  />
+                </Link>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -184,10 +196,11 @@ const Dashboard = () => {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <ClipboardListIcon
-                  onClick={onCheck}
-                  className="text-[#21B9C6] cursor-pointer"
-                />
+                <Link href='/patient-analysis'>
+                  <ClipboardListIcon
+                    className="text-[#21B9C6] cursor-pointer"
+                  />
+                </Link>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -200,10 +213,11 @@ const Dashboard = () => {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <ClipboardListIcon
-                  onClick={onCheck}
-                  className="text-[#21B9C6] cursor-pointer"
-                />
+                <Link href='/patient-analysis'>
+                  <ClipboardListIcon
+                    className="text-[#21B9C6] cursor-pointer"
+                  />
+                </Link>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -216,10 +230,11 @@ const Dashboard = () => {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <ClipboardListIcon
-                  onClick={onCheck}
-                  className="text-[#21B9C6] cursor-pointer"
-                />
+                <Link href='/patient-analysis'>
+                  <ClipboardListIcon
+                    className="text-[#21B9C6] cursor-pointer"
+                  />
+                </Link>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -232,10 +247,11 @@ const Dashboard = () => {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <ClipboardListIcon
-                  onClick={onCheck}
-                  className="text-[#21B9C6] cursor-pointer"
-                />
+                <Link href='/patient-analysis'>
+                  <ClipboardListIcon
+                    className="text-[#21B9C6] cursor-pointer"
+                  />
+                </Link>
               </TableCell>
             </TableRow>
             <TableRow>
@@ -248,10 +264,11 @@ const Dashboard = () => {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <ClipboardListIcon
-                  onClick={onCheck}
-                  className="text-[#21B9C6] cursor-pointer"
-                />
+                <Link href='/patient-analysis'>
+                  <ClipboardListIcon
+                    className="text-[#21B9C6] cursor-pointer"
+                  />
+                </Link>
               </TableCell>
             </TableRow>
           </TableBody>
