@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
 import XrayImageEditor from "@/components/file-robot";
-import { redirect } from "next/navigation";
 
 import {
   Table,
@@ -50,11 +49,12 @@ import {
   Key,
 } from "react";
 
-async function PatientAnalysis() {
+async function PatientAnalysis(context: any) {
   const token = cookies().get("token");
 
-  const medRes = await fetch(
-    "http://103.217.176.51:8000/v1/checkup/medical-history",
+  const response = await fetch(
+    `http://103.217.176.51:8000/v1/dentist_checkup?checkup_id=8`,
+    // `http://103.217.176.51:8000/v1/dentist_checkup?checkup_id=${checkup_id}`,
     {
       method: "GET",
       headers: {
@@ -63,38 +63,17 @@ async function PatientAnalysis() {
       },
     }
   );
-  const medHistory = await medRes.json();
-  // console.log(
-  //   medHistory.medical_history[0].medicalHistoryQuestions.questions[1].answer
-  // );
+  const checkup = await response.json();
+  // console.log(checkup.data.medical_history);
 
-  const health_concerns =
-    medHistory.medical_history[0].medicalHistoryQuestions.health_concerns;
+  const patient = checkup.data.member;
 
-  const health_question_1 =
-    medHistory.medical_history[0].medicalHistoryQuestions.questions[0].question;
-  const health_answers_1 =
-    medHistory.medical_history[0].medicalHistoryQuestions.questions[0].answer;
+  const healthConcerns = checkup.data.medical_history[0].health_concerns;
 
-  const health_question_2 =
-    medHistory.medical_history[0].medicalHistoryQuestions.questions[1].question;
-  const health_answers_2 =
-    medHistory.medical_history[0].medicalHistoryQuestions.questions[1].answer;
+  const healthQA = checkup.data.medical_history[0].answers;
 
-  const complaintRes = await fetch(
-    "http://103.217.176.51:8000/v1/checkup/complaints",
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token?.value}`,
-      },
-    }
-  );
-  const complaintsData = await complaintRes.json();
-  // console.log(complaint.complaints);
-  const fillings = complaintsData.complaints.slice(0, 4);
-  const theGum = complaintsData.complaints.slice(4, 7);
+  const image = checkup.data.images[0];
+  console.log(image);
 
   return (
     <div className="flex">
@@ -102,24 +81,24 @@ async function PatientAnalysis() {
         <div className=" flex justify-between w-full ">
           <div className="flex flex-row gap-x-7 justify-center items-center ">
             <h1 className="text-3xl font-bold text-[#21B9C6]">
-              Alfred Rodgriguez
+              {patient.full_name}
             </h1>
             <span className="text-slate-500  flex flex-row">
-              DOB:<p className="ml-2 text-black"> 9/2/1975</p>
+              DOB:<p className="ml-2 text-black"> {patient.dob}</p>
             </span>
             <span className="text-slate-500 flex flex-row">
-              Age:<p className="ml-2 text-black">9</p>
+              Age:<p className="ml-2 text-black">{patient.age}</p>
             </span>
             <span className="text-slate-500 mr-2 flex flex-row">
-              Tel: <p className="ml-2 text-black">949 000 0000</p>
-            </span>
-
-            <span className="text-slate-500 mr-2 flex flex-row">
-              Sex: <p className="ml-2 text-black">Male</p>
+              Tel: <p className="ml-2 text-black">{patient.phone_number}</p>
             </span>
 
             <span className="text-slate-500 mr-2 flex flex-row">
-              Date: <p className="ml-2 text-black">01/01/2023</p>
+              Sex: <p className="ml-2 text-black">{patient.gender}</p>
+            </span>
+
+            <span className="text-slate-500 mr-2 flex flex-row">
+              Date: <p className="ml-2 text-black">04/05/2023</p>
             </span>
           </div>
           <AlertDialog>
@@ -164,7 +143,7 @@ async function PatientAnalysis() {
                   </li>
                 </ul>
                 <ul className="text-lg list-disc">
-                  {health_concerns.map(
+                  {healthConcerns.map(
                     (health: string, index: Key | null | undefined) => {
                       return (
                         <li key={index} className="flex">
@@ -174,71 +153,27 @@ async function PatientAnalysis() {
                       );
                     }
                   )}
-                  {/* <li className="flex">
-                    <Check className="mr-2" /> MI/Angina
-                  </li>
-                  <li className="flex">
-                    <Check className="mr-2" />
-                    Artificial heart Valves
-                  </li>
-                  <li className="flex">
-                    <Check className="mr-2" />
-                    Respiratory Disorder
-                  </li>
-                  <li className="flex">
-                    <Check className="mr-2" />
-                    Epilepsy
-                  </li>
-                  <li className="flex">
-                    <Check className="mr-2" />
-                    Fainting Disorders
-                  </li> */}
                 </ul>
               </div>
-              <div className="p-4">
-                <ul className="text-lg list-disc">
-                  <li className="font-bold ">{health_question_1} </li>
-                </ul>
-                {health_answers_1.map(
-                  (answer1: string, index: Key | null | undefined) => {
-                    return (
-                      <ul key={index} className="text-lg list-disc">
-                        <li className="flex">
-                          <Check className="mr-2 w-6 h-6" />
-                          {answer1}
-                        </li>
-                      </ul>
-                    );
-                  }
-                )}
-                {/* <ul className="text-lg list-disc">
-                  <li className="flex">
-                    <Check className="mr-2" />
-                    Aspirin
-                  </li>
-                  <li className="flex">
-                    <Check className="mr-2" size={42} />
-                    Oral birth control drugs or other hormonal therapy
-                  </li>
-                </ul> */}
-              </div>
-              <div className="px-4">
-                <ul className=" list-disc">
-                  <li className="text-lg font-bold">{health_question_2}</li>
-                </ul>
-                {health_answers_2.map(
-                  (answer2: string, index: Key | null | undefined) => {
-                    return (
-                      <ul key={index} className="text-lg list-disc">
-                        <li className="flex">
-                          <Check className="mr-2" />
-                          {answer2}
-                        </li>
-                      </ul>
-                    );
-                  }
-                )}
-              </div>
+              {healthQA.map((qa: any, index: Key) => {
+                return (
+                  <div className="p-4" key={index}>
+                    <ul className="text-lg list-disc">
+                      <li className="font-bold ">{qa.question} </li>
+                    </ul>
+                    <ul className="text-lg list-disc">
+                      {qa.answer.map((qa: any, index: Key) => {
+                        return (
+                          <li key={index} className="flex">
+                            <Check className="mr-2 w-6 h-6" />
+                            {qa}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                );
+              })}
             </div>
             <ChatDialog>
               <ChatDialogTrigger asChild>
@@ -304,7 +239,7 @@ async function PatientAnalysis() {
               <Separator />
               <div className="flex">
                 <div className="flex flex-col w-[50%]">
-                  <XrayImageEditor imageURL="/xray.jpg" />
+                  <XrayImageEditor imageURL={`/xray.jpg`} />
                   <h5 className="text-xl text-[#21B9C6] font-bold">
                     Presenting Complaints
                   </h5>
@@ -314,16 +249,10 @@ async function PatientAnalysis() {
                       Filling
                     </div>
                     <ul className="grid grid-cols-2 list-disc px-5 py-1 gap-x-8">
-                      {fillings.map((complaint: any) => (
-                        <li key={complaint.complaint_id}>
-                          {complaint.complaint_title}
-                        </li>
-                      ))}
-
-                      {/* <li>Defective</li>
+                      <li>Defective</li>
                       <li>Loose</li>
                       <li>Fall out</li>
-                      <li>too large</li> */}
+                      <li>too large</li>
                     </ul>
                   </div>
                   <div className="flex flex-col">
@@ -331,14 +260,9 @@ async function PatientAnalysis() {
                       The Gum
                     </div>
                     <ul className="grid grid-cols-2 list-disc px-5 py-1 gap-x-8">
-                      {theGum.map((complaint: any) => (
-                        <li key={complaint.complaint_id}>
-                          {complaint.complaint_title}
-                        </li>
-                      ))}
-                      {/* <li>Beeding Gum</li>
+                      <li>Beeding Gum</li>
                       <li>Lumps and Swelling</li>
-                      <li>Change in Color</li> */}
+                      <li>Change in Color</li>
                     </ul>
                   </div>
                 </div>
@@ -450,7 +374,7 @@ async function PatientAnalysis() {
             <div className="flex justify-end my-5 mr-1">
               <Link
                 className="rounded-full px-14 py-4 text-xl transition hover:opacity-80 font-semibold bg-[#21B9C6] text-white"
-                href="/patient"
+                href="/patient-report"
               >
                 Next
               </Link>

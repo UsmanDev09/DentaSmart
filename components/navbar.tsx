@@ -13,7 +13,9 @@ const Navbar = () => {
   return (
     <div className="flex items-center justify-between bg-white px-10 border shadow-sm">
       <div className="flex ">
-        <Image src="logo.svg" width={162} height={48} alt="" />
+        <Link href="/" className="flex">
+          <Image src="logo.svg" width={162} height={48} alt="" />
+        </Link>
         <Tabs defaultValue="patients" className="w-[425px]">
           <TabsList className="">
             <TabsTrigger value="patients">Patients</TabsTrigger>

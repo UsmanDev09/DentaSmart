@@ -35,15 +35,22 @@ export async function Dashboard() {
   const response = await fetch(
     "http://103.217.176.51:8000/v1/dentist_dashboard",
     {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token?.value}`,
       },
+      body: JSON.stringify({ args: { checkup_type: "" } }),
     }
   );
-  const json = await response.json();
-  console.log(json);
+  const dashboard = await response.json();
+
+  const patients = dashboard.checkup;
+  const dentist = dashboard.dentist;
+  const patientsWithDentist = patients.map((patient: any) => ({
+    ...patient,
+    dentist,
+  }));
 
   return (
     <div className="flex flex-col gap-y-10 p-10 bg-[#F5F5F5]">
@@ -134,6 +141,33 @@ export async function Dashboard() {
             </TableRow>
           </TableHeader>
           <TableBody>
+            {patientsWithDentist.map((patient: any) => {
+              return (
+                <TableRow key={patient.checkup_id}>
+                  <TableCell>{patient.checkup_id}</TableCell>
+                  <TableCell>{patient.member_name}</TableCell>
+                  <TableCell>
+                    {patient.dentist.first_name} {patient.dentist.last_name}
+                  </TableCell>
+                  <TableCell>{patient.status}</TableCell>
+                  <TableCell>{patient.gender}</TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell>
+                    <Link
+                      href={{
+                        pathname: `/patient-analysis`,
+                        query: { checkupId: patient.checkup_id },
+                      }}
+                      passHref
+                    >
+                      <ClipboardListIcon className="text-[#21B9C6] cursor-pointer" />
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
             <TableRow>
               <TableCell>1 </TableCell>
               <TableCell>Mitchael</TableCell>
