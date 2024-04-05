@@ -40,8 +40,61 @@ import { ArrowRight, Check, ChevronLeft, ChevronRight, X } from "lucide-react";
 import PatientChatResponse from "@/components/patient-chat-response";
 import AiChatResponse from "@/components/ai-chat-response";
 import Link from "next/link";
-async function PatientAnalysis() {
+import { cookies } from "next/headers";
+import {
+  ReactElement,
+  JSXElementConstructor,
+  ReactNode,
+  ReactPortal,
+  PromiseLikeOfReactNode,
+  Key,
+} from "react";
 
+async function PatientAnalysis() {
+  const token = cookies().get("token");
+
+  const medRes = await fetch(
+    "http://103.217.176.51:8000/v1/checkup/medical-history",
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+    }
+  );
+  const medHistory = await medRes.json();
+  // console.log(
+  //   medHistory.medical_history[0].medicalHistoryQuestions.questions[1].answer
+  // );
+
+  const health_concerns =
+    medHistory.medical_history[0].medicalHistoryQuestions.health_concerns;
+
+  const health_question_1 =
+    medHistory.medical_history[0].medicalHistoryQuestions.questions[0].question;
+  const health_answers_1 =
+    medHistory.medical_history[0].medicalHistoryQuestions.questions[0].answer;
+
+  const health_question_2 =
+    medHistory.medical_history[0].medicalHistoryQuestions.questions[1].question;
+  const health_answers_2 =
+    medHistory.medical_history[0].medicalHistoryQuestions.questions[1].answer;
+
+  const complaintRes = await fetch(
+    "http://103.217.176.51:8000/v1/checkup/complaints",
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+    }
+  );
+  const complaintsData = await complaintRes.json();
+  // console.log(complaint.complaints);
+  const fillings = complaintsData.complaints.slice(0, 4);
+  const theGum = complaintsData.complaints.slice(4, 7);
 
   return (
     <div className="flex">
@@ -97,7 +150,7 @@ async function PatientAnalysis() {
         </div>
         <Separator className="mt-2" />
         <div className="flex mt-5 gap-x-4">
-          <div className="flex flex-col gap-y-5 justify-between max-w-[25%]">
+          <div className="flex flex-col gap-y-5 justify-between max-w-[30%]">
             <div className="bg-white p-5 rounded-sm border shadow-xs h-full">
               <h3 className="text-2xl text-[#21B9C6] font-bold">
                 Medical history
@@ -111,7 +164,17 @@ async function PatientAnalysis() {
                   </li>
                 </ul>
                 <ul className="text-lg list-disc">
-                  <li className="flex">
+                  {health_concerns.map(
+                    (health: string, index: Key | null | undefined) => {
+                      return (
+                        <li key={index} className="flex">
+                          <Check className="mr-2" />
+                          {health}
+                        </li>
+                      );
+                    }
+                  )}
+                  {/* <li className="flex">
                     <Check className="mr-2" /> MI/Angina
                   </li>
                   <li className="flex">
@@ -129,16 +192,26 @@ async function PatientAnalysis() {
                   <li className="flex">
                     <Check className="mr-2" />
                     Fainting Disorders
-                  </li>
+                  </li> */}
                 </ul>
               </div>
               <div className="p-4">
                 <ul className="text-lg list-disc">
-                  <li className="font-bold ">
-                    Are you taking any of the following?
-                  </li>
+                  <li className="font-bold ">{health_question_1} </li>
                 </ul>
-                <ul className="text-lg list-disc">
+                {health_answers_1.map(
+                  (answer1: string, index: Key | null | undefined) => {
+                    return (
+                      <ul key={index} className="text-lg list-disc">
+                        <li className="flex">
+                          <Check className="mr-2 w-6 h-6" />
+                          {answer1}
+                        </li>
+                      </ul>
+                    );
+                  }
+                )}
+                {/* <ul className="text-lg list-disc">
                   <li className="flex">
                     <Check className="mr-2" />
                     Aspirin
@@ -147,20 +220,24 @@ async function PatientAnalysis() {
                     <Check className="mr-2" size={42} />
                     Oral birth control drugs or other hormonal therapy
                   </li>
-                </ul>
+                </ul> */}
               </div>
               <div className="px-4">
                 <ul className=" list-disc">
-                  <li className="text-lg font-bold">
-                    Are you allergic or have any adverse reaction to
-                  </li>
+                  <li className="text-lg font-bold">{health_question_2}</li>
                 </ul>
-                <ul className="text-lg list-disc">
-                  <li className="flex">
-                    <Check className="mr-2" />
-                    Codeine or other narcotics
-                  </li>
-                </ul>
+                {health_answers_2.map(
+                  (answer2: string, index: Key | null | undefined) => {
+                    return (
+                      <ul key={index} className="text-lg list-disc">
+                        <li className="flex">
+                          <Check className="mr-2" />
+                          {answer2}
+                        </li>
+                      </ul>
+                    );
+                  }
+                )}
               </div>
             </div>
             <ChatDialog>
@@ -212,7 +289,7 @@ async function PatientAnalysis() {
               </DialogContent>
             </ChatDialog>
           </div>
-          <div className="flex flex-col justify-between w-full">
+          <div className="flex flex-col w-full">
             <div className="flex flex-col bg-white border rounded-sm p-3">
               <Tabs defaultValue="analysis">
                 <TabsList>
@@ -237,10 +314,16 @@ async function PatientAnalysis() {
                       Filling
                     </div>
                     <ul className="grid grid-cols-2 list-disc px-5 py-1 gap-x-8">
-                      <li>Defective</li>
+                      {fillings.map((complaint: any) => (
+                        <li key={complaint.complaint_id}>
+                          {complaint.complaint_title}
+                        </li>
+                      ))}
+
+                      {/* <li>Defective</li>
                       <li>Loose</li>
                       <li>Fall out</li>
-                      <li>too large</li>
+                      <li>too large</li> */}
                     </ul>
                   </div>
                   <div className="flex flex-col">
@@ -248,9 +331,14 @@ async function PatientAnalysis() {
                       The Gum
                     </div>
                     <ul className="grid grid-cols-2 list-disc px-5 py-1 gap-x-8">
-                      <li>Beeding Gum</li>
+                      {theGum.map((complaint: any) => (
+                        <li key={complaint.complaint_id}>
+                          {complaint.complaint_title}
+                        </li>
+                      ))}
+                      {/* <li>Beeding Gum</li>
                       <li>Lumps and Swelling</li>
-                      <li>Change in Color</li>
+                      <li>Change in Color</li> */}
                     </ul>
                   </div>
                 </div>
@@ -361,7 +449,7 @@ async function PatientAnalysis() {
             </div>
             <div className="flex justify-end my-5 mr-1">
               <Link
-                className="rounded-full px-16 py-7 text-xl transition hover:opacity-80 font-semibold"
+                className="rounded-full px-14 py-4 text-xl transition hover:opacity-80 font-semibold bg-[#21B9C6] text-white"
                 href="/patient"
               >
                 Next
@@ -387,6 +475,6 @@ async function PatientAnalysis() {
       </div>
     </div>
   );
-};
+}
 
 export default PatientAnalysis;

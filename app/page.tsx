@@ -1,4 +1,4 @@
-import { Check, ClipboardListIcon, Filter, Search } from "lucide-react";
+import { ClipboardListIcon, Filter, Search } from "lucide-react";
 import AnalyticalCard from "@/components/analytics-card";
 
 import {
@@ -28,23 +28,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
-import axios from "axios";
-import { useEffect } from "react";
 import { cookies } from "next/headers";
 
 export async function Dashboard() {
-  const token = cookies().get('token');
-  const response = await fetch('http://103.217.176.51:8000/v1/dentist_dashboard', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token?.value}`
-    },  
-    
-  })
-  const json = await response.json()
-  console.log(json)
-
+  const token = cookies().get("token");
+  const response = await fetch(
+    "http://103.217.176.51:8000/v1/dentist_dashboard",
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+    }
+  );
+  const json = await response.json();
+  console.log(json);
 
   return (
     <div className="flex flex-col gap-y-10 p-10 bg-[#F5F5F5]">
@@ -145,10 +144,8 @@ export async function Dashboard() {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <Link href='/patient-analysis'>
-                  <ClipboardListIcon
-                    className="text-[#21B9C6] cursor-pointer"
-                  />
+                <Link href="/patient-analysis">
+                  <ClipboardListIcon className="text-[#21B9C6] cursor-pointer" />
                 </Link>
               </TableCell>
             </TableRow>
@@ -162,10 +159,8 @@ export async function Dashboard() {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <Link href='/patient-analysis'>
-                  <ClipboardListIcon
-                    className="text-[#21B9C6] cursor-pointer"
-                  />
+                <Link href="/patient-analysis">
+                  <ClipboardListIcon className="text-[#21B9C6] cursor-pointer" />
                 </Link>
               </TableCell>
             </TableRow>
@@ -179,10 +174,8 @@ export async function Dashboard() {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <Link href='/patient-analysis'>
-                  <ClipboardListIcon
-                    className="text-[#21B9C6] cursor-pointer"
-                  />
+                <Link href="/patient-analysis">
+                  <ClipboardListIcon className="text-[#21B9C6] cursor-pointer" />
                 </Link>
               </TableCell>
             </TableRow>
@@ -196,10 +189,8 @@ export async function Dashboard() {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <Link href='/patient-analysis'>
-                  <ClipboardListIcon
-                    className="text-[#21B9C6] cursor-pointer"
-                  />
+                <Link href="/patient-analysis">
+                  <ClipboardListIcon className="text-[#21B9C6] cursor-pointer" />
                 </Link>
               </TableCell>
             </TableRow>
@@ -213,10 +204,8 @@ export async function Dashboard() {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <Link href='/patient-analysis'>
-                  <ClipboardListIcon
-                    className="text-[#21B9C6] cursor-pointer"
-                  />
+                <Link href="/patient-analysis">
+                  <ClipboardListIcon className="text-[#21B9C6] cursor-pointer" />
                 </Link>
               </TableCell>
             </TableRow>
@@ -230,10 +219,8 @@ export async function Dashboard() {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <Link href='/patient-analysis'>
-                  <ClipboardListIcon
-                    className="text-[#21B9C6] cursor-pointer"
-                  />
+                <Link href="/patient-analysis">
+                  <ClipboardListIcon className="text-[#21B9C6] cursor-pointer" />
                 </Link>
               </TableCell>
             </TableRow>
@@ -247,10 +234,8 @@ export async function Dashboard() {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <Link href='/patient-analysis'>
-                  <ClipboardListIcon
-                    className="text-[#21B9C6] cursor-pointer"
-                  />
+                <Link href="/patient-analysis">
+                  <ClipboardListIcon className="text-[#21B9C6] cursor-pointer" />
                 </Link>
               </TableCell>
             </TableRow>
@@ -264,10 +249,8 @@ export async function Dashboard() {
               <TableCell>15:24</TableCell>
               <TableCell>3</TableCell>
               <TableCell>
-                <Link href='/patient-analysis'>
-                  <ClipboardListIcon
-                    className="text-[#21B9C6] cursor-pointer"
-                  />
+                <Link href="/patient-analysis">
+                  <ClipboardListIcon className="text-[#21B9C6] cursor-pointer" />
                 </Link>
               </TableCell>
             </TableRow>
@@ -297,6 +280,6 @@ export async function Dashboard() {
       </div>
     </div>
   );
-};
+}
 
 export default Dashboard;
