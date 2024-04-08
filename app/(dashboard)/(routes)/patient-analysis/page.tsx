@@ -3,7 +3,6 @@ import Date from "@/components/date";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
-import XrayImageEditor from "@/components/file-robot";
 
 import {
   Table,
@@ -40,21 +39,19 @@ import PatientChatResponse from "@/components/patient-chat-response";
 import AiChatResponse from "@/components/ai-chat-response";
 import Link from "next/link";
 import { cookies } from "next/headers";
-import {
-  ReactElement,
-  JSXElementConstructor,
-  ReactNode,
-  ReactPortal,
-  PromiseLikeOfReactNode,
-  Key,
-} from "react";
+import { Key } from "react";
+import Image from "next/image";
 
-async function PatientAnalysis(context: any) {
+async function PatientAnalysis({
+  params,
+}: {
+  params: { [key: string]: string | string[] | undefined };
+}) {
   const token = cookies().get("token");
 
   const response = await fetch(
     `http://103.217.176.51:8000/v1/dentist_checkup?checkup_id=8`,
-    // `http://103.217.176.51:8000/v1/dentist_checkup?checkup_id=${checkup_id}`,
+    // `http://103.217.176.51:8000/v1/dentist_checkup?checkup_id=${params.checkup_id}`,
     {
       method: "GET",
       headers: {
@@ -64,7 +61,6 @@ async function PatientAnalysis(context: any) {
     }
   );
   const checkup = await response.json();
-  // console.log(checkup.data.medical_history);
 
   const patient = checkup.data.member;
 
@@ -73,7 +69,6 @@ async function PatientAnalysis(context: any) {
   const healthQA = checkup.data.medical_history[0].answers;
 
   const image = checkup.data.images[0];
-  console.log(image);
 
   return (
     <div className="flex">
@@ -239,7 +234,17 @@ async function PatientAnalysis(context: any) {
               <Separator />
               <div className="flex">
                 <div className="flex flex-col w-[50%]">
-                  <XrayImageEditor imageURL={`/xray.jpg`} />
+                  <Image
+                    src={`http://103.217.176.51:8000${image}`}
+                    width="500"
+                    height={224}
+                    alt=""
+                    className="my-5 cursor-pointer"
+                    crossOrigin="anonymous"
+                  />
+                  {/* <XrayImageEditor
+                    imageURL={`http://103.217.176.51:8000${image}`} */}
+                  {/* /> */}
                   <h5 className="text-xl text-[#21B9C6] font-bold">
                     Presenting Complaints
                   </h5>
