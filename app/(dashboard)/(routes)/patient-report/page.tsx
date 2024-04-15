@@ -7,17 +7,11 @@ import { Separator } from "@/components/ui/separator";
 
 import { Key } from "react";
 
-async function Patientcheckup({
-  params,
-  searchParams,
-}: {
-  params: { [key: string]: string | string[] | undefined };
-  searchParams: any;
-}) {
+async function Patientcheckup({ searchParams }: { searchParams: any }) {
   const token = cookies().get("token");
 
   const response = await fetch(
-    `http://103.217.176.51:8000/v1/dentist_checkup?checkup_id=8`,
+    `http://103.217.176.51:8000/v1/dentist_checkup?checkup_id=${searchParams.checkupId}`,
     {
       method: "GET",
       headers: {
@@ -33,21 +27,19 @@ async function Patientcheckup({
 
   const medicalHistory = report.data.medical_history;
 
-  console.log(report.data.medical_history[0].answers[1].answer[0]);
-
   return (
     <div className="px-8 py-6">
       <div className="flex justify-between items-center">
         <Link
           className="hover:underline flex text-xl  items-center"
-          href="/patient-analysis"
+          href={`/patient-analysis?checkupId=${searchParams.checkupId}`}
         >
           <ChevronLeft className="font-bold w-8 h-8 mr-1" />
           Back
         </Link>
         <Link
           className="hover:underline px-6 py-2 rounded-full text-xl bg-[#21B9C6] text-white flex items-center"
-          href="/patient"
+          href={`/patient?checkupId=${searchParams.checkupId}`}
         >
           Submit
         </Link>
