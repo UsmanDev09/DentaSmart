@@ -44,14 +44,15 @@ import Image from "next/image";
 
 async function PatientAnalysis({
   params,
+  searchParams,
 }: {
   params: { [key: string]: string | string[] | undefined };
+  searchParams: any;
 }) {
   const token = cookies().get("token");
 
   const response = await fetch(
-    `http://103.217.176.51:8000/v1/dentist_checkup?checkup_id=8`,
-    // `http://103.217.176.51:8000/v1/dentist_checkup?checkup_id=${params.checkup_id}`,
+    `http://103.217.176.51:8000/v1/dentist_checkup?checkup_id=${searchParams.checkupId}`,
     {
       method: "GET",
       headers: {
@@ -64,9 +65,7 @@ async function PatientAnalysis({
 
   const patient = checkup.data.member;
 
-  const healthConcerns = checkup.data.medical_history[0].health_concerns;
-
-  const healthQA = checkup.data.medical_history[0].answers;
+  const medicalHistory = checkup.data.medical_history;
 
   const image = checkup.data.images[0];
 
@@ -126,46 +125,32 @@ async function PatientAnalysis({
         <div className="flex mt-5 gap-x-4">
           <div className="flex flex-col gap-y-5 justify-between max-w-[30%]">
             <div className="bg-white p-5 rounded-sm border shadow-xs h-full">
-              <h3 className="text-2xl text-[#21B9C6] font-bold">
-                Medical history
-              </h3>
-              <Separator className="my-2" />
-              <div className="px-4 py-2">
-                <ul className="text-lg font-bold list-disc">
-                  <li>
-                    Do you have any long term health condition or any disability
-                    that you would like to make us aware of?
-                  </li>
-                </ul>
-                <ul className="text-lg list-disc">
-                  {healthConcerns.map(
-                    (health: string, index: Key | null | undefined) => {
-                      return (
-                        <li key={index} className="flex">
-                          <Check className="mr-2" />
-                          {health}
-                        </li>
-                      );
-                    }
-                  )}
-                </ul>
-              </div>
-              {healthQA.map((qa: any, index: Key) => {
+              {medicalHistory.map((history: any, index: number) => {
                 return (
-                  <div className="p-4" key={index}>
-                    <ul className="text-lg list-disc">
-                      <li className="font-bold ">{qa.question} </li>
-                    </ul>
-                    <ul className="text-lg list-disc">
-                      {qa.answer.map((qa: any, index: Key) => {
-                        return (
-                          <li key={index} className="flex">
-                            <Check className="mr-2 w-6 h-6" />
-                            {qa}
-                          </li>
-                        );
-                      })}
-                    </ul>
+                  <div key={index}>
+                    <h3 className="text-2xl text-[#21B9C6] font-bold">
+                      Medical history
+                    </h3>
+                    <Separator className="my-2" />
+                    {history.answers.map((qa: any, index: Key) => {
+                      return (
+                        <div className="p-4" key={index}>
+                          <ul className="text-lg list-disc">
+                            <li className="font-bold ">{qa.question} </li>
+                          </ul>
+                          <ul className="text-lg list-disc">
+                            {qa.answer.map((qa: any, index: Key) => {
+                              return (
+                                <li key={index} className="flex">
+                                  <Check className="mr-2 w-6 h-6" />
+                                  {qa}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      );
+                    })}
                   </div>
                 );
               })}
@@ -235,16 +220,12 @@ async function PatientAnalysis({
               <div className="flex">
                 <div className="flex flex-col w-[50%]">
                   <Image
-                    src={`http://103.217.176.51:8000${image}`}
+                    src={`/xray.jpg`}
                     width="500"
                     height={224}
                     alt=""
-                    className="my-5 cursor-pointer"
-                    crossOrigin="anonymous"
+                    className="my-5 "
                   />
-                  {/* <XrayImageEditor
-                    imageURL={`http://103.217.176.51:8000${image}`} */}
-                  {/* /> */}
                   <h5 className="text-xl text-[#21B9C6] font-bold">
                     Presenting Complaints
                   </h5>
@@ -288,6 +269,7 @@ async function PatientAnalysis({
                         <TableHead className="text-[#fff] font-bold">
                           Health
                         </TableHead>
+                        <TableHead></TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -296,9 +278,9 @@ async function PatientAnalysis({
                         <TableCell>
                           <Combobox />
                         </TableCell>
-                        <TableCell className="flex justify-between text-lg items-center ">
-                          89%
-                          <X className="text-[red] ml-6" />
+                        <TableCell className="text-lg ">89%</TableCell>
+                        <TableCell>
+                          <X className="text-[red]" />
                         </TableCell>
                       </TableRow>
                     </TableBody>
@@ -308,21 +290,21 @@ async function PatientAnalysis({
                         <TableCell>
                           <Combobox />
                         </TableCell>
-                        <TableCell className="flex justify-between text-lg items-center">
-                          76%
-                          <X className="text-[red] ml-6" />
+                        <TableCell className="text-lg">76%</TableCell>
+                        <TableCell>
+                          <X className="text-[red]" />
                         </TableCell>
                       </TableRow>
                     </TableBody>
                     <TableBody>
-                      <TableRow>
+                      <TableRow className="items-center">
                         <TableCell>12</TableCell>
                         <TableCell>
                           <Combobox />
                         </TableCell>
-                        <TableCell className="flex justify-between text-lg items-center">
-                          68%
-                          <X className="text-[red] ml-6" />
+                        <TableCell className="text-lg">68%</TableCell>
+                        <TableCell>
+                          <X className="text-[red]" />
                         </TableCell>
                       </TableRow>
                     </TableBody>
@@ -332,9 +314,9 @@ async function PatientAnalysis({
                         <TableCell>
                           <Combobox />
                         </TableCell>
-                        <TableCell className="flex justify-between text-lg items-center">
-                          65.8%
-                          <X className="text-[red] ml-6" />
+                        <TableCell className="text-lg">65.8%</TableCell>
+                        <TableCell>
+                          <X className="text-[red]" />
                         </TableCell>
                       </TableRow>
                     </TableBody>
@@ -344,9 +326,9 @@ async function PatientAnalysis({
                         <TableCell>
                           <Combobox />
                         </TableCell>
-                        <TableCell className="flex justify-between text-lg items-center">
-                          58%
-                          <X className="text-[red] ml-6" />
+                        <TableCell className="text-lg">58%</TableCell>
+                        <TableCell>
+                          <X className="text-[red]" />
                         </TableCell>
                       </TableRow>
                     </TableBody>
@@ -356,8 +338,8 @@ async function PatientAnalysis({
                         <TableCell>
                           <Combobox />
                         </TableCell>
-                        <TableCell className="flex justify-between text-lg items-center">
-                          65%
+                        <TableCell className="text-lg">65%</TableCell>
+                        <TableCell>
                           <X className="text-[red]" />
                         </TableCell>
                       </TableRow>
