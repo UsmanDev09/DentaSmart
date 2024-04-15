@@ -69,9 +69,11 @@ function Navbar() {
           />
           John Doe
         </div>
-        <Button variant="outline" className="text-base ml-4">
-          <LogOut className="mr-2" /> Log Out
-        </Button>
+        <form action={signOut}>
+          <Button variant="outline" className="text-base ml-4">
+            <LogOut className="mr-2" /> Log Out
+          </Button>
+        </form>
       </div>
     </div>
   );

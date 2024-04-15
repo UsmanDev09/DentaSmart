@@ -1,11 +1,7 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import { Line, Circle, Group } from 'react-konva'
-//@ts-ignore
-import { render } from 'react-dom';
-import { Stage, Layer, Rect, Text } from 'react-konva';
-import Konva from 'konva';
+import React, { useState } from "react";
+import { Line, Circle, Group } from "react-konva";
 
 /**
  *
@@ -14,7 +10,6 @@ import Konva from 'konva';
  * minMaxX[1]=>maxX
  *
  */
-
 
 const PolygonAnnotation = (props: any) => {
   const {
@@ -25,36 +20,36 @@ const PolygonAnnotation = (props: any) => {
     handleGroupDragEnd,
     handleMouseOverStartPoint,
     handleMouseOutStartPoint,
-  } = props
-  const vertexRadius = 6
+  } = props;
+  const vertexRadius = 6;
 
-  const [stage, setStage] = useState<any>()
+  const [stage, setStage] = useState<any>();
   const handleGroupMouseOver = (e: any) => {
-    if (!isFinished) return
-    e.target.getStage().container().style.cursor = 'move'
-    setStage(e.target.getStage())
-  }
+    if (!isFinished) return;
+    e.target.getStage().container().style.cursor = "move";
+    setStage(e.target.getStage());
+  };
   const handleGroupMouseOut = (e: any) => {
-    e.target.getStage().container().style.cursor = 'default'
-  }
-  const [minMaxX, setMinMaxX] = useState([0, 0]) //min and max in x axis
-  const [minMaxY, setMinMaxY] = useState([0, 0]) //min and max in y axis
+    e.target.getStage().container().style.cursor = "default";
+  };
+  const [minMaxX, setMinMaxX] = useState([0, 0]); //min and max in x axis
+  const [minMaxY, setMinMaxY] = useState([0, 0]); //min and max in y axis
   const handleGroupDragStart = (e: any) => {
-    let arrX = points.map((p: any) => p[0])
-    let arrY = points.map((p: any) => p[1])
+    let arrX = points.map((p: any) => p[0]);
+    let arrY = points.map((p: any) => p[1]);
     // setMinMaxX(minMax(arrX))
     // setMinMaxY(minMax(arrY))
-  }
+  };
   const groupDragBound = (pos: any) => {
-    let { x, y } = pos
-    const sw = stage?.width()
-    const sh = stage?.height()
-    if (minMaxY[0] + y < 0) y = -1 * minMaxY[0]
-    if (minMaxX[0] + x < 0) x = -1 * minMaxX[0]
-    if (minMaxY[1] + y > sh) y = sh - minMaxY[1]
-    if (minMaxX[1] + x > sw) x = sw - minMaxX[1]
-    return { x, y }
-  }
+    let { x, y } = pos;
+    const sw = stage?.width();
+    const sh = stage?.height();
+    if (minMaxY[0] + y < 0) y = -1 * minMaxY[0];
+    if (minMaxX[0] + x < 0) x = -1 * minMaxX[0];
+    if (minMaxY[1] + y > sh) y = sh - minMaxY[1];
+    if (minMaxX[1] + x > sw) x = sw - minMaxX[1];
+    return { x, y };
+  };
   return (
     <Group
       name="polygon"
@@ -72,35 +67,36 @@ const PolygonAnnotation = (props: any) => {
         closed={isFinished}
         fill="rgb(0,128,0,0.5)"
       />
-      {points && points.map((point: any, index: any) => {
-        const x = point[0] - vertexRadius / 2
-        const y = point[1] - vertexRadius / 2
-        const startPointAttr =
-          index === 0
-            ? {
-                hitStrokeWidth: 12,
-                onMouseOver: handleMouseOverStartPoint,
-                onMouseOut: handleMouseOutStartPoint,
-              }
-            : null
-        return (
-          <Circle
-            key={index}
-            x={x}
-            y={y}
-            radius={vertexRadius}
-            fill="white"
-            stroke="black"
-            strokeWidth={2}
-            draggable
-            onDragMove={(e) => handlePointDragMove(e, index)}
-            // dragBoundFunc={(pos) => dragBoundFunc(stage?.width(), stage?.height(), vertexRadius, pos)}
-            {...startPointAttr}
-          />
-        )
-      })}
+      {points &&
+        points.map((point: any, index: any) => {
+          const x = point[0] - vertexRadius / 2;
+          const y = point[1] - vertexRadius / 2;
+          const startPointAttr =
+            index === 0
+              ? {
+                  hitStrokeWidth: 12,
+                  onMouseOver: handleMouseOverStartPoint,
+                  onMouseOut: handleMouseOutStartPoint,
+                }
+              : null;
+          return (
+            <Circle
+              key={index}
+              x={x}
+              y={y}
+              radius={vertexRadius}
+              fill="white"
+              stroke="black"
+              strokeWidth={2}
+              draggable
+              onDragMove={(e) => handlePointDragMove(e, index)}
+              // dragBoundFunc={(pos) => dragBoundFunc(stage?.width(), stage?.height(), vertexRadius, pos)}
+              {...startPointAttr}
+            />
+          );
+        })}
     </Group>
-  )
-}
+  );
+};
 
-export default PolygonAnnotation
+export default PolygonAnnotation;
