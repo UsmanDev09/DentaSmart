@@ -28,9 +28,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
-import axios from "axios";
-import { useEffect } from "react";
 import { cookies } from "next/headers";
+
 
 export async function Dashboard() {
   const token = cookies().get('token');
@@ -43,8 +42,6 @@ export async function Dashboard() {
     
   })
   const json = await response.json()
-  console.log(json)
-
 
   return (
     <div className="flex flex-col gap-y-10 p-10 bg-[#F5F5F5]">

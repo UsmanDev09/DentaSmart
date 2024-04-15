@@ -1,5 +1,5 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertCircle, BellDot } from "lucide-react";
+import { BellDot, LogOut } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
@@ -8,28 +8,33 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/notification-popover";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-const Navbar = () => {
+function Navbar() {
+  async function signOut() {
+    "use server";
+    cookies().delete("token");
+    redirect("/sign-in");
+  }
+
   return (
     <div className="flex items-center justify-between bg-white px-10 border shadow-sm">
       <div className="flex ">
-        <Image src="logo.svg" width={162} height={48} alt="" />
+        <Link href="/" className="flex">
+          <Image src="logo.svg" width={162} height={48} alt="" />
+        </Link>
         <Tabs defaultValue="patients" className="w-[425px]">
           <TabsList className="">
             <TabsTrigger value="patients">Patients</TabsTrigger>
             <TabsTrigger value="analysis">Analysis</TabsTrigger>
           </TabsList>
-          {/* <TabsContent value="account">
-            Make changes to your account here.
-          </TabsContent>
-          <TabsContent value="password">Change your password here.</TabsContent> */}
         </Tabs>
       </div>
       <div className="flex flex-row items-center">
-        {/* <Link href="#"> */}
         <Popover>
-          <PopoverTrigger className="relative">
-            <BellDot className="mr-2" />
+          <PopoverTrigger className="relative mr-3">
+            <BellDot />
           </PopoverTrigger>
           <PopoverContent className="flex flex-col gap-2 absolute -right-4 top-1">
             <Button variant="link">
@@ -54,8 +59,7 @@ const Navbar = () => {
             </Button>
           </PopoverContent>
         </Popover>
-        {/* </Link> */}
-        <Button variant="link">
+        <div className="flex relative items-center hover:underline">
           <Image
             src="profile.svg"
             width={32}
@@ -64,10 +68,13 @@ const Navbar = () => {
             className="mr-2"
           />
           John Doe
+        </div>
+        <Button variant="outline" className="text-base ml-4">
+          <LogOut className="mr-2" /> Log Out
         </Button>
       </div>
     </div>
   );
-};
+}
 
 export default Navbar;
