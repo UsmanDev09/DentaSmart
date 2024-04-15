@@ -5,14 +5,12 @@ import PatientXray from "@/components/patient-xray";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft } from "lucide-react";
 
-const Patient = () => {
-
+const Patient = ({ searchParams }: { searchParams: any }) => {
   return (
     <div className="sm:py-6 sm:px-8 px-1 py-4">
       <Link
-        // onClick={() => handleNavigation()}
         className="hover:underline text-xl flex items-center"
-        href="/patient-report"
+        href={`/patient-report?checkupId=${searchParams.checkupId}`}
       >
         <ChevronLeft className="mr-1 font-bold h-8 w-8" />
         Back
