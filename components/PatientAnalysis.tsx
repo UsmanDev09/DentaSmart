@@ -54,6 +54,7 @@ export const PatientAnalysis = ({
   params: any;
 }) => {
   const [drawPolygon, setDrawPolygon] = useState(false);
+  const [drawRect, setDrawRect] = useState(false);
 
   const onSave = (points: any) => {
     console.log("points", points);
@@ -250,6 +251,7 @@ export const PatientAnalysis = ({
                       imageUrl="./sampleImage.jpg"
                       drawPolygon={drawPolygon}
                       onSave={onSave}
+                      drawRect={drawRect}
                     />
                     </ReduxProvider>
                   </div>

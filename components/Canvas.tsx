@@ -126,6 +126,8 @@ const Canvas = ({
       const sy = newAnnotation[0].y;
       const { x, y } = e.target.getStage().getPointerPosition();
       const annotationToAdd = {
+        shape:"",
+        status:"",
         x: sx,
         y: sy,
         width: x - sx,
