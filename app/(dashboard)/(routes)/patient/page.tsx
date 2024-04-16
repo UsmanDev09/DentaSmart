@@ -1,7 +1,7 @@
 import Link from "next/link";
-import PatientBio from "@/components/patient-bio";
-import PatientProblems from "@/components/patient-problem";
-import PatientXray from "@/components/patient-xray";
+import PatientBio from "@/components/patientBio";
+import PatientProblems from "@/components/patientProblem";
+import PatientXray from "@/components/patientXray";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft } from "lucide-react";
 

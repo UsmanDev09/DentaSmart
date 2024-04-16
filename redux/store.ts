@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import polygonChange from "./features/polygon-slice"
-import rectangleChange from "./features/rectangle-slice";
+import polygonReducer from "./features/polygon-slice"
+import rectangleReducer from "./features/rectangle-slice";
 import {useSelector} from "react-redux"
 
 export const store = configureStore({
     reducer: 
         { 
-            "PolygonChange":polygonChange,
-            "RectangleChange":rectangleChange,
+            "Polygon":polygonReducer,
+            "Rectangle":rectangleReducer,
         },
 });
 

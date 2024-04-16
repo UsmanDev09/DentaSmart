@@ -1,7 +1,7 @@
 "use client";
 // import { Separator } from "./ui/separator";
 import Image from "next/image";
-import PatientComplaints from "./patient-complaints";
+import PatientComplaints from "./patientComplaints";
 
 const PatientBio = () => {
   return (

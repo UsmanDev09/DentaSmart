@@ -1,6 +1,6 @@
 "use client";
 
-import ChatCard from "@/components/chat-card";
+import ChatCard from "@/components/chatCard";
 import Date from "@/components/date";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
@@ -41,8 +41,8 @@ import Canvas from "@/components/Canvas";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowRight, Check, ChevronLeft, ChevronRight, X } from "lucide-react";
-import PatientChatResponse from "@/components/patient-chat-response";
-import AiChatResponse from "@/components/ai-chat-response";
+import PatientChatResponse from "@/components/patientChatResponse";
+import AiChatResponse from "@/components/aiChatResponse";
 import Link from "next/link";
 import ReduxProvider from "@/redux/provider";
 

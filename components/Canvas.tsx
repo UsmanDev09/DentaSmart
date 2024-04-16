@@ -35,7 +35,7 @@ const Canvas = ({
   const [isPolyComplete, setPolyComplete] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
-  const newPoints = useSelector((state:RootState)=> state.PolygonChange.value.points )
+  // const newPoints = useSelector((state:RootState)=> state.PolygonChange.value.points )
 
 
   const videoElement = useMemo(() => {

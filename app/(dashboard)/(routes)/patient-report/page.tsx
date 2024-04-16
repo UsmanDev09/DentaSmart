@@ -1,4 +1,4 @@
-import PatientProblemsEditable from "@/components/patient-problem-editable";
+import PatientProblemsEditable from "@/components/patientProblemEditable";
 import Riskcheckups from "@/components/risks-reports";
 import { Check, ChevronLeft } from "lucide-react";
 import Link from "next/link";
