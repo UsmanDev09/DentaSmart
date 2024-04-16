@@ -54,7 +54,8 @@ export const PatientAnalysis = ({
   params: any;
 }) => {
   const [drawPolygon, setDrawPolygon] = useState(false);
-  const [drawRect, setDrawRect] = useState(false);
+  const [drawRectangle, setDrawRectangle] = useState(false);
+
 
   const onSave = (points: any) => {
     console.log("points", points);
@@ -234,11 +235,18 @@ export const PatientAnalysis = ({
                     Report
                   </TabsTrigger>
                   <TabsTrigger
-                    onClick={() => setDrawPolygon(true)}
+                    onClick={() => {setDrawRectangle(false), setDrawPolygon(true)}}
                     value="polygon"
                     className="bg-[#E3E3E3]"
                   >
                     Draw polygon
+                  </TabsTrigger>
+                  <TabsTrigger
+                    onClick={() => {setDrawPolygon(false), setDrawRectangle(true)}}
+                    value="recatngle"
+                    className="bg-[#E3E3E3]"
+                  >
+                    Draw Rectangle
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
@@ -251,7 +259,7 @@ export const PatientAnalysis = ({
                       imageUrl="./sampleImage.jpg"
                       drawPolygon={drawPolygon}
                       onSave={onSave}
-                      drawRect={drawRect}
+                      drawRect={drawRectangle}
                     />
                     </ReduxProvider>
                   </div>

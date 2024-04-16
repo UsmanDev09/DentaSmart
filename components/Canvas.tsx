@@ -103,7 +103,7 @@ const Canvas = ({
           y: sy,
           width: x - sx,
           height: y - sy,
-          key: "0",
+          key: newAnnotation.length+1,
         },
       ]);
     }
@@ -126,8 +126,8 @@ const Canvas = ({
       const sy = newAnnotation[0].y;
       const { x, y } = e.target.getStage().getPointerPosition();
       const annotationToAdd = {
-        shape:"",
-        status:"",
+        shape:"Rectangle",
+        status:"Complete",
         x: sx,
         y: sy,
         width: x - sx,
