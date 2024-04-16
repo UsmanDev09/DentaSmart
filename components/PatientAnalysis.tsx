@@ -44,6 +44,7 @@ import { ArrowRight, Check, ChevronLeft, ChevronRight, X } from "lucide-react";
 import PatientChatResponse from "@/components/patient-chat-response";
 import AiChatResponse from "@/components/ai-chat-response";
 import Link from "next/link";
+import ReduxProvider from "@/redux/provider";
 
 export const PatientAnalysis = ({
   patientAnalysis,
@@ -244,11 +245,13 @@ export const PatientAnalysis = ({
               <div className="flex">
                 <div className="flex flex-col w-[50%]">
                   <div className="flex flex-col items-end">
+                    <ReduxProvider>
                     <Canvas
                       imageUrl="./sampleImage.jpg"
                       drawPolygon={drawPolygon}
                       onSave={onSave}
                     />
+                    </ReduxProvider>
                   </div>
                   <h5 className="text-xl text-[#21B9C6] font-bold">
                     Presenting Complaints
