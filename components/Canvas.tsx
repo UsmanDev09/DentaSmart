@@ -1,29 +1,42 @@
-
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import PolygonAnnotation from "./PolygonAnnotation";
-import { Stage, Layer, Image, Rect, Line } from "react-konva";
+import { Stage, Layer, Image, Rect, Label, Tag, Text } from "react-konva";
 import { Button } from "./ui/button";
-import ReduxProvider from "@/redux/provider";
 import { addPolygon } from "@/redux/features/polygon-slice";
 import { addRectangle } from "@/redux/features/rectangle-slice";
-import { useDispatch,useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch,  } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { Input } from "./ui/input";
+import { nanoid } from "@reduxjs/toolkit";
+import { Tabs, TabsList,TabsContent, TabsTrigger } from "./ui/tabs";
+import { Card, CardDescription, CardTitle } from "./ui/card";
+import { RectangleHorizontal } from "lucide-react";
+
+const scaleBy = 1.01;
+
+function getDistance(p1:any, p2:any) {
+  return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+}
+
+function getCenter(p1:any, p2:any) {
+  return {
+    x: (p1.x + p2.x) / 2,
+    y: (p1.y + p2.y) / 2,
+  };
+}
 
 const Canvas = ({
   imageUrl,
-  drawPolygon,
-  onSave,
-  drawRect,
 }: {
   imageUrl: string;
-  drawPolygon: boolean;
-  drawRect: boolean;
-  onSave: Function;
 }) => {
   const videoSource = imageUrl;
   const [image, setImage] = useState<any>();
   const imageRef = useRef<any>(null);
   const dataRef = useRef<any>(null);
+
+  const [cordinates, setCordinates] = useState<any>({x: 0, y: 0});
+  // const [rectCordinates, setRectCordinates] = useState<any>({x: 0, y: 0});
 
   const [annotations, setAnnotations] = useState<any>([]);
   const [newAnnotation, setNewAnnotation] = useState<any>([]);
@@ -33,15 +46,22 @@ const Canvas = ({
   const [position, setPosition] = useState([0, 0]);
   const [isMouseOverPoint, setMouseOverPoint] = useState(false);
   const [isPolyComplete, setPolyComplete] = useState(false);
+  const [drawPolygon, setDrawPolygon] = useState(false);
+  const [drawRectangle, setDrawRectangle] = useState(false);
+  const [labelActive, setLabelActive] = useState(false);
+  const [polygonLabel, setPolygonLabel] = useState('');
+  const [rectanglelabel, setrRectanglelabel] = useState('');
+  const [polygonCoordinates, setPolygonCoordinates] = useState<any>({points:[], label:"", id:""})
+
 
   const dispatch = useDispatch<AppDispatch>();
-  // const newPoints = useSelector((state:RootState)=> state.PolygonChange.value.points )
+  const id = nanoid()
 
 
   const videoElement = useMemo(() => {
     const element = new window.Image();
-    element.width = 480;
-    element.height = 360;
+    element.width = 460;
+    element.height = 400;
     element.src = videoSource;
     return element;
   }, [videoSource]);
@@ -65,6 +85,8 @@ const Canvas = ({
     return [stage.getPointerPosition().x, stage.getPointerPosition().y];
   };
 
+
+
   const handleMouseDown = (e: any) => {
     if (drawPolygon) {
       if (isPolyComplete) return;
@@ -73,15 +95,16 @@ const Canvas = ({
       if (isMouseOverPoint && points.length >= 3) {
         setPolyComplete(true);
         console.log(points);
-        dispatch(addPolygon(points))
-        // points to save inside zustand/ redux (dispatch action) state,
-        // { status: completed, points, shape: 'polygon' }
+        const id = nanoid()
+        setCordinates({x: mousePos[0], y: mousePos[1]});
+        setPolygonCoordinates({points: points, id: id, label:polygonLabel});        
+        setLabelActive(true);
+
+
       } else {
         setPoints([...points, mousePos]);
-        // points to save inside zustand/ redux (dispatch action) state,
-        // { status: in-progress, points, shape: 'polygon' }
       }
-    } else if (drawRect) {
+    } else if (drawRectangle) {
       const stage = e.target.getStage();
       const { x, y } = stage.getPointerPosition();
       setNewAnnotation([{ x, y, width: 0, height: 0, key: "0" }]);
@@ -93,7 +116,7 @@ const Canvas = ({
       const stage = e.target.getStage();
       const mousePos = getMousePos(stage);
       setPosition(mousePos);
-    } else if (drawRect && newAnnotation.length === 1) {
+    } else if (drawRectangle && newAnnotation.length === 1) {
       const sx = newAnnotation[0].x;
       const sy = newAnnotation[0].y;
       const { x, y } = e.target.getStage().getPointerPosition();
@@ -103,7 +126,7 @@ const Canvas = ({
           y: sy,
           width: x - sx,
           height: y - sy,
-          key: newAnnotation.length+1,
+          key: newAnnotation.length + 1,
         },
       ]);
     }
@@ -121,32 +144,21 @@ const Canvas = ({
   };
 
   const handleMouseUp = (e: any) => {
-    if (newAnnotation.length === 1 && drawRect) {
+    if (newAnnotation.length === 1 && drawRectangle) {
       const sx = newAnnotation[0].x;
       const sy = newAnnotation[0].y;
       const { x, y } = e.target.getStage().getPointerPosition();
       const annotationToAdd = {
-        shape:"Rectangle",
-        status:"Complete",
+        shape: "Rectangle",
+        status: "Complete",
         x: sx,
         y: sy,
         width: x - sx,
         height: y - sy,
         key: annotations.length + 1,
+        id,
       };
-
       console.log(annotationToAdd);
-
-      // state to save inside zustand, redux (dispatch action)
-      // {
-      //   shape: 'rectangle'
-      //   status: completed
-      //   x: sx,
-      //   y: sy,
-      //   width: x - sx,
-      //   height: y - sy,
-      //   key: annotations.length + 1
-      // };
       dispatch(addRectangle(annotationToAdd));
       annotations.push(annotationToAdd);
       setNewAnnotation([]);
@@ -193,79 +205,263 @@ const Canvas = ({
 
   const annotationsToDraw = [...newAnnotation, ...annotations];
 
+  const stageRef = useRef<any>(null);
+  let lastCenter:any = null;
+  let lastDist = 0;
+  
+  function zoomStage(event:any) {
+    event.evt.preventDefault();
+    if (stageRef.current !== null) {
+      const stage = stageRef.current;
+      const oldScale = stage.scaleX();
+      const { x: pointerX, y: pointerY } = stage.getPointerPosition();
+      const mousePointTo = {
+        x: (pointerX - stage.x()) / oldScale,
+        y: (pointerY - stage.y()) / oldScale,
+      };
+      const newScale = event.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+      stage.scale({ x: newScale, y: newScale });
+      const newPos = {
+        x: pointerX - mousePointTo.x * newScale,
+        y: pointerY - mousePointTo.y * newScale,
+      }
+      stage.position(newPos);
+      stage.batchDraw();
+    }
+  }
+
+  function handleTouch(e:any) {
+    e.evt.preventDefault();
+    var touch1 = e.evt.touches[0];
+    var touch2 = e.evt.touches[1];
+    const stage = stageRef.current;
+    if (stage !== null) {
+      if (touch1 && touch2) {
+        if (stage.isDragging()) {
+          stage.stopDrag();
+        }
+  
+        var p1 = {
+          x: touch1.clientX,
+          y: touch1.clientY
+        };
+        var p2 = {
+          x: touch2.clientX,
+          y: touch2.clientY
+        };
+  
+        if (!lastCenter) {
+          lastCenter = getCenter(p1, p2);
+          return;
+        }
+        var newCenter = getCenter(p1, p2);
+  
+        var dist = getDistance(p1, p2);
+  
+        if (!lastDist) {
+          lastDist = dist;
+        }
+  
+        // local coordinates of center point
+        var pointTo = {
+          x: (newCenter.x - stage.x()) / stage.scaleX(),
+          y: (newCenter.y - stage.y()) / stage.scaleX()
+        };
+  
+        var scale = stage.scaleX() * (dist / lastDist);
+  
+        stage.scaleX();
+        stage.scaleY();
+  
+        // calculate new position of the stage
+        var dx = newCenter.x - lastCenter.x;
+        var dy = newCenter.y - lastCenter.y;
+  
+        var newPos = {
+          x: newCenter.x - pointTo.x * scale + dx,
+          y: newCenter.y - pointTo.y * scale + dy
+        };
+  
+        stage.position(newPos);
+        stage.batchDraw();
+  
+        lastDist = dist;
+        lastCenter = newCenter;
+      }
+    }
+  }
+
+  function handleTouchEnd() {
+    lastCenter = null;
+    lastDist = 0;
+  }
+
+const handleLabelChange = (e: any) => {
+  console.log("handleLabelChange", e.target.value);
+  setPolygonLabel(e.target.value);
+  console.log(e.target.value)
+
+
+}
+const onSave = (points: any) => {
+  console.log("points", points);
+};
+
+const onSaveLabel = () => {
+    dispatch(addPolygon({points:points, label:polygonLabel, id:id}))
+    // console.log("onSave",{points, label,id});
+
+    setLabelActive(false)
+  }
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <Stage
-        width={size.width || 480}
-        height={size.height || 360}
-        onMouseMove={handleMouseMove}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-      >
-        <Layer>
-          <Image
-            ref={imageRef}
-            image={image}
-            x={0}
-            y={0}
-            width={size.width}
-            height={size.height}
-            alt=""
-          />
-          {drawPolygon && (
-            <PolygonAnnotation
-              points={points}
-              flattenedPoints={flattenedPoints}
-              handlePointDragMove={handlePointDragMove}
-              handleGroupDragEnd={handleGroupDragEnd}
-              handleMouseOverStartPoint={handleMouseOverStartPoint}
-              handleMouseOutStartPoint={handleMouseOutStartPoint}
-              isFinished={isPolyComplete}
-            />
-          )}
-
-          {drawRect &&
-            annotationsToDraw.map((annotationValue, index) => {
-              return (
-                <Rect
-                  key={index}
-                  x={annotationValue.x}
-                  y={annotationValue.y}
-                  width={annotationValue.width}
-                  height={annotationValue.height}
-                  fill="transparent"
-                  stroke="red"
+    <>
+      <div className="flex p-5">
+        <Tabs className="w-[400px] flex justify-end ">
+          <TabsList className="flex flex-col">
+            <TabsTrigger 
+              onClick={()=>{setDrawPolygon(true) , setDrawRectangle(false)}} 
+              value="polygon">
+                polygon
+            </TabsTrigger>
+            <TabsTrigger 
+              onClick={() =>{setDrawPolygon(false), setDrawRectangle(true);}}
+              value="rectangle"> 
+                <RectangleHorizontal/>
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      <div>
+        <Stage
+          width={size.width || 480}
+          height={size.height || 360}
+          onMouseMove={handleMouseMove}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onWheel={zoomStage}
+          onTouchMove={handleTouch}
+          onTouchEnd={handleTouchEnd}
+          ref={stageRef}
+        >
+          <Layer>
+              <Image
+                ref={imageRef}
+                image={image}
+                x={0}
+                y={0}
+                width={size.width}
+                height={size.height}
+                alt=""
+              />
+            {drawPolygon && (
+              <>
+                <PolygonAnnotation
+                  points={points}
+                  flattenedPoints={flattenedPoints}
+                  handlePointDragMove={handlePointDragMove}
+                  handleGroupDragEnd={handleGroupDragEnd}
+                  handleMouseOverStartPoint={handleMouseOverStartPoint}
+                  handleMouseOutStartPoint={handleMouseOutStartPoint}
+                  isFinished={isPolyComplete}
                 />
-              );
-            })}
-        </Layer>
-      </Stage>
+                <Label x= {cordinates.x - 3} y={cordinates.y - 15}>
+                  <Tag
+                      fill= 'transparent'
+                      pointerDirection= 'down'
+                      pointerWidth={5}
+                      pointerHeight={10}
+                      lineJoin= 'round'
+                      shadowColor= 'black'
+                      stroke="white"
+                  />
+                  <Text
+                  text={polygonLabel}
+                  fontSize={15}
+                  padding={5}
+                  fill='white'
+                  />
+                </Label>
+              </>
+            )}
 
-      <div
-        ref={dataRef}
-        style={{
-          display: "none",
-          width: 400,
-          boxShadow: "7px 7px 5px .4em rgba(0,0,0,.1)",
-        }}
-      >
-        <pre>{}</pre>
+            {drawRectangle &&
+              annotationsToDraw.map((annotationValue, index) => {
+                return (
+                  <>
+                  <Rect
+                    key={index}
+                    x={annotationValue.x}
+                    y={annotationValue.y}
+                    width={annotationValue.width}
+                    height={annotationValue.height}
+                    fill="transparent"
+                    stroke="red"
+                  />
+                  <Label key={index}  x={annotationValue.x + 5} y={annotationValue.y -5}>
+                    <Tag
+                      fill= 'transparent'
+                      pointerDirection= 'down'
+                      pointerWidth={5}
+                      pointerHeight={10}
+                      lineJoin= 'round'
+                      shadowColor= 'black'
+                      stroke="white"
+                    />
+                      <Text
+                          text={rectanglelabel}
+                          fontSize={15}
+                          padding={5}
+                          fill='white'
+                      />
+                  </Label>
+                
+                  
+                  </>
+                );
+              })}
+          </Layer>
+        </Stage>
+
+        <div
+          ref={dataRef}
+          style={{
+            display: "none",
+            width: 400,
+            boxShadow: "7px 7px 5px .4em rgba(0,0,0,.1)",
+          }}
+        >
+        </div>
+        {(drawPolygon || drawRectangle) &&
+          <Button className="mt-4 w-20" onClick={() => onSave(false)}>
+            {/* {isEditing ?(<>Edit</>):(<>Save</>)} */} Save
+          </Button>
+        }
       </div>
-      {(drawPolygon || drawRect) && (
-        <Button className="mt-4 w-20" onClick={() => onSave(false)}>
-          Save
-        </Button>
-      )}
+      <div>
+        <Tabs defaultValue="labels" className="w-[400px] flex flex-col justify-start border ml-5">
+          <TabsList>
+            <TabsTrigger value="labels" > 
+              Labels
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="labels">
+            <Card className=" p-5">
+              <>
+                {labelActive && (
+                  <>
+                    <input type="text" onChange={handleLabelChange} />
+                    <button type="button" onClick={onSaveLabel} >Save</button>
+                  </>
+                )}
+                <CardTitle>Polygon</CardTitle>
+                <CardDescription><p>{polygonLabel.length ===0 ?(<>No Label</>):(<>{polygonLabel}</>) }</p></CardDescription>
+              </>
+            </Card>
+          </TabsContent> 
+        </Tabs>
+      </div>
     </div>
+    </>
   );
 };
 
 export default Canvas;
-

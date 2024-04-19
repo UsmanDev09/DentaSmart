@@ -8,6 +8,7 @@ type Rectangle = {
   width: number;
   height: number;
   key: number;
+  id: string;
 };
 
 type RectanglesState = {

@@ -56,7 +56,6 @@ export const PatientAnalysis = ({
   const [drawPolygon, setDrawPolygon] = useState(false);
   const [drawRectangle, setDrawRectangle] = useState(false);
 
-
   const onSave = (points: any) => {
     console.log("points", points);
   };
@@ -234,34 +233,29 @@ export const PatientAnalysis = ({
                   <TabsTrigger value="report" className="bg-[#E3E3E3]">
                     Report
                   </TabsTrigger>
-                  <TabsTrigger
-                    onClick={() => {setDrawRectangle(false), setDrawPolygon(true)}}
-                    value="polygon"
-                    className="bg-[#E3E3E3]"
-                  >
-                    Draw polygon
-                  </TabsTrigger>
-                  <TabsTrigger
-                    onClick={() => {setDrawPolygon(false), setDrawRectangle(true)}}
-                    value="recatngle"
-                    className="bg-[#E3E3E3]"
-                  >
-                    Draw Rectangle
-                  </TabsTrigger>
                 </TabsList>
               </Tabs>
               <Separator />
               <div className="flex">
                 <div className="flex flex-col w-[50%]">
-                  <div className="flex flex-col items-end">
-                    <ReduxProvider>
-                    <Canvas
-                      imageUrl="./sampleImage.jpg"
-                      drawPolygon={drawPolygon}
-                      onSave={onSave}
-                      drawRect={drawRectangle}
-                    />
-                    </ReduxProvider>
+                  <div className="flex flex-col items-end" >
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        }} className="m-3 ml-10 ">
+                      <Link href={`/img-tool`}>
+                        <ReduxProvider>
+                        <Canvas
+                          imageUrl="./sampleImage.jpg"
+                          drawPolygon={drawPolygon}
+                          onSave={onSave}
+                          drawRect={drawRectangle}
+                          polyLabel="adksn"
+                        />
+                        </ReduxProvider>
+                      </Link>
+                    </div>
                   </div>
                   <h5 className="text-xl text-[#21B9C6] font-bold">
                     Presenting Complaints

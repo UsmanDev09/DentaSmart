@@ -4,15 +4,20 @@ type InitialeState = {
   value: PolygonState;
 };
 type PolygonState = {
-  points: Array<any>;
+  points: [];
   status:string;
-  shape:string
+  shape:string;
+  label:string;
+  id: string;
 };
 const initialeState = {
   value: {
     points: [],
     status:"None",
-    shape:"None"
+    shape:"None",
+    label: "",
+    id: ""
+    
   } as PolygonState,
 } as InitialeState;
 
@@ -20,12 +25,14 @@ export const polygon = createSlice({
   name: "polygon",
   initialState: initialeState,
   reducers: {
-    addPolygon: ( state,action: PayloadAction<any>) => {
+    addPolygon: ( state , action: PayloadAction<any>) => {
+      console.log('action', action)
       return {
-        
         value: {
           status:"Complete",
-          points: action.payload,
+          id: action.payload.id,
+          label: action.payload.label,
+          points: action.payload.points,
           shape: "Polygon"
         },
       };
