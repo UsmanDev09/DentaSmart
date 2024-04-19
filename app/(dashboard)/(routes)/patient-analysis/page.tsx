@@ -19,8 +19,21 @@ async function PatientAnalysisPage({ searchParams }: { searchParams: any }) {
   );
   const patientAnalysis = await response.json();
 
+  const chatResponse = await fetch(
+    `http://103.217.176.51:8000/v1/dentist_chat?checkup_id=${searchParams.checkupId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+    }
+  );
+  const chat = await chatResponse.json();
+  
+
   return (
-    <PatientAnalysis patientAnalysis={patientAnalysis} params={searchParams} />
+    <PatientAnalysis chat ={chat} patientAnalysis={patientAnalysis} searchParams={searchParams} />
   );
 }
 

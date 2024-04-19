@@ -2,7 +2,6 @@ import Image from "next/image";
 
 interface PatientChatResponseProps {
   comment: string;
-  time: string;
   imageUrl?: string;
   imageUrl2?: string;
   imageUrl3?: string;
@@ -10,7 +9,6 @@ interface PatientChatResponseProps {
 
 const PatientChatResponse = ({
   comment,
-  time,
   imageUrl,
   imageUrl2,
   imageUrl3,
@@ -34,7 +32,6 @@ const PatientChatResponse = ({
             </div>
           )}
         </div>
-        <span className="text-slate-500 my-1">{time}</span>
       </div>
       <Image
         src="/avatar2.svg"

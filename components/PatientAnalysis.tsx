@@ -48,17 +48,15 @@ import ReduxProvider from "@/redux/provider";
 
 export const PatientAnalysis = ({
   patientAnalysis,
-  params,
+  searchParams,
+  chat
 }: {
   patientAnalysis: any;
-  params: any;
+  searchParams: any;
+  chat:any;
 }) => {
-  const [drawPolygon, setDrawPolygon] = useState(false);
-  const [drawRectangle, setDrawRectangle] = useState(false);
 
-  const onSave = (points: any) => {
-    console.log("points", points);
-  };
+  const chats= chat.chat;
 
   return (
     <div className="flex">
@@ -185,42 +183,32 @@ export const PatientAnalysis = ({
                   <ArrowRight className="text-[#21B9C6]" size={30} />
                 </Button>
               </ChatDialogTrigger>
-              <DialogContent className="bg-[#EBF1F8]">
-                <DialogHeader>
-                  <DialogTitle className="flex items-center text-4xl mx-auto mb-3">
-                    Ai Smart Dentist
-                  </DialogTitle>
-                  <DialogDescription className="flex flex-col bg-[#EBF1F8] gap-1 overflow-y-auto">
-                    <PatientChatResponse
-                      comment="Hello, Ai! How are you doing?"
-                      time="12:09"
-                    />
-                    <AiChatResponse
-                      comment="I am Good How may i help you."
-                      time="12:10"
-                    />
-                    <PatientChatResponse
-                      comment="I have pain in thooth"
-                      time="12:11"
-                    />
-                    <AiChatResponse
-                      comment="Do you have any additional concerns?"
-                      time="12:12"
-                    />
-                    <AiChatResponse
-                      comment="Do you have any previous X-ray/Mouth Image?"
-                      time="12:13"
-                    />
-                    <PatientChatResponse
-                      comment="I have attached"
-                      time="12:14"
-                      imageUrl="/chatPic1.svg"
-                      imageUrl2="/chatPic2.svg"
-                      imageUrl3="/chatPic3.svg"
-                    />
-                  </DialogDescription>
-                </DialogHeader>
-              </DialogContent>
+                <DialogContent className="bg-[#EBF1F8] lg:max-w-screen-lg overflow-y-auto max-h-screen">
+                  
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center mx-auto  text-4xl mb-3 ">
+                      Ai Smart Dentist
+                    </DialogTitle>
+                    <DialogDescription className="flex flex-col bg-[#EBF1F8] gap-1 ">
+                        {chats.map((chat:any, index:any)=>{
+                          return(
+                            <div key={index} id={chats.id}>
+                              {chat.role === "assistant" && 
+                                <AiChatResponse
+                                  comment={chat.body}
+                                /> 
+                              }
+                              {chat.role === "user" && 
+                                <PatientChatResponse
+                                  comment={chat.body}
+                                /> 
+                              }
+                            </div>
+                          )
+                        })}
+                    </DialogDescription>
+                  </DialogHeader>
+                </DialogContent>
             </ChatDialog>
           </div>
           <div className="flex flex-col w-full">
@@ -238,24 +226,15 @@ export const PatientAnalysis = ({
               <Separator />
               <div className="flex">
                 <div className="flex flex-col w-[50%]">
-                  <div className="flex flex-col items-end" >
-                    <div style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                        }} className="m-3 ml-10 ">
-                      <Link href={`/img-tool`}>
-                        <ReduxProvider>
-                        <Canvas
-                          imageUrl="./sampleImage.jpg"
-                          drawPolygon={drawPolygon}
-                          onSave={onSave}
-                          drawRect={drawRectangle}
-                          polyLabel="adksn"
-                        />
-                        </ReduxProvider>
-                      </Link>
-                    </div>
+                  <div className="flex flex-col items-end my-5" >
+                    <Link href={`/img-tool`}>
+                      <Image
+                        src={`http://103.217.176.51:8000${patientAnalysis.data.images[0]}`}
+                        height={500}
+                        width={500}
+                        alt=""
+                      />
+                    </Link>
                   </div>
                   <h5 className="text-xl text-[#21B9C6] font-bold">
                     Presenting Complaints
@@ -391,7 +370,7 @@ export const PatientAnalysis = ({
             <div className="flex justify-end my-5 mr-1">
               <Link
                 className="rounded-full px-14 py-4 text-xl transition hover:opacity-80 font-semibold bg-[#21B9C6] text-white"
-                href={`/patient-report?checkupId=${params.checkupId}`}
+                href={`/patient-report?checkupId=${searchParams.checkupId}`}
               >
                 Next
               </Link>
