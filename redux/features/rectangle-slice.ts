@@ -9,6 +9,7 @@ type Rectangle = {
   height: number;
   key: number;
   id: string;
+  label: string;
 };
 
 type RectanglesState = {

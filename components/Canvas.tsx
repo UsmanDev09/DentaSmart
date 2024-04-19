@@ -48,10 +48,13 @@ const Canvas = ({
   const [isPolyComplete, setPolyComplete] = useState(false);
   const [drawPolygon, setDrawPolygon] = useState(false);
   const [drawRectangle, setDrawRectangle] = useState(false);
-  const [labelActive, setLabelActive] = useState(false);
+  const [polygonLabelActive, setPolygonLabelActive] = useState(false);
+  const [rectangleLabelActive, setRectangleLabelActive] = useState(false);
+
   const [polygonLabel, setPolygonLabel] = useState('');
-  const [rectanglelabel, setrRectanglelabel] = useState('');
+  const [rectangleLabel, setRectangleLabel] = useState('');
   const [polygonCoordinates, setPolygonCoordinates] = useState<any>({points:[], label:"", id:""})
+  const [rectangleCoordinates, setRectangleCoordinates] = useState<any>()
 
 
   const dispatch = useDispatch<AppDispatch>();
@@ -94,11 +97,9 @@ const Canvas = ({
       const mousePos = getMousePos(stage);
       if (isMouseOverPoint && points.length >= 3) {
         setPolyComplete(true);
-        console.log(points);
-        const id = nanoid()
         setCordinates({x: mousePos[0], y: mousePos[1]});
         setPolygonCoordinates({points: points, id: id, label:polygonLabel});        
-        setLabelActive(true);
+        setPolygonLabelActive(true);
 
 
       } else {
@@ -143,12 +144,14 @@ const Canvas = ({
     setMouseOverPoint(false);
   };
 
+  let annotationToAdd:any={};
+
   const handleMouseUp = (e: any) => {
     if (newAnnotation.length === 1 && drawRectangle) {
       const sx = newAnnotation[0].x;
       const sy = newAnnotation[0].y;
       const { x, y } = e.target.getStage().getPointerPosition();
-      const annotationToAdd = {
+      annotationToAdd = {
         shape: "Rectangle",
         status: "Complete",
         x: sx,
@@ -156,16 +159,20 @@ const Canvas = ({
         width: x - sx,
         height: y - sy,
         key: annotations.length + 1,
-        id,
+        id:id,
+        label:rectangleLabel
       };
-      console.log(annotationToAdd);
-      dispatch(addRectangle(annotationToAdd));
+      setRectangleCoordinates(annotationToAdd)
+
+      setRectangleLabelActive(true);
       annotations.push(annotationToAdd);
       setNewAnnotation([]);
       setAnnotations(annotations);
     }
   };
 
+  // console.log("rectangleCoordinates: ",rectangleCoordinates);
+  
   const handlePointDragMove = (e: any) => {
     const stage = e.target.getStage();
     const index = e.target.index - 1;
@@ -296,23 +303,27 @@ const Canvas = ({
     lastDist = 0;
   }
 
-const handleLabelChange = (e: any) => {
-  console.log("handleLabelChange", e.target.value);
-  setPolygonLabel(e.target.value);
-  console.log(e.target.value)
-
-
-}
-const onSave = (points: any) => {
-  console.log("points", points);
-};
-
-const onSaveLabel = () => {
-    dispatch(addPolygon({points:points, label:polygonLabel, id:id}))
-    // console.log("onSave",{points, label,id});
-
-    setLabelActive(false)
+  const handlePolygonLabelChange = (e: any) => {
+    setPolygonLabel(e.target.value);
   }
+
+  const handleRectangleLabelChange = (e: any) => {
+    setRectangleLabel(e.target.value);
+  }
+
+  const onSave = (points: any) => {
+  };
+
+  const onSavePolygonLabel = () => {
+    dispatch(addPolygon({points:points, label:polygonLabel, id:id}))
+    setPolygonLabelActive(false)
+  }
+  const onSaveRectangleLabel = () => {
+    
+    dispatch(addRectangle({...rectangleCoordinates, label:rectangleLabel}));
+    setRectangleLabelActive(false)
+  }
+
   return (
     <>
       <div className="flex p-5">
@@ -407,14 +418,12 @@ const onSaveLabel = () => {
                       stroke="white"
                     />
                       <Text
-                          text={rectanglelabel}
+                          text={rectangleLabel}
                           fontSize={15}
                           padding={5}
                           fill='white'
                       />
                   </Label>
-                
-                  
                   </>
                 );
               })}
@@ -432,7 +441,7 @@ const onSaveLabel = () => {
         </div>
         {(drawPolygon || drawRectangle) &&
           <Button className="mt-4 w-20" onClick={() => onSave(false)}>
-            {/* {isEditing ?(<>Edit</>):(<>Save</>)} */} Save
+            Save
           </Button>
         }
       </div>
@@ -446,14 +455,26 @@ const onSaveLabel = () => {
           <TabsContent value="labels">
             <Card className=" p-5">
               <>
-                {labelActive && (
+                {polygonLabelActive && (
                   <>
-                    <input type="text" onChange={handleLabelChange} />
-                    <button type="button" onClick={onSaveLabel} >Save</button>
+                    <input type="text" onChange={handlePolygonLabelChange} />
+                    <button type="button" onClick={onSavePolygonLabel} >Save</button>
                   </>
                 )}
                 <CardTitle>Polygon</CardTitle>
-                <CardDescription><p>{polygonLabel.length ===0 ?(<>No Label</>):(<>{polygonLabel}</>) }</p></CardDescription>
+                <CardDescription><p>{polygonLabel.length ===0 ?(<>No Polygon Shape has been drawn</>):(<>{polygonLabel}</>) }</p></CardDescription>
+              </>
+            </Card>
+            <Card className=" p-5">
+              <>
+                {rectangleLabelActive && (
+                  <>
+                    <input type="text" onChange={handleRectangleLabelChange} />
+                    <button type="button" onClick={onSaveRectangleLabel} >Save</button>
+                  </>
+                )}
+                <CardTitle>Rectangle</CardTitle>
+                <CardDescription><p>{rectangleLabel.length ===0 ?(<>No Rectangle Shape has been drawn</>):(<>{rectangleLabel}</>) }</p></CardDescription>
               </>
             </Card>
           </TabsContent> 
