@@ -24,9 +24,8 @@ async function Patientcheckup({ searchParams }: { searchParams: any }) {
   const report = await response.json();
 
   const patient = report.data.member;
-
   const medicalHistory = report.data.medical_history;
-
+  
   return (
     <div className="px-8 py-6">
       <div className="flex justify-between items-center">
@@ -52,7 +51,7 @@ async function Patientcheckup({ searchParams }: { searchParams: any }) {
               DOB:<p className="ml-2 text-black"> {patient.dob}</p>
             </span>
           </h1>
-          <h1 className="text-2xl font-bold ml-[4rem]">Diagnosis</h1>
+          <h1 className="text-2xl font-bold ml-[6rem]">Diagnosis</h1>
           <h1 className="text-2xl font-bold ml-[22rem]">Risks</h1>
         </div>
         <div className="flex mt-5 gap-x-4">
@@ -89,13 +88,14 @@ async function Patientcheckup({ searchParams }: { searchParams: any }) {
               })}
             </div>
           </div>
-          <div className="mb-5">
-            <PatientProblemsEditable />
-            <PatientProblemsEditable />
-          </div>
-          <div>
-            <Riskcheckups />
-            <Riskcheckups />
+          <div className="mb-5 ">
+            {report.data.diagonsis.diagnosisTreatment.map((treatments:any, index:number)=>{
+              return(
+                <div key={index} className="flex items-center gap-x-5">
+                  <PatientProblemsEditable treatments = {treatments} />
+                  <Riskcheckups treatments = {treatments} />
+                </div>
+                )})}
           </div>
         </div>
       </div>

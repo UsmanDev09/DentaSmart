@@ -1,11 +1,13 @@
 import { Check, Edit, Trash2 } from "lucide-react";
 
-const RiskReports = () => {
+const RiskReports = ({treatments}:{treatments:any}) => {
+  
+
   return (
     <div className="p-4 bg-white rounded-xl mb-4 w-[450px]">
       <div className="flex justify-between">
         <div className="">
-          <h3 className="text-xl font-bold">Toothache</h3>
+          <h3 className="text-xl font-bold">{treatments.Problems}</h3>
         </div>
         <div className="flex flex-col items-end gap-2 text-right">
           <div className="text-right flex gap-x-2">
@@ -15,30 +17,13 @@ const RiskReports = () => {
         </div>
       </div>
       <div>
-        <p className="flex text-sm my-2">
-          <Check className="mr-2 text-[#21B9C6]" />
-          Removal of causative agent
-        </p>
-
-        <p className="flex text-sm my-2">
-          <Check className="mr-2 text-[#21B9C6]" />
-          Filling
-        </p>
-
-        <p className="flex text-sm my-2">
-          <Check className="mr-2 text-[#21B9C6]" />
-          Repair of existing restoration
-        </p>
-
-        <p className="flex text-sm my-2">
-          <Check className="mr-2 text-[#21B9C6]" />
-          Continue to monitor symptoms
-        </p>
-
-        <p className="flex text-sm my-2">
-          <Check className="mr-2 text-[#21B9C6]" />
-          Visit dentist if symptoms persist or worsen
-        </p>
+        {treatments.Risks.map((risks:any, index:number) =>{
+          return(
+          <p className="flex text-sm my-2" key={index}>
+            <Check className="mr-2 text-[#21B9C6]" />
+            {risks}
+          </p>
+          )})}
       </div>
     </div>
   );

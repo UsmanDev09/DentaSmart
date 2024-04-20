@@ -44,7 +44,6 @@ import { ArrowRight, Check, ChevronLeft, ChevronRight, X } from "lucide-react";
 import PatientChatResponse from "@/components/patientChatResponse";
 import AiChatResponse from "@/components/aiChatResponse";
 import Link from "next/link";
-import ReduxProvider from "@/redux/provider";
 
 export const PatientAnalysis = ({
   patientAnalysis,
@@ -57,6 +56,9 @@ export const PatientAnalysis = ({
 }) => {
 
   const chats= chat.chat;
+  
+  const diagnostic= patientAnalysis.data.diagonsis.predictions[0].metadata
+
 
   return (
     <div className="flex">
@@ -184,7 +186,6 @@ export const PatientAnalysis = ({
                 </Button>
               </ChatDialogTrigger>
                 <DialogContent className="bg-[#EBF1F8] lg:max-w-screen-lg overflow-y-auto max-h-screen">
-                  
                   <DialogHeader>
                     <DialogTitle className="flex items-center mx-auto  text-4xl mb-3 ">
                       Ai Smart Dentist
@@ -244,6 +245,7 @@ export const PatientAnalysis = ({
                     <div className="w-full bg-[#E3E3E3] p-1 rounded-sm">
                       Filling
                     </div>
+                    {/* {patientAnalysis.complaints.map((complaint)=>{})} */}
                     <ul className="grid grid-cols-2 list-disc px-5 py-1 gap-x-8">
                       <li>Defective</li>
                       <li>Loose</li>
@@ -285,7 +287,7 @@ export const PatientAnalysis = ({
                       <TableRow>
                         <TableCell>02</TableCell>
                         <TableCell>
-                          <Combobox />
+                          <Combobox/>
                         </TableCell>
                         <TableCell className="flex justify-between text-lg items-center ">
                           89%
