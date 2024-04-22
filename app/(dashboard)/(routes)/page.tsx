@@ -1,5 +1,5 @@
 import { ClipboardListIcon, Filter, Search } from "lucide-react";
-import AnalyticalCard from "@/components/analytics-card";
+import AnalyticalCard from "@/components/analyticsCard";
 
 import {
   Table,

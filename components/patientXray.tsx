@@ -4,9 +4,12 @@ import { Separator } from "./ui/separator";
 
 interface PatientXrayProps {
   imageUrl: string;
+  predictions:any
 }
 
-const PatientXray = ({ imageUrl }: PatientXrayProps) => {
+const PatientXray = ({ imageUrl, predictions }: PatientXrayProps) => {
+
+  console.log(predictions.metadata.modelClasses.diagnostic)
   return (
     <div className="bg-white p-4 rounded-xl ">
       <div className="flex justify-between ">
@@ -18,7 +21,18 @@ const PatientXray = ({ imageUrl }: PatientXrayProps) => {
         <h4>Tooth Health</h4>
       </div>
       <div>
-        <div className="flex justify-between items-center border-b py-3">
+            {predictions.metadata.modelClasses.diagnostic.map((diagnostic:any, index:number)=>{
+              return( 
+                <div key={index} className="flex justify-between items-center border-b py-3">
+                  <h5 className="flex">        
+                    <Check className="mr-2 text-[#21B9C6]" />
+                    {diagnostic}
+                  </h5>
+                </div>
+              )})}
+            {/* <h5 className="">89%</h5> */}
+          
+        {/* <div className="flex justify-between items-center border-b py-3">
           <h5 className="flex">
             <Check className="mr-2 text-[#21B9C6]" />
             Implant
@@ -47,7 +61,7 @@ const PatientXray = ({ imageUrl }: PatientXrayProps) => {
             Implant
           </h5>
           <h5>65.8%</h5>
-        </div>
+        </div> */}
       </div>
     </div>
   );
