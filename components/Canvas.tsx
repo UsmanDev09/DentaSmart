@@ -337,13 +337,7 @@ const Canvas = ({
   console.log("rectangleCoordinates: ",rectangleCoordinates )
 
   const onSaveRectangleLabel = () => {  
-    dispatch(addRectangle(
-      {
-        ...rectangleCoordinates, label:rectangleLabel
-      //   x:0, y:0, width:0 , height:0, shape:"Rectangle",
-      //  status:"Complete" ,label:rectangleLabel, id:id, key:+1
-      }
-    ));
+    dispatch(addRectangle({...rectangleCoordinates, label:rectangleLabel}));
     setRectangleLabelActive(false)
     setRectangles([]);
     setRectangleLabel('')

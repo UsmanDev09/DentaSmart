@@ -58,10 +58,17 @@ export const PatientAnalysis = ({
 
   const chats= chat.chat;
   const medicalHistory= patientAnalysis.data.medical_history;
-  const modelClasses = patientAnalysis.data.diagonsis.predictions[0].metadata.modelClasses  
+  const modelClasses = patientAnalysis.data.diagonsis.predictions[0].metadata.modelClasses;  
   console.log(modelClasses);
   
+  const predictions = patientAnalysis.data.diagonsis.predictions;
 
+  const findings = predictions.map((prediction:any) => ({
+    toothNumbering: prediction.metadata.modelClasses.tooth_numbering,
+    diagnostic: prediction.metadata.modelClasses.diagnostic,
+  }));
+
+  console.log(findings)
 
   return (
     <div className="flex">
@@ -259,17 +266,18 @@ export const PatientAnalysis = ({
                         </TableHead>
                       </TableRow>
                     </TableHeader>
-                    {/* {modelClasses.tooth_numbering.map((models:any,index:number)=>{
-                      return(
-                        <TableBody key={index}>
-                        <TableRow>
-                          <TableCell key={index}>
-                            {models}
-                          </TableCell>
+                    <TableBody>
+                      {findings.map((finding:any, index:number) => (
+                        <TableRow key={index}>
+                          {/* {finding.toothNumbering.map((tooth:any, toothIndex:number) => ( */}
+                            <TableCell >{finding.toothNumbering}</TableCell>
+                          {/* // ))} */}
+                          {/* {finding.diagnostic.map((diagnostic:any, diagnosticIndex:number) => ( */}
+                            <TableCell>{finding.diagnostic}</TableCell>
+                          {/* // ))} */}
                         </TableRow>
-                      </TableBody>
-                      )
-                    })} */}
+                      ))}
+                    </TableBody>
                     <TableBody>
                       <TableRow>
                         <TableCell>02</TableCell>
