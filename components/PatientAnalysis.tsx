@@ -44,6 +44,7 @@ import { ArrowRight, Check, ChevronLeft, ChevronRight, X } from "lucide-react";
 import PatientChatResponse from "@/components/patientChatResponse";
 import AiChatResponse from "@/components/aiChatResponse";
 import Link from "next/link";
+import PatientAnalysisPage from "@/app/(dashboard)/(routes)/patient-analysis/page";
 
 export const PatientAnalysis = ({
   patientAnalysis,
@@ -56,8 +57,10 @@ export const PatientAnalysis = ({
 }) => {
 
   const chats= chat.chat;
+  const medicalHistory= patientAnalysis.data.medical_history;
+  const modelClasses = patientAnalysis.data.diagonsis.predictions[0].metadata.modelClasses  
+  console.log(modelClasses);
   
-  const diagnostic= patientAnalysis.data.diagonsis.predictions[0].metadata
 
 
   return (
@@ -127,52 +130,36 @@ export const PatientAnalysis = ({
         <Separator className="mt-2" />
         <div className="flex mt-5 gap-x-4">
           <div className="flex flex-col gap-y-5 justify-between max-w-[30%]">
-            <div className="bg-white p-5 rounded-sm border shadow-xs h-full">
-              <h3 className="text-2xl text-[#21B9C6] font-bold">
-                Medical history
-              </h3>
-              <Separator className="my-2" />
-              <div className="px-4 py-2">
-                <ul className="text-lg font-bold list-disc">
-                  <li>
-                    Do you have any long term health condition or any disability
-                    that you would like to make us aware of?
-                  </li>
-                </ul>
-                <ul className="text-lg list-disc">
-                  {patientAnalysis.data.medical_history[0].health_concerns.map(
-                    (health: string, index: Key | null | undefined) => {
+          <div className="bg-white p-5 rounded-sm border shadow-xs h-full">
+              {medicalHistory.map((history: any, index: number) => {
+                return (
+                  <div key={index}>
+                    <h3 className="text-2xl text-[#21B9C6] font-bold">
+                      Medical history
+                    </h3>
+                    <Separator className="my-2" />
+                    {history.answers.map((q: any, index: Key) => {
                       return (
-                        <li key={index} className="flex">
-                          <Check className="mr-2" />
-                          {health}
-                        </li>
+                        <div className="p-4" key={index}>
+                          <ul className="text-lg list-disc">
+                            <li className="font-bold ">{q.question} </li>
+                          </ul>
+                          <ul className="text-lg list-disc">
+                            {q.answer.map((answers: any, index: Key) => {
+                              return (
+                                <li key={index} className="flex">
+                                  <Check className="mr-2 w-6 h-6" />
+                                  {answers}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
                       );
-                    }
-                  )}
-                </ul>
-              </div>
-              {patientAnalysis.data.medical_history[0].answers.map(
-                (qa: any, index: Key) => {
-                  return (
-                    <div className="p-4" key={index}>
-                      <ul className="text-lg list-disc">
-                        <li className="font-bold ">{qa.question} </li>
-                      </ul>
-                      <ul className="text-lg list-disc">
-                        {qa.answer.map((qa: any, index: Key) => {
-                          return (
-                            <li key={index} className="flex">
-                              <Check className="mr-2 w-6 h-6" />
-                              {qa}
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  );
-                }
-              )}
+                    })}
+                  </div>
+                );
+              })}
             </div>
             <ChatDialog>
               <ChatDialogTrigger asChild>
@@ -222,45 +209,34 @@ export const PatientAnalysis = ({
                   <TabsTrigger value="report" className="bg-[#E3E3E3]">
                     Report
                   </TabsTrigger>
+                  <Link href = "/img-tool" >
+                  <TabsTrigger value="draw" className="bg-[#E3E3E3]">
+                    Draw
+                  </TabsTrigger>
+                  </Link>
                 </TabsList>
               </Tabs>
               <Separator />
               <div className="flex">
                 <div className="flex flex-col w-[50%]">
                   <div className="flex flex-col items-end my-5" >
-                    <Link href={`/img-tool`}>
                       <Image
-                        src={`http://103.217.176.51:8000${patientAnalysis.data.images[0]}`}
-                        height={500}
-                        width={500}
+                        src=""
+                        height={300}
+                        width={300}
                         alt=""
                       />
-                    </Link>
                   </div>
-                  <h5 className="text-xl text-[#21B9C6] font-bold">
+                  <h5 className="text-xl text-[#21B9C6] font-bold ">
                     Presenting Complaints
                   </h5>
-                  <Separator className="my-1" />
-                  <div className="flex flex-col ">
-                    <div className="w-full bg-[#E3E3E3] p-1 rounded-sm">
-                      Filling
-                    </div>
-                    {/* {patientAnalysis.complaints.map((complaint)=>{})} */}
+                  <div className="flex flex-col p-1">
                     <ul className="grid grid-cols-2 list-disc px-5 py-1 gap-x-8">
-                      <li>Defective</li>
-                      <li>Loose</li>
-                      <li>Fall out</li>
-                      <li>too large</li>
-                    </ul>
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="w-full bg-[#E3E3E3] p-1 rounded-sm">
-                      The Gum
-                    </div>
-                    <ul className="grid grid-cols-2 list-disc px-5 py-1 gap-x-8">
-                      <li>Beeding Gum</li>
-                      <li>Lumps and Swelling</li>
-                      <li>Change in Color</li>
+                      {patientAnalysis.data.complaints.map((complaints:any, index:number)=>{
+                        return(
+                          <li key={index}>{complaints}</li>
+                        ) 
+                      })}
                     </ul>
                   </div>
                 </div>
@@ -283,6 +259,17 @@ export const PatientAnalysis = ({
                         </TableHead>
                       </TableRow>
                     </TableHeader>
+                    {/* {modelClasses.tooth_numbering.map((models:any,index:number)=>{
+                      return(
+                        <TableBody key={index}>
+                        <TableRow>
+                          <TableCell key={index}>
+                            {models}
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                      )
+                    })} */}
                     <TableBody>
                       <TableRow>
                         <TableCell>02</TableCell>
