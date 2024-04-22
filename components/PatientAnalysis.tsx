@@ -266,18 +266,18 @@ export const PatientAnalysis = ({
                         </TableHead>
                       </TableRow>
                     </TableHeader>
-                    <TableBody>
+                    {/* <TableBody>
                       {findings.map((finding:any, index:number) => (
                         <TableRow key={index}>
                           {/* {finding.toothNumbering.map((tooth:any, toothIndex:number) => ( */}
-                            <TableCell >{finding.toothNumbering}</TableCell>
+                            {/* <TableCell >{finding.toothNumbering}</TableCell> */}
                           {/* // ))} */}
                           {/* {finding.diagnostic.map((diagnostic:any, diagnosticIndex:number) => ( */}
-                            <TableCell>{finding.diagnostic}</TableCell>
+                            {/* <TableCell>{finding.diagnostic}</TableCell> */}
                           {/* // ))} */}
-                        </TableRow>
-                      ))}
-                    </TableBody>
+                        {/* </TableRow> */}
+                      {/* ))} */}
+                    {/* </TableBody> */}
                     <TableBody>
                       <TableRow>
                         <TableCell>02</TableCell>
