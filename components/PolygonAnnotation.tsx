@@ -50,6 +50,7 @@ const PolygonAnnotation = (props: any) => {
     if (minMaxX[1] + x > sw) x = sw - minMaxX[1];
     return { x, y };
   };
+  console.log(props)
   return (
     <Group
       name="polygon"

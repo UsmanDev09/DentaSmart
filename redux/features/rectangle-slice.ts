@@ -13,11 +13,11 @@ type Rectangle = {
 };
 
 type RectanglesState = {
-  rectangles: Record<string, Rectangle>;
+  rectangles: Rectangle[];
 };
 
 const initialState: RectanglesState = {
-  rectangles: {},
+  rectangles: [],
 };
 
 export const rectangle = createSlice({
