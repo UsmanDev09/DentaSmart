@@ -41,7 +41,7 @@ export const polygon = createSlice({
         labelCordinates: action.payload.labelCordinates,
       });
     },
-    editLabel: (state, action: PayloadAction<Label>) => {
+    editPolyLabel: (state, action: PayloadAction<Label>) => {
       state.polygons.map((polygon) => {
         if(polygon.id === action.payload.id) { 
           polygon.label = action.payload.label
@@ -50,7 +50,7 @@ export const polygon = createSlice({
     },
     deletePolygon: (state, action: PayloadAction<any>) => {      
       const filteredPoylgons = state.polygons.filter((polygon) => {
-       return polygon.id !== action.payload
+        return polygon.id !== action.payload
       })
 
       state.polygons = filteredPoylgons
@@ -58,5 +58,6 @@ export const polygon = createSlice({
   },
 });
 
-export const { addPolygon, editLabel, deletePolygon } = polygon.actions;
+
+export const { addPolygon, editPolyLabel, deletePolygon } = polygon.actions;
 export default polygon.reducer;

@@ -9,7 +9,6 @@ interface PatientXrayProps {
 
 const PatientXray = ({ imageUrl, predictions }: PatientXrayProps) => {
 
-  console.log(predictions.metadata.modelClasses.diagnostic)
   return (
     <div className="bg-white p-4 rounded-xl ">
       <div className="flex justify-between ">

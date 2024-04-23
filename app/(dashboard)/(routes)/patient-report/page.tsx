@@ -9,7 +9,8 @@ import { Key } from "react";
 
 async function Patientcheckup({ searchParams }: { searchParams: any }) {
   const token = cookies().get("token");
-
+  let report;
+  try {
   const response = await fetch(
     `http://103.217.176.51:8000/v1/dentist_checkup?checkup_id=${searchParams.checkupId}`,
     {
@@ -21,7 +22,10 @@ async function Patientcheckup({ searchParams }: { searchParams: any }) {
     }
   );
 
-  const report = await response.json();
+    report = await response.json();
+  } catch(err: unknown) {
+    throw new Error('Failed to fetch dentist checkup')
+  }
 
   const patient = report.data.member;
   const medicalHistory = report.data.medical_history;
@@ -57,7 +61,7 @@ async function Patientcheckup({ searchParams }: { searchParams: any }) {
         <div className="flex mt-5 gap-x-4">
           <div className="flex flex-col gap-y-5 justify-between max-w-[22%]">
             <div className="bg-white p-5 rounded-sm border shadow-xs h-full">
-              {medicalHistory.map((history: any, index: number) => {
+              {medicalHistory.length > 0 ? medicalHistory.map((history: any, index: number) => {
                 return (
                   <div key={index}>
                     <h3 className="text-2xl text-[#21B9C6] font-bold">
@@ -85,7 +89,9 @@ async function Patientcheckup({ searchParams }: { searchParams: any }) {
                     })}
                   </div>
                 );
-              })}
+              }) : (
+                <p>No medical history found</p>
+              )}
             </div>
           </div>
           <div className="mb-5 ">

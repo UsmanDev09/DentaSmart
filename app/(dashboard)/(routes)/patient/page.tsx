@@ -22,7 +22,7 @@ const Patient = async ({ searchParams }: { searchParams: any }) => {
   );
 
   const report = await response.json();
-  // console.log(report.data.diagonsis.predictions[0].metadata.modelClasses.diagnostic);
+  console.log(report.data.diagonsis.predictions[1]);
 
   return (
     <div className="sm:py-6 sm:px-8 px-1 py-4">
@@ -35,7 +35,7 @@ const Patient = async ({ searchParams }: { searchParams: any }) => {
       </Link>
       <div className="md:p-10 px-2 py-4 flex gap-6 flex-wrap md:justify-around sm:justify-center">
         <div className="sm:w-[450px] w-[370px] flex-wrap">
-          <PatientBio />
+          <PatientBio report = {report} />
           <Button
             variant="outline"
             className="w-full my-4 flex justify-between text-lg items-center border-none p-7 rounded-xl"

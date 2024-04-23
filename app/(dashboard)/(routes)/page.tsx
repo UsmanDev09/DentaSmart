@@ -1,5 +1,6 @@
 import { ClipboardListIcon, Filter, Search } from "lucide-react";
 import AnalyticalCard from "@/components/analyticsCard";
+import { ToastContainer, toast } from 'react-toastify';
 
 import {
   Table,
@@ -55,6 +56,7 @@ export async function Dashboard() {
   return (
     <>
       <div className="flex flex-col gap-y-10 p-10 bg-[#F5F5F5]">
+        <ToastContainer />
         <div className="flex flex-row justify-between items-center flex-wrap">
           <AnalyticalCard />
           <AnalyticalCard />
