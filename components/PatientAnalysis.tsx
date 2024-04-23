@@ -55,7 +55,7 @@ export const PatientAnalysis = ({
   searchParams: any;
   chat:any;
 }) => {
-
+  console.log(patientAnalysis)
   const chats= chat.chat;
   const medicalHistory= patientAnalysis.data.medical_history;
   const modelClasses = patientAnalysis.data.diagonsis.predictions[0].metadata.modelClasses;  
@@ -104,9 +104,9 @@ export const PatientAnalysis = ({
               </p>
             </span>
 
-            <span className="text-slate-500 mr-2 flex flex-row">
+            {/* <span className="text-slate-500 mr-2 flex flex-row">
               Date: <p className="ml-2 text-black">04/05/2023</p>
-            </span>
+            </span> */}
           </div>
           <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -136,9 +136,9 @@ export const PatientAnalysis = ({
         </div>
         <Separator className="mt-2" />
         <div className="flex mt-5 gap-x-4">
-          <div className="flex flex-col gap-y-5 justify-between max-w-[30%]">
+          <div className="flex flex-col gap-y-5 justify-between w-[304px] max-[30%]">
           <div className="bg-white p-5 rounded-sm border shadow-xs h-full">
-              {medicalHistory.map((history: any, index: number) => {
+              {medicalHistory.length > 0 ? medicalHistory.map((history: any, index: number) => {
                 return (
                   <div key={index}>
                     <h3 className="text-2xl text-[#21B9C6] font-bold">
@@ -166,7 +166,9 @@ export const PatientAnalysis = ({
                     })}
                   </div>
                 );
-              })}
+              }) : (
+                <p> No medical history found </p>
+              )}
             </div>
             <ChatDialog>
               <ChatDialogTrigger asChild>
@@ -185,7 +187,7 @@ export const PatientAnalysis = ({
                       Ai Smart Dentist
                     </DialogTitle>
                     <DialogDescription className="flex flex-col bg-[#EBF1F8] gap-1 ">
-                        {chats.map((chat:any, index:any)=>{
+                        {chats ? chats.map((chat:any, index:any)=>{
                           return(
                             <div key={index} id={chats.id}>
                               {chat.role === "assistant" && 
@@ -200,7 +202,9 @@ export const PatientAnalysis = ({
                               }
                             </div>
                           )
-                        })}
+                        }) : (
+                          <p>No chats found</p>
+                        )}
                     </DialogDescription>
                   </DialogHeader>
                 </DialogContent>

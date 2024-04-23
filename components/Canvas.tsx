@@ -40,7 +40,6 @@ const Canvas = ({
   const [cordinates, setCordinates] = useState<any>({x: 0, y: 0});
   // const [rectCordinates, setRectCordinates] = useState<any>({x: 0, y: 0});
   const state = useSelector((state: RootState) => state);
-  // console.log('STATE', state.Polygon.polygons)
 
   const [rectangles, setRectangles] = useState<any>([]);
   const [polygons, setPolygons] = useState<any>([]);
@@ -65,11 +64,11 @@ const Canvas = ({
   const [rectangleCoordinates, setRectangleCoordinates] = useState<any>()
   const [editedPolygonLabel ,setEditedPolygonLabel] = useState<string>('');
   const [editedRectangleLabel ,setEditedRectangleLabel] = useState<string>('');
-
+  const rectanglesToDraw = newRectangle;
 
   const dispatch = useDispatch<AppDispatch>();
   const id = nanoid()
-
+  console.log(newRectangle)
 
   const videoElement = useMemo(() => {
     const element = new window.Image();
@@ -105,7 +104,7 @@ const Canvas = ({
       const mousePos = getMousePos(stage);
       if (isMouseOverPoint && points.length >= 3) {
         setPolyComplete(true);
-        setCordinates({x: mousePos[0], y: mousePos[1]});
+        setCordinates({ x: mousePos[0], y: mousePos[1] });
         setPolygonCoordinates({ points: points, id: id, label:polygonLabel }); 
         setPolygons([...polygons, { points, id, label: polygonLabel }]);       
         setPolygonLabelActive(true);
@@ -115,7 +114,17 @@ const Canvas = ({
     } else if (drawRectangle) {
       const stage = e.target.getStage();
       const { x, y } = stage.getPointerPosition();
-      setNewRectangle([{ x, y, width: 0, height: 0, key: "0" }]);
+      setNewRectangle([
+        { 
+          shape: "Rectangle",
+          x, 
+          y, 
+          width: 0, 
+          height: 0, 
+          key: "0" 
+        }
+      ]);
+      
     }
   };
 
@@ -130,6 +139,7 @@ const Canvas = ({
       const { x, y } = e.target.getStage().getPointerPosition();
       setNewRectangle([
         {
+          shape: "Rectangle",
           x: sx,
           y: sy,
           width: x - sx,
@@ -158,7 +168,8 @@ const Canvas = ({
       const sx = newRectangle[0].x;
       const sy = newRectangle[0].y;
       const { x, y } = e.target.getStage().getPointerPosition();
-      
+      const id = nanoid()
+
       annotationToAdd = {
         shape: "Rectangle",
         status: "Complete",
@@ -168,15 +179,10 @@ const Canvas = ({
         height: y - sy,
         key: rectangles.length,
         id:id,
-        label:rectangleLabel
+        // label:rectangleLabel
       };
-
-      setRectangleCoordinates(annotationToAdd)
-
       setRectangleLabelActive(true);
-      rectangles.push(annotationToAdd);
-      setNewRectangle([]);
-      setRectangles(rectangles);
+      setNewRectangle(annotationToAdd);
     }
   };
   
@@ -222,7 +228,6 @@ const Canvas = ({
     if (isPolyComplete) dataRef.current.style.display = "";
   };
 
-  const rectanglesToDraw = [...newRectangle, ...rectangles];
 
   const stageRef = useRef<any>(null);
   let lastCenter:any = null;
@@ -334,12 +339,17 @@ const Canvas = ({
     setPolygonLabel('')
   }
 
-  console.log("rectangleCoordinates: ",rectangleCoordinates )
 
   const onSaveRectangleLabel = () => {  
-    dispatch(addRectangle({...rectangleCoordinates, label:rectangleLabel}));
+    console.log('cordinates', cordinates)
+    dispatch(addRectangle(
+      {
+        ...newRectangle, label:rectangleLabel
+      }
+    ));
+
+    setNewRectangle([])
     setRectangleLabelActive(false)
-    setRectangles([]);
     setRectangleLabel('')
 
   }
@@ -369,8 +379,6 @@ const Canvas = ({
     dispatch(editRectLabel({ label: editedRectangleLabel, id }))
     setEditRectangleLabel(false)
   }
-
-  // console.log("Rectangles:",state.Rectangle.rectangles);
   
   return (
     <>
@@ -476,18 +484,18 @@ const Canvas = ({
             )}
 
             {drawRectangle && state.Rectangle.rectangles &&
-                state.Rectangle.rectangles.map((rectangles)=>{return (
-                  <>
+                state.Rectangle.rectangles.map((rectangle)=>{
+                  return (
+                  <div key={rectangle.id}>
                     <Rect
-                      key={rectangles.id}
-                      x={rectangles.x}
-                      y={rectangles.y}
-                      width={rectangles.width}
-                      height={rectangles.height}
+                      x={rectangle.x}
+                      y={rectangle.y}
+                      width={rectangle.width}
+                      height={rectangle.height}
                       fill="transparent"
                       stroke="red"
                     />
-                    <Label key={rectangles.id}  x={rectangles.x + 5} y={rectangles.y -5}>
+                    <Label  x={rectangle.x + 5} y={rectangle.y -5}>
                       <Tag
                         fill= 'transparent'
                         pointerDirection= 'down'
@@ -498,47 +506,25 @@ const Canvas = ({
                         stroke="white"
                       />
                       <Text
-                        text={rectangles.label}
+                        text={rectangle.label}
                         fontSize={15}
                         padding={5}
                         fill='white'
                       />
                     </Label>
-                  </>
+                  </div>
                 )})}
 
             {drawRectangle &&
-              rectanglesToDraw.map((rectangle) => {
-                return (
-                  <>
-                    <Rect
-                      x={rectangle.x}
-                      y={rectangle.y}
-                      width={rectangle.width}
-                      height={rectangle.height}
-                      fill="transparent"
-                      stroke="red"
-                    />
-                    {/* <Label key={index} x={rectangle.x + 5} y={rectangle.y -5}>
-                      <Tag
-                        fill= 'transparent'
-                        pointerDirection= 'down'
-                        pointerWidth={5}
-                        pointerHeight={10}
-                        lineJoin= 'round'
-                        shadowColor= 'black'
-                        stroke="white"
-                      />
-                        <Text
-                          text={rectangle}
-                          fontSize={15}
-                          padding={5}
-                          fill='white'
-                        />
-                    </Label> */}
-                  </>
-                );
-              })}
+              <Rect
+                x={newRectangle.x}
+                y={newRectangle.y}
+                width={newRectangle.width}
+                height={newRectangle.height}
+                fill="transparent"
+                stroke="red"
+              />
+            }
             </Layer> 
           </Stage>
 

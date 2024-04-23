@@ -32,7 +32,7 @@ export const rectangle = createSlice({
   reducers: {
     addRectangle: (state, action: PayloadAction<Rectangle>) => {
       const { key } = action.payload;
-      state.rectangles[key] = action.payload;
+      state.rectangles.push(action.payload);
     },
 
     editRectLabel:(state, action:PayloadAction<Label>)=>{
