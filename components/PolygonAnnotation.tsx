@@ -21,6 +21,7 @@ const PolygonAnnotation = (props: any) => {
     handleMouseOverStartPoint,
     handleMouseOutStartPoint,
   } = props;
+
   const vertexRadius = 6;
 
   const [stage, setStage] = useState<any>();
@@ -67,10 +68,10 @@ const PolygonAnnotation = (props: any) => {
         closed={isFinished}
         fill="rgb(0,128,0,0.5)"
       />
-      {points &&
+      {points && !isFinished &&
         points.map((point: any, index: any) => {
-          const x = point[0] - vertexRadius / 2;
-          const y = point[1] - vertexRadius / 2;
+          const x = (point.x) - vertexRadius / 2;
+          const y = (point.y ) - vertexRadius / 2;
           const startPointAttr =
             index === 0
               ? {

@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { PatientAnalysis } from "@/components/PatientAnalysis";
-import { toast } from "react-toastify";
+
 
 async function PatientAnalysisPage({ searchParams }: { searchParams: any }) {
   const token = cookies().get("token");
@@ -21,8 +21,7 @@ async function PatientAnalysisPage({ searchParams }: { searchParams: any }) {
   } catch (err: unknown) {
       throw new Error('Failed to fetch dentist checkup')
   }
-  
-  
+    
 
   try {
     const chatResponse = await fetch(
