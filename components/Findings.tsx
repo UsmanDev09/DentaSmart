@@ -25,8 +25,6 @@ export const Findings = ({searchParams}: {searchParams: any}) => {
   })
     const [selectedImage, setSelectedImage] = useState<string>(images[0].split("/")[2])
 
-
-    console.log(patientAnalysis)
      return (
         <div className="flex">
                 <div className="flex flex-col">

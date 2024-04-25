@@ -48,26 +48,23 @@ export const PatientAnalysis = ({
 
   const chats = chat.chat  
 
-  const images = patientAnalysis.data.images;
-
   const checkupHistory = history.data;
   
   dispatch(initializePatientAnalysis(patientAnalysis));
-  
 
   return (
-    <div className="flex">
+    <div className="flex justify-between">
       <div className="p-10">
         <div className=" flex justify-between w-full ">
           <PatientProfile />
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button
+              {/* <Button
                 variant="login"
                 className="rounded-full px-6 font-semibold text-lg"
               >
                 Submit
-              </Button>
+              </Button> */}
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>

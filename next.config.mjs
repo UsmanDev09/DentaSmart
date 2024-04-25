@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: false,
   env: {
     CLIENT_URL: process.env.CLIENT_URL,
+    CLIENT_DOMAIN: process.env.CLIENT_DOMAIN,
   },
   experimental: {
     appDir: true,

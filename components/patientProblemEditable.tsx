@@ -12,7 +12,8 @@ import { Checkbox } from "./ui/checkbox";
 interface PatientProblemsEditableProps {
   treatments: any;
   index: number;
-  onDelete: (index: number) => void;
+  onDelete: any;
+  id: string;
 }
 
 const PatientProblemsEditable = (
@@ -20,13 +21,15 @@ const PatientProblemsEditable = (
     treatments,
     index,
     onDelete,
+    id
   } : PatientProblemsEditableProps
 ) => {
 
   const handleDelete = () => {
-    onDelete(index);
+    onDelete(index, id);
   };
-
+  console.log(treatments)
+  if(treatments.length > 0) 
   return (
     <div className="p-4 bg-white rounded-xl mb-4 w-[450px]">
       <div className="flex justify-between">
@@ -185,16 +188,18 @@ const PatientProblemsEditable = (
         </div>
       </div>
       <div>
-      {treatments.TreatmentOptions.map((options:any, index:number) =>{
+      {treatments.map((options:any, index:number) =>{
         return(
           <p className="flex text-sm my-2" key={index}>
-            <Check className="mr-2 text-[#21B9C6]" />
+            <Check className="mr-2 w-10 max-w-10 text-[#21B9C6]" />
             {options}
           </p>
           )})}
       </div>
     </div>
-  );
+  ); else {
+    return (<div className="ml-20 w-[400px]"><p>No Problems</p></div>)
+  }
 };
 
 export default PatientProblemsEditable;

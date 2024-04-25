@@ -6,7 +6,7 @@ async function PatientAnalysisPage({ searchParams }: { searchParams: any }) {
   
   let token = cookies().get("token");
   let patientAnalysis, chat, history, startDate = searchParams.startDate ? searchParams.startDate : "2024-01-01", 
-  endDate = searchParams.endDate ? searchParams.endDate : `2024-04-22`;
+  endDate = searchParams.endDate ? searchParams.endDate : `2024-04-25`;
   
   let dateStart = new Date(startDate);
 

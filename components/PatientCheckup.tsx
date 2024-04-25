@@ -5,19 +5,54 @@ import Link from "next/link";
 import PatientProblemsEditable from "./patientProblemEditable";
 import RiskReports from "./risks-reports";
 import { Key } from "react";
+import { useState } from "react";
+
+const PatientCheckup = ({ report, searchParams, medicalHistory, patient, } : { searchParams : any; report:any; medicalHistory:any; patient:any; }) => {
+  const { opg, general } = report.data.diagonsis.diagnosisTreatment;
+  const [diagnosisTreatment, setDiagnosisTraeatment] = useState({ opg, general })
+  const handleDeleteProblem = (opgIndex: number, diagnosisIndex: number) => {
+    const updatedOpg = diagnosisTreatment.opg.map((opgObj: any, index: number) => {
+        if (index === opgIndex) {
+            return {
+                ...opgObj,
+                differential_diagnosis: []
+            };
+        }
+        return opgObj;
+    });
+
+    setDiagnosisTraeatment({ opg: updatedOpg, general: diagnosisTreatment.general });
+  }
+
+  const handleDeleteRisks = (opgIndex: number, diagnosisIndex: number) => {
+    const updatedOpg = diagnosisTreatment.opg.map((opgObj: any, index: number) => {
+      if (index === opgIndex) {
+          return {
+              ...opgObj,
+              consequences: []
+          };
+      }
+      return opgObj;
+  });
+
+  setDiagnosisTraeatment({ opg: updatedOpg, general: diagnosisTreatment.general });
+  }
+
+  const handleSubmit = async () => {
+    const response  = await fetch(`http://localhost:3000/api/diagnosisTreatment`, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ diagnosis_treament: diagnosisTreatment, checkup_id: searchParams.checkupId  })
+    })
+    
+    console.log(response);
+
+  }
 
 
-const PatientCheckup = ({ 
-    report, 
-    searchParams, 
-    medicalHistory, 
-    patient,
-    } : {
-    searchParams : any;
-    report:any;
-    medicalHistory:any;
-    patient:any;
-    }) => {
+  console.log(diagnosisTreatment)
   return (
     <div className="px-8 py-6">
     <div className="flex justify-between items-center">
@@ -28,12 +63,12 @@ const PatientCheckup = ({
         <ChevronLeft className="font-bold w-8 h-8 mr-1" />
         Back
       </Link>
-      <Link
+      <button
+        onClick={handleSubmit}
         className="hover:underline px-6 py-2 rounded-full text-xl bg-[#21B9C6] text-white flex items-center"
-        href={`/patient?checkupId=${searchParams.checkupId}`}
       >
         Submit
-      </Link>
+      </button>
     </div>
     <div className="flex flex-col px-6 py-8 flex-wrap">
       <div className="flex border-b-2 mb-4">
@@ -83,22 +118,46 @@ const PatientCheckup = ({
           </div>
         </div>
         <div className="mb-5 ">
-          {report.data.diagonsis.diagnosisTreatment.map((treatments:any, index:number)=>{
+          {diagnosisTreatment ? 
+            diagnosisTreatment.opg && diagnosisTreatment.opg.map((o:any, index:number)=>{
             return(
-              <div key={index} className="flex items-center gap-x-5">
+              <div key={index} className="flex gap-x-5">
                 <PatientProblemsEditable 
-                treatments = {treatments}       
-                onDelete={(indexToDelete) => { (prevTreatments:any) =>
-                  prevTreatments.filter((treatment:any, i:any) => i !== indexToDelete);
-                }} 
-                index={index} />
-                <RiskReports treatments = {treatments}
-                onDelete={(indexToDelete) => { (prevTreatments:any) =>
-                  prevTreatments.filter((treatment:any, i:any) => i !== indexToDelete);
-                }} 
-                index={index} />
+                  onDelete={handleDeleteProblem}
+                  treatments = {o.differential_diagnosis}       
+                  index={index}
+                  id='opg' 
+                />
+                <RiskReports 
+                  onDelete={handleDeleteRisks} 
+                  treatments = {o.consequences}
+                  index={index} 
+                  id='opg'
+                />
               </div>
-              )})}
+              )}) : (
+                <p> No Diagnosis Treatment </p>
+            )}
+           {diagnosisTreatment ? 
+            diagnosisTreatment.general.length > 0 && diagnosisTreatment.general.map((o:any, index:number)=>{
+            return(
+              <div key={index} className="flex gap-x-5">
+                <PatientProblemsEditable 
+                  onDelete={handleDeleteProblem}
+                  treatments = {o.differential_diagnosis}       
+                  index={index} 
+                  id='general'
+                />
+                <RiskReports
+                  onDelete={handleDeleteRisks} 
+                  treatments = {o.consequences}
+                  index={index} 
+                  id='general'
+                />
+              </div>
+              )}) : (
+                <p> No Diagnosis Treatment </p>
+              )}
         </div>
       </div>
     </div>
