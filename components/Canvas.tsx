@@ -75,8 +75,8 @@ const Canvas = ({
 
   const videoElement = useMemo(() => {
     const element = new window.Image();
-    element.width = imageData.imageWidth;
-    element.height = imageData.imageHeight;
+    element.width = (imageData.imageWidth/imageData.imageHeight) * 800;
+    element.height = 800;
     element.src = videoSource;
     return element;
   }, [videoSource]);
@@ -399,10 +399,11 @@ const Canvas = ({
             </TabsTrigger>
           </TabsList>
         </Tabs>
-      <div>
+      <div className="flex">
+        <div>
         <Stage
-          width={size.width || imageData.imageWidth}
-          height={size.height || imageData.imageHeight}
+          width={(imageData.imageWidth / imageData.imageHeight) * 800}
+          height={800}
           onMouseMove={handleMouseMove}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
@@ -417,8 +418,8 @@ const Canvas = ({
                 image={image}
                 x={0}
                 y={0}
-                width={size.width}
-                height={size.height}
+                width={(imageData.imageWidth / imageData.imageHeight) * 800}
+                height={800}
                 alt=""
               />
               {drawPolygon && state.Polygon.polygons && 
@@ -530,6 +531,7 @@ const Canvas = ({
             }
             </Layer> 
           </Stage>
+          </div>
             <div>
         <Tabs defaultValue="labels" className="w-[400px] flex flex-col justify-start border ml-5">
           <TabsList>
@@ -614,9 +616,14 @@ const Canvas = ({
             </Card> */}
           </TabsContent> 
         </Tabs>
+      {(drawPolygon || drawRectangle) &&
+        <Button className="mt-4 ml-8 w-20" onClick={onSave}>
+          Save
+        </Button>
+      }
       </div>
-          
-
+      </div>
+    </div>
         <div
           ref={dataRef}
           style={{
@@ -626,13 +633,6 @@ const Canvas = ({
           }}
         >
         </div>
-        {(drawPolygon || drawRectangle) &&
-          <Button className="mt-4 w-20" onClick={onSave}>
-            Save
-          </Button>
-        }
-      </div>
-    </div>
     </>
   );
 };

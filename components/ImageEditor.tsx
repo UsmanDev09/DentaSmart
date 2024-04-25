@@ -33,7 +33,7 @@ export const ImageEditor = ({ patientAnalysis, searchParams } : { patientAnalysi
     useEffect(() => {
 
         prediction[0].diagnostic.map((d: any, index: number) => {
-            const points = denormalizePoints(d.mask_points, 0, imageData.imageWidth, 0, imageData.imageHeight)
+            const points = denormalizePoints(d.mask_points, 0, (imageData.imageWidth / imageData.imageHeight) * 800, 0, 800)
             const flattenedPoints = points
             .map(({ x, y } : { x: any, y: any}) => [x, y])
             .concat()
@@ -51,14 +51,14 @@ export const ImageEditor = ({ patientAnalysis, searchParams } : { patientAnalysi
         })
     }, [])
 
-    const onSave = () => {
+    const onSave = async () => {
         console.log('saved')
         const diagnosis = 
         polygons.map((polygon: any) => {
             return {
                 class_id: polygon.id,
                 class_name: polygon.label,
-                mask_points: normalizePoints(polygon.points, 0, imageData.imageWidth, 0, imageData.imageHeight),
+                mask_points: normalizePoints(polygon.points, 0, (imageData.imageWidth / imageData.imageHeight) * 800, 0, 800),
                 confidence: polygon.confidence
             }
 
@@ -72,6 +72,15 @@ export const ImageEditor = ({ patientAnalysis, searchParams } : { patientAnalysi
             }
         })
 
+        const response  = await fetch(`http://localhost:3000/api/prediction`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ predictions: patientAnalysisCopy.data.diagonsis.predictions, checkup_id: searchParams.checkupId  })
+        })
+    
+        console.log(response);
         console.log('Diagnosis', diagnosis)
         console.log('PatientAnalysisCopy', patientAnalysisCopy)
     }

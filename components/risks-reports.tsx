@@ -3,16 +3,14 @@ import { DiagnosisDialog, DiagnosisDialogTrigger } from "./ui/diagnosis-dialog";
 
 interface RiskReportsProps {
   treatments: any;
-  onDelete: (index:number) => void;
   index: number;
+  onDelete: any;
+  id: string;
 }
 
-const RiskReports = ({treatments, onDelete, index}:RiskReportsProps) => {
+const RiskReports = ({onDelete, treatments, index, id}:RiskReportsProps) => {
   
-  const handleDelete = () => {
-    onDelete(index);
-  };
-
+  if(treatments.length > 0) 
   return (
     <div className="p-4 bg-white rounded-xl mb-4 w-[450px]">
       <div className="flex justify-between">
@@ -21,8 +19,8 @@ const RiskReports = ({treatments, onDelete, index}:RiskReportsProps) => {
         </div>
         <div className="flex flex-col items-end gap-2 text-right">
           <div className="text-right flex gap-x-2">
-            <button onClick={handleDelete}>
-              <Trash2 className="text-red-600 cursor-pointer" />
+            <button>
+              <Trash2 onClick={() => onDelete(index, id)}className="text-red-600 cursor-pointer" />
             </button>
             <DiagnosisDialog>
               <DiagnosisDialogTrigger asChild>
@@ -33,7 +31,7 @@ const RiskReports = ({treatments, onDelete, index}:RiskReportsProps) => {
         </div>
       </div>
       <div>
-        {treatments.Risks.map((risks:any, index:number) =>{
+        {treatments.map((risks:any, index:number) =>{
           return(
           <p className="flex text-sm my-2" key={index}>
             <Check className="mr-2 text-[#21B9C6]" />
@@ -43,6 +41,13 @@ const RiskReports = ({treatments, onDelete, index}:RiskReportsProps) => {
       </div>
     </div>
   );
+  else {
+    return (
+      <div className="ml-20 w-[400px]">
+        <p>No Risks</p>
+      </div>
+    )
+  }
 };
 
 export default RiskReports;

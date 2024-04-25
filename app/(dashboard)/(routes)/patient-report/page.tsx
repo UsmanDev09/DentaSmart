@@ -35,11 +35,11 @@ async function PatientCheckupPage({ searchParams }: { searchParams: any }) {
   
   return (
     <PatientCheckup 
-      patient = {patient} 
-      medicalHistory = {medicalHistory}
-      report = {report} 
-      searchParams = {searchParams} 
-      />
+      patient={patient} 
+      medicalHistory={medicalHistory}
+      report={report} 
+      searchParams={searchParams} 
+    />
   );
 }
 
