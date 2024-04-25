@@ -29,38 +29,6 @@ const PatientXray = ({ imageUrl, predictions }: PatientXrayProps) => {
                   </h5>
                 </div>
               )})}
-            {/* <h5 className="">89%</h5> */}
-          
-        {/* <div className="flex justify-between items-center border-b py-3">
-          <h5 className="flex">
-            <Check className="mr-2 text-[#21B9C6]" />
-            Implant
-          </h5>
-          <h5 className="">89%</h5>
-        </div>
-        <div className="flex justify-between items-center border-b py-3">
-          <h5 className="flex">
-            <Check className="mr-2 text-[#21B9C6] " />
-            Restoration
-          </h5>
-          <h5>76%</h5>
-        </div>
-
-        <div className="flex justify-between items-center border-b py-3">
-          <h5 className="flex">
-            <Check className="mr-2 text-[#21B9C6]" />
-            Filling
-          </h5>
-          <h5>68%</h5>
-        </div>
-
-        <div className="flex justify-between items-center py-2">
-          <h5 className="flex">
-            <Check className="mr-2 text-[#21B9C6]" />
-            Implant
-          </h5>
-          <h5>65.8%</h5>
-        </div> */}
       </div>
     </div>
   );

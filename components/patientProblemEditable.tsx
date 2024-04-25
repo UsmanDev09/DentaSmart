@@ -1,4 +1,4 @@
-import { Check, Edit, Edit2, Trash, Trash2 } from "lucide-react";
+import { Check, Edit, Trash2 } from "lucide-react";
 import {
   DiagnosisDialog,
   DiagnosisDialogTrigger,
@@ -9,7 +9,24 @@ import {
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 
-const PatientProblemsEditable = ({treatments}:{treatments:any}) => {
+interface PatientProblemsEditableProps {
+  treatments: any;
+  index: number;
+  onDelete: (index: number) => void;
+}
+
+const PatientProblemsEditable = (
+  {
+    treatments,
+    index,
+    onDelete,
+  } : PatientProblemsEditableProps
+) => {
+
+  const handleDelete = () => {
+    onDelete(index);
+  };
+
   return (
     <div className="p-4 bg-white rounded-xl mb-4 w-[450px]">
       <div className="flex justify-between">
@@ -22,10 +39,12 @@ const PatientProblemsEditable = ({treatments}:{treatments:any}) => {
         </div>
         <div className="flex flex-col items-end gap-2 text-right">
           <div className="text-right flex gap-x-2">
-            <Trash2 className="text-red-600" />
+            <button onClick={handleDelete}>
+              <Trash2 className="text-red-600 cursor-pointer" />
+            </button>
             <DiagnosisDialog>
               <DiagnosisDialogTrigger asChild>
-                <Edit className="text-[#21B9C6]" />
+                <Edit className="text-[#21B9C6] cursor-pointer" />
               </DiagnosisDialogTrigger>
               <DialogContent className="bg-white text-black">
                 <DialogHeader>

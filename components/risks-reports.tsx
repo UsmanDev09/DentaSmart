@@ -1,7 +1,17 @@
 import { Check, Edit, Trash2 } from "lucide-react";
+import { DiagnosisDialog, DiagnosisDialogTrigger } from "./ui/diagnosis-dialog";
 
-const RiskReports = ({treatments}:{treatments:any}) => {
+interface RiskReportsProps {
+  treatments: any;
+  onDelete: (index:number) => void;
+  index: number;
+}
+
+const RiskReports = ({treatments, onDelete, index}:RiskReportsProps) => {
   
+  const handleDelete = () => {
+    onDelete(index);
+  };
 
   return (
     <div className="p-4 bg-white rounded-xl mb-4 w-[450px]">
@@ -11,8 +21,14 @@ const RiskReports = ({treatments}:{treatments:any}) => {
         </div>
         <div className="flex flex-col items-end gap-2 text-right">
           <div className="text-right flex gap-x-2">
-            <Trash2 className="text-red-600" />
-            <Edit className="text-[#21B9C6]" />
+            <button onClick={handleDelete}>
+              <Trash2 className="text-red-600 cursor-pointer" />
+            </button>
+            <DiagnosisDialog>
+              <DiagnosisDialogTrigger asChild>
+                <Edit className="text-[#21B9C6] cursor-pointer" />
+              </DiagnosisDialogTrigger>  
+            </DiagnosisDialog>        
           </div>
         </div>
       </div>
