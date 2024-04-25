@@ -3,16 +3,16 @@ import PolygonAnnotation from "./PolygonAnnotation";
 import { Stage, Layer, Image as KonvaImage, Rect, Label, Tag, Text } from "react-konva";
 import Image from "next/image";
 import { useSelector } from "react-redux";
-
+import { useDispatch } from "react-redux";
 import { Button } from "./ui/button";
 import { addPolygon, deletePolygon, editPolyLabel } from "@/redux/features/polygon-slice";
 import { addRectangle, removeRectangle, editRectLabel } from "@/redux/features/rectangle-slice";
-import { useDispatch,  } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { nanoid } from "@reduxjs/toolkit";
 import { Tabs, TabsList,TabsContent, TabsTrigger } from "./ui/tabs";
 import { Card, CardDescription, CardTitle } from "./ui/card";
 import { Pencil, RectangleHorizontal, Trash2 } from "lucide-react";
+import { initializePatientAnalysis } from "@/redux/features/patient-analysis-slice";
 
 const scaleBy = 1.01;
 
@@ -29,17 +29,23 @@ function getCenter(p1:any, p2:any) {
 
 const Canvas = ({
   imageUrl,
+  diagnostic,
+  imageData,
+  onSave,
 }: {
   imageUrl: string;
+  diagnostic: any;
+  imageData: any;
+  onSave: any;
 }) => {
   const videoSource = imageUrl;
+  const dispatch = useDispatch();
+  const state = useSelector((state: any) => state)
   const [image, setImage] = useState<any>();
   const imageRef = useRef<any>(null);
   const dataRef = useRef<any>(null);
-
   const [cordinates, setCordinates] = useState<any>({x: 0, y: 0});
-  // const [rectCordinates, setRectCordinates] = useState<any>({x: 0, y: 0});
-  const state = useSelector((state: RootState) => state);
+
 
   const [rectangles, setRectangles] = useState<any>([]);
   const [polygons, setPolygons] = useState<any>([]);
@@ -47,16 +53,15 @@ const Canvas = ({
   const [points, setPoints] = useState<any>([]);
   const [size, setSize] = useState<any>({});
   const [flattenedPoints, setFlattenedPoints] = useState<number[]>([]);
-  const [position, setPosition] = useState([0, 0]);
+  const [position, setPosition] = useState<any>([0, 0]);
   const [isMouseOverPoint, setMouseOverPoint] = useState(false);
   const [isPolyComplete, setPolyComplete] = useState(false);
-  const [drawPolygon, setDrawPolygon] = useState(false);
+  const [drawPolygon, setDrawPolygon] = useState(true);
   const [drawRectangle, setDrawRectangle] = useState(false);
   const [polygonLabelActive, setPolygonLabelActive] = useState(false);
   const [rectangleLabelActive, setRectangleLabelActive] = useState(false);
   const [editPolygonLabel, setEditPolygonLabel] = useState(false);
   const [editRectangleLabel, setEditRectangleLabel] = useState(false);
-
 
   const [polygonLabel, setPolygonLabel] = useState('');
   const [rectangleLabel, setRectangleLabel] = useState('');
@@ -66,14 +71,12 @@ const Canvas = ({
   const [editedRectangleLabel ,setEditedRectangleLabel] = useState<string>('');
   const rectanglesToDraw = newRectangle;
 
-  const dispatch = useDispatch<AppDispatch>();
   const id = nanoid()
-  console.log(newRectangle)
 
   const videoElement = useMemo(() => {
     const element = new window.Image();
-    element.width = 460;
-    element.height = 400;
+    element.width = imageData.imageWidth;
+    element.height = imageData.imageHeight;
     element.src = videoSource;
     return element;
   }, [videoSource]);
@@ -91,7 +94,7 @@ const Canvas = ({
     return () => {
       videoElement.removeEventListener("load", onload);
     };
-  }, [videoElement]);
+  }, [videoElement, videoSource]);
 
   const getMousePos = (stage: any) => {
     return [stage.getPointerPosition().x, stage.getPointerPosition().y];
@@ -101,15 +104,16 @@ const Canvas = ({
     if (drawPolygon) {
       if (isPolyComplete) return;
       const stage = e.target.getStage();
-      const mousePos = getMousePos(stage);
+      const { x, y} = stage.getPointerPosition()
       if (isMouseOverPoint && points.length >= 3) {
         setPolyComplete(true);
-        setCordinates({ x: mousePos[0], y: mousePos[1] });
+        setCordinates({ x, y });
         setPolygonCoordinates({ points: points, id: id, label:polygonLabel }); 
         setPolygons([...polygons, { points, id, label: polygonLabel }]);       
         setPolygonLabelActive(true);
       } else {
-        setPoints([...points, mousePos]);
+        setPoints([...points, {x, y}]);
+
       }
     } else if (drawRectangle) {
       const stage = e.target.getStage();
@@ -131,7 +135,7 @@ const Canvas = ({
   const handleMouseMove = (e: any) => {
     if (drawPolygon) {
       const stage = e.target.getStage();
-      const mousePos = getMousePos(stage);
+      const mousePos = stage.getPointerPosition();
       setPosition(mousePos);
     } else if (drawRectangle && newRectangle.length === 1) {
       const sx = newRectangle[0].x;
@@ -198,12 +202,13 @@ const Canvas = ({
   };
 
   useEffect(() => {
-    setFlattenedPoints(
-      points
-        .concat(isPolyComplete ? [] : position)
-        .reduce((a: any, b: any) => a.concat(b), [])
-    );
-  }, [points]);
+    const flattened = points
+      .map(({ x, y } : { x: any, y: any}) => [x, y])
+      .concat(isPolyComplete ? [] : [position.x, position.y])
+      .reduce((a: any, b: any) => a.concat(b), []);
+      setFlattenedPoints(flattened)
+  }, [points, position, isPolyComplete]);
+  
 
   useEffect(() => {
 
@@ -328,11 +333,8 @@ const Canvas = ({
     setRectangleLabel(e.target.value);
   }
 
-  const onSave = (points: any) => {
-  };
-
   const onSavePolygonLabel = () => {
-    dispatch(addPolygon({points: points, label: polygonLabel, id:id, status: 'Completed', shape: 'Polygon', flattenedPoints: flattenedPoints, labelCordinates: { x: cordinates.x, y: cordinates.y}}))
+    dispatch(addPolygon({points: points, label: polygonLabel, id: nanoid(), status: 'Completed', shape: 'Polygon', flattenedPoints: flattenedPoints, labelCordinates: { x: cordinates.x, y: cordinates.y}, confidence: 0}))
     setPolygonLabelActive(false)
     setPoints([]);
     setPolyComplete(false);
@@ -383,7 +385,7 @@ const Canvas = ({
   return (
     <>
       <div className="flex p-5">
-        <Tabs className="w-[400px] flex justify-end ">
+        <Tabs className="flex justify-end ">
           <TabsList className="flex flex-col">
             <TabsTrigger 
               onClick={()=>{setDrawPolygon(true) , setDrawRectangle(false)}} 
@@ -399,8 +401,8 @@ const Canvas = ({
         </Tabs>
       <div>
         <Stage
-          width={size.width || 480}
-          height={size.height || 360}
+          width={size.width || imageData.imageWidth}
+          height={size.height || imageData.imageHeight}
           onMouseMove={handleMouseMove}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
@@ -420,9 +422,10 @@ const Canvas = ({
                 alt=""
               />
               {drawPolygon && state.Polygon.polygons && 
-                state.Polygon.polygons.map((polygon) => (
+                state.Polygon.polygons.map((polygon: any, index: number) => (
                 <>
                 <PolygonAnnotation
+                  key={index}
                   points={polygon.points}
                   flattenedPoints={polygon.flattenedPoints}
                   handlePointDragMove={handlePointDragMove}
@@ -431,7 +434,7 @@ const Canvas = ({
                   handleMouseOutStartPoint={handleMouseOutStartPoint}
                   isFinished={polygon.status === 'Complete'}
                 />
-                <Label x= {polygon.labelCordinates.x - 3} y={polygon.labelCordinates.y - 15}>
+                {/* <Label x= {polygon.labelCordinates.x - 3} y={polygon.labelCordinates.y - 15}>
                   <Tag
                       fill= 'transparent'
                       pointerDirection= 'down'
@@ -447,7 +450,7 @@ const Canvas = ({
                   padding={5}
                   fill='white'
                   />
-                </Label>
+                </Label> */}
               </>
               ))}
 
@@ -484,7 +487,7 @@ const Canvas = ({
             )}
 
             {drawRectangle && state.Rectangle.rectangles &&
-                state.Rectangle.rectangles.map((rectangle)=>{
+                state.Rectangle.rectangles.map((rectangle: any)=>{
                   return (
                   <div key={rectangle.id}>
                     <Rect
@@ -527,36 +530,19 @@ const Canvas = ({
             }
             </Layer> 
           </Stage>
-
-        <div
-          ref={dataRef}
-          style={{
-            display: "none",
-            width: 400,
-            boxShadow: "7px 7px 5px .4em rgba(0,0,0,.1)",
-          }}
-        >
-        </div>
-        {(drawPolygon || drawRectangle) &&
-          <Button className="mt-4 w-20" onClick={() => onSave(false)}>
-            Save
-          </Button>
-        }
-      </div>
-      <div>
+            <div>
         <Tabs defaultValue="labels" className="w-[400px] flex flex-col justify-start border ml-5">
           <TabsList>
             <TabsTrigger value="labels" > 
               Labels
             </TabsTrigger>
           </TabsList>
+              {/* {polygonLabel.length ===0 && (<CardDescription>No Shape Drawn</CardDescription>)} */}
           <TabsContent value="labels">
             <Card className="w-full p-5">
               <>
-              {/* {polygonLabel.length ===0 && (<CardDescription>No Shape Drawn</CardDescription>)} */}
 
                 {polygonLabelActive && (
-
                   <>
                     <p>Please provide a label to your shape</p>
                     <input type="text" onChange={handlePolygonLabelChange} className="h-10 border-2"/>
@@ -564,7 +550,7 @@ const Canvas = ({
                   </>
                 )}
                 {
-                  state.Polygon.polygons && state.Polygon.polygons.map((polygon) => {
+                  state.Polygon.polygons && state.Polygon.polygons.map((polygon: any) => {
                       return ( 
                         <div key={polygon.id} className="flex justify-between mt-4">
                           <CardTitle>
@@ -590,9 +576,9 @@ const Canvas = ({
                 }
               </>
             </Card>
-            <Card className=" p-5">
-              <>
                 {/* {rectangleLabel.length ===0 && (<CardDescription>No Shape Drawn</CardDescription>)} */}
+            {/* <Card className=" p-5">
+              <>
                 {rectangleLabelActive && (
                   <>
                     <p>Please provide a label to your shape</p>
@@ -601,17 +587,17 @@ const Canvas = ({
                   </>
                 )}
                 {
-                  state.Rectangle.rectangles && state.Rectangle.rectangles.map((rectangle) => {
+                  state.Rectangle.rectangles && state.Rectangle.rectangles.map((rectangle: any) => {
                     return(
                       <div key = {rectangle.id} className="flex justify-between">
                         <CardTitle>          
                           {editRectangleLabel && (
-                              <>
-                                <input type="text" defaultValue={rectangle.label} onChange={(e) => handleEditRectangleLabel(e)}/>
-                                <button type="button" onClick={() => saveEditedRectangleLabel(rectangle.id)}>Save</button>
-                              </>
-                            )}
-                            {!editRectangleLabel && <p>{rectangle.label}</p>}
+                            <>
+                              <input type="text" defaultValue={rectangle.label} onChange={(e) => handleEditRectangleLabel(e)}/>
+                              <button type="button" onClick={() => saveEditedRectangleLabel(rectangle.id)}>Save</button>
+                            </>
+                          )}
+                          {!editRectangleLabel && <p>{rectangle.label}</p>}
                         </CardTitle>
                         <div className="flex">
                           <button onClick={() => setEditRectangleLabel(true)} >
@@ -625,9 +611,26 @@ const Canvas = ({
                   })
                 }
               </>
-            </Card>
+            </Card> */}
           </TabsContent> 
         </Tabs>
+      </div>
+          
+
+        <div
+          ref={dataRef}
+          style={{
+            display: "none",
+            width: 400,
+            boxShadow: "7px 7px 5px .4em rgba(0,0,0,.1)",
+          }}
+        >
+        </div>
+        {(drawPolygon || drawRectangle) &&
+          <Button className="mt-4 w-20" onClick={onSave}>
+            Save
+          </Button>
+        }
       </div>
     </div>
     </>
@@ -635,3 +638,5 @@ const Canvas = ({
 };
 
 export default Canvas;
+
+

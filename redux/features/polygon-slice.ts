@@ -7,7 +7,8 @@ type Polygon = {
   label: string;
   id: string;
   flattenedPoints: number[];
-  labelCordinates: { 
+  confidence?: number,
+  labelCordinates?: { 
     x: number,
     y: number
   };
@@ -39,6 +40,7 @@ export const polygon = createSlice({
         shape: "Polygon",
         flattenedPoints: action.payload.flattenedPoints,
         labelCordinates: action.payload.labelCordinates,
+        confidence: action.payload.confidence
       });
     },
     editPolyLabel: (state, action: PayloadAction<Label>) => {

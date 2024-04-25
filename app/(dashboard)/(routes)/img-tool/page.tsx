@@ -1,21 +1,37 @@
-"use client"
+import { cookies } from "next/headers";
+import { ImageEditor } from "@/components/ImageEditor";
 
-import Canvas from "@/components/Canvas";
-import ReduxProvider from "@/redux/provider";
+export default async function ImgTool({searchParams} : {searchParams: any}) {
+  const { image, checkupId } = searchParams;
+  let patientAnalysis;
+  const token = cookies().get('token');
+  
+    try {
+      const response = await fetch(
+        `http://103.217.176.51:8000/v1/dentist_checkup?checkup_id=${searchParams.checkupId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token?.value}`,
+          },
+        }
+      );
+      patientAnalysis = await response.json();
+    } catch (err: unknown) {
+        throw new Error('Failed to fetch dentist checkup')
+    }
 
-const ImgTool = () => {
+    
+
   return (
     <div >
       <div className="border p-5 ml-5">
-        <ReduxProvider>
-          <Canvas 
-            imageUrl="./sampleImage.jpg"
-          />
-        </ReduxProvider>
+          <ImageEditor patientAnalysis={patientAnalysis} searchParams={searchParams} />
       </div>
     </div>
   
 
   )
 }
-export default ImgTool;
+

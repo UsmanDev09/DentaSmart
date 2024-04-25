@@ -3,11 +3,8 @@
 import * as React from "react";
 import {
   Check,
-  CheckCircle,
   CheckCircle2,
-  CheckCircleIcon,
   ChevronDown,
-  LucideCheckCircle2,
   LucideIcon,
 } from "lucide-react";
 
@@ -32,43 +29,25 @@ type Finding = {
   icon: LucideIcon;
 };
 
-const findings: Finding[] = [
-  {
-    value: "implant",
-    label: "Implant",
-    icon: CheckCircle2,
-  },
-  {
-    value: "crown",
-    label: "Crown",
-    icon: CheckCircle2,
-  },
-  {
-    value: "rct",
-    label: "RCT",
-    icon: CheckCircle2,
-  },
-  {
-    value: "filling",
-    label: "Filling",
-    icon: CheckCircle2,
-  },
-  {
-    value: "caries",
-    label: "Caries",
-    icon: CheckCircle2,
-  },
-  {
-    value: "restoration",
-    label: "Restoration",
-    icon: CheckCircle2,
-  },
-];
 
-export function Combobox() {
+export function Combobox( { diagnosticFindings, diagnosticFinding } : {diagnosticFindings: any, diagnosticFinding: string} ) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState<Finding | null>(null);
+  const [value, setValue] = React.useState<Finding>({
+    value: diagnosticFinding,
+    label: diagnosticFinding,
+    icon: CheckCircle2
+  });
 
+  const findings = diagnosticFindings.map((diagnosticFinding: string) => {
+    return (
+      {
+        value: diagnosticFinding,
+        label: diagnosticFinding,
+        icon: CheckCircle2
+      }
+    )
+  })
+  
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -96,26 +75,21 @@ export function Combobox() {
           <CommandInput placeholder="Enter Info" />
           <CommandEmpty>No implant found.</CommandEmpty>
           <CommandGroup>
-            {findings.map((finding) => (
+            {findings.map((finding: any) => (
               <CommandItem
                 key={finding.value}
                 value={finding.value}
-                onSelect={(value) => {
-                  setValue(
-                    findings.find((priority) => priority.value === value) ||
-                      null
-                  );
-                  setOpen(false);
+                onSelect={(currentValue) => {
+                  setValue(({label: currentValue, value: currentValue, icon: CheckCircle2}))
+                  setOpen(false)
                 }}
               >
-                {/* <finding.icon
+                <Check
                   className={cn(
-                    "mr-2 h-4 w-4 text-red-700",
-                    finding.value === finding.value
-                      ? "opacity-100"
-                      : "opacity-0"
+                    "mr-2 h-4 w-4",
+                    value === finding.value ? "opacity-100" : "opacity-0"
                   )}
-                /> */}
+                />
                 {finding.label}
               </CommandItem>
             ))}
