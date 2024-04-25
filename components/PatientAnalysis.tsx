@@ -3,17 +3,8 @@
 import ChatCard from "@/components/chatCard";
 import Date from "@/components/date";
 import { Button } from "@/components/ui/button";
-import { Combobox } from "@/components/ui/combobox";
 import { Separator } from "@/components/ui/separator";
 
-import {
-  Table,
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableCell,
-  TableBody,
-} from "@/components/ui/table";
 
 import {
   AlertDialog,
@@ -25,18 +16,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
- 
-import { Card, CardContent } from "@/components/ui/card"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
 
-
-import Image from "next/image";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChevronRight, X } from "lucide-react";
@@ -47,7 +27,6 @@ import { initializePatientAnalysis } from "@/redux/features/patient-analysis-sli
 import { PatientProfile } from "./PatientProfile";
 import { MedicalHistory } from "./MedicalHistory";
 import { Chats } from "./Chats";
-import { Complaints } from "./Complaints";
 import { Findings } from "./Findings";
 
 export const PatientAnalysis = ({
@@ -147,11 +126,11 @@ export const PatientAnalysis = ({
         <div className="flex flex-col p-5">
           <h2 className="text-3xl font-bold ">History</h2>
           <div>
-            <Date startDate={startDate} endDate={endDate}/>
+            <Date searchParams={searchParams} startDate={startDate} endDate={endDate}/>
           </div>
           <div className="gap-y-8 h-full">
             {checkupHistory.checkup.map((history:any, index:number )=>{
-              return <ChatCard history = {history} key={index}/>
+              return <ChatCard history={history} key={index}/>
             })}
           </div>
         </div>

@@ -5,7 +5,8 @@ import { PatientAnalysis } from "@/components/PatientAnalysis";
 async function PatientAnalysisPage({ searchParams }: { searchParams: any }) {
   
   let token = cookies().get("token");
-  let patientAnalysis, chat, history, startDate = "2024-01-01", endDate = `2024-04-22`;
+  let patientAnalysis, chat, history, startDate = searchParams.startDate ? searchParams.startDate : "2024-01-01", 
+  endDate = searchParams.endDate ? searchParams.endDate : `2024-04-22`;
   
   let dateStart = new Date(startDate);
 
@@ -21,11 +22,6 @@ async function PatientAnalysisPage({ searchParams }: { searchParams: any }) {
 
   let formattedStartDate = `${startDay}-${startMonth}-${startYear}`;
   let formattedEndDate = `${endDay}-${endMonth}-${endYear}`;
-
-  console.log(formattedStartDate);
-  console.log(formattedEndDate);
-
-  
 
   try {
     const response = await fetch(
@@ -84,16 +80,6 @@ async function PatientAnalysisPage({ searchParams }: { searchParams: any }) {
       } catch (err: unknown) {
         throw new Error('Failed to fetch history data')
       }
-
-      // console.log(history);
-
-      // const checkups = history.data.checkup;
-      // const visit = history.data.visits;
-
-      // const checkupWithVisit = checkups.map((checkup:any)=>{
-      //   checkup,
-      //   visit,
-      // })
       
 
   return (

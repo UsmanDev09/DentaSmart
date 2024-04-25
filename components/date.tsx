@@ -1,21 +1,21 @@
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-const Date = ({startDate, endDate} : {startDate:any, endDate:any}) => {
+const Date = ({ searchParams, startDate, endDate } : { searchParams: any, startDate:any, endDate:any }) => {
 
-  const [startedDate, setStartedDate] = useState(startDate);
-  const [endedDate, setEndedDate] = useState(endDate);
-
+  const router = useRouter()
 
   const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    
     const inputValue = event.target.value;
-    const changedDate = inputValue;
-    setStartedDate(changedDate);
+    console.log('IV', inputValue)
+    router.push(`/patient-analysis?checkupId=${searchParams.checkupId}&startDate=${inputValue}&endDate=${endDate}`)
   };
 
   const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
-    const changedDate = inputValue;
-    setEndedDate(changedDate);
+    router.push(`/patient-analysis?checkupId=${searchParams.checkupId}&startDate=${startDate}&endDate=${inputValue}`)
+
   };
     
   return (
@@ -25,7 +25,7 @@ const Date = ({startDate, endDate} : {startDate:any, endDate:any}) => {
         id="startDate"
         name="startdate"
         className="rounded-full border-2 border-[#21B9C6]"
-        value={startedDate}
+        value={startDate}
         onChange={handleStartDateChange}
       />
       <input
@@ -33,7 +33,7 @@ const Date = ({startDate, endDate} : {startDate:any, endDate:any}) => {
         id="endDate"
         name="endDate"
         className="rounded-full border-2 border-[#21B9C6]"
-        value={endedDate}
+        value={endDate}
         onChange={handleEndDateChange}
       />
     </div>
