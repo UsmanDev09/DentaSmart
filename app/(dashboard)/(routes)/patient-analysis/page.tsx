@@ -3,8 +3,29 @@ import { PatientAnalysis } from "@/components/PatientAnalysis";
 
 
 async function PatientAnalysisPage({ searchParams }: { searchParams: any }) {
-  const token = cookies().get("token");
-  let patientAnalysis, chat;
+  
+  let token = cookies().get("token");
+  let patientAnalysis, chat, history, startDate = "2024-01-01", endDate = `2024-04-22`;
+  
+  let dateStart = new Date(startDate);
+
+  let startDay = dateStart.getDate().toString().padStart(2, '0');
+  let startMonth = (dateStart.getMonth() + 1).toString().padStart(2, '0');
+  let startYear = dateStart.getFullYear();
+
+  let dateEnd = new Date(endDate);
+
+  let endDay = dateEnd.getDate().toString().padStart(2, '0'); 
+  let endMonth = (dateEnd.getMonth() + 1).toString().padStart(2, '0');
+  let endYear = dateEnd.getFullYear();
+
+  let formattedStartDate = `${startDay}-${startMonth}-${startYear}`;
+  let formattedEndDate = `${endDay}-${endMonth}-${endYear}`;
+
+  console.log(formattedStartDate);
+  console.log(formattedEndDate);
+
+  
 
   try {
     const response = await fetch(
@@ -18,9 +39,9 @@ async function PatientAnalysisPage({ searchParams }: { searchParams: any }) {
       }
     );
     patientAnalysis = await response.json();
-  } catch (err: unknown) {
-      throw new Error('Failed to fetch dentist checkup')
-  }
+    } catch (err: unknown) {
+        throw new Error('Failed to fetch dentist checkup')
+    }
     
 
   try {
@@ -35,13 +56,55 @@ async function PatientAnalysisPage({ searchParams }: { searchParams: any }) {
       }
     );
     chat = await chatResponse.json();
-  } catch (err: unknown) {
+    } catch (err: unknown) {
       throw new Error('Failed to fetch dentist chat')
-  }
+    }
   
+  try {
+    const historyResponse = await fetch(
+      `http://103.217.176.51:8000/v1/history`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token?.value}`,
+        },
+        body:JSON.stringify(
+          {
+          args: {
+              start_date: `${formattedStartDate}`,
+              end_date: `${formattedEndDate}`,
+              dentasmart_visit: true,
+              dentist_visit: true,
+              checkup_id: searchParams.checkupId
+            }
+          })
+      });
+      history = await historyResponse.json();
+      } catch (err: unknown) {
+        throw new Error('Failed to fetch history data')
+      }
+
+      // console.log(history);
+
+      // const checkups = history.data.checkup;
+      // const visit = history.data.visits;
+
+      // const checkupWithVisit = checkups.map((checkup:any)=>{
+      //   checkup,
+      //   visit,
+      // })
+      
 
   return (
-    <PatientAnalysis chat={chat} patientAnalysis={patientAnalysis} searchParams={searchParams} />
+    <PatientAnalysis  
+      history={history} 
+      chat={chat} 
+      patientAnalysis={patientAnalysis} 
+      searchParams={searchParams} 
+      startDate={startDate}
+      endDate = {endDate}
+      />
   );
 }
 

@@ -53,11 +53,17 @@ import { Findings } from "./Findings";
 export const PatientAnalysis = ({
   patientAnalysis,
   searchParams,
-  chat
+  chat,
+  history,
+  startDate,
+  endDate
 }: {
   patientAnalysis: any;
   searchParams: any;
   chat:any;
+  history: any;
+  startDate:any
+  endDate:any
 }) => {
   const dispatch = useDispatch();
 
@@ -65,6 +71,8 @@ export const PatientAnalysis = ({
 
   const images = patientAnalysis.data.images;
 
+  const checkupHistory = history.data;
+  
   dispatch(initializePatientAnalysis(patientAnalysis));
   
 
@@ -138,15 +146,13 @@ export const PatientAnalysis = ({
       <div className="bg-white border pr-1">
         <div className="flex flex-col p-5">
           <h2 className="text-3xl font-bold ">History</h2>
-          <div className="flex flex-row gap-x-4 my-4">
-            <Date />
-            <Date />
+          <div>
+            <Date startDate={startDate} endDate={endDate}/>
           </div>
           <div className="gap-y-8 h-full">
-            <ChatCard />
-            <ChatCard />
-            <ChatCard />
-            <ChatCard />
+            {checkupHistory.checkup.map((history:any, index:number )=>{
+              return <ChatCard history = {history} key={index}/>
+            })}
           </div>
         </div>
       </div>
