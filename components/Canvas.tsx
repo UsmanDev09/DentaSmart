@@ -428,6 +428,7 @@ const Canvas = ({
               {state.Line.lines && state.Line.lines.map((line: any, index: number) => {
                 console.log(line.flattenedPoints)
                 return (<Line
+                key={index}
                   points={line.flattenedPoints}
                   stroke={line.boneloss ? 'red' : 'green'}
                   strokeWidth={3}

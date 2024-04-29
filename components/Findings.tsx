@@ -61,8 +61,7 @@ export const Findings = ({searchParams}: {searchParams: any}) => {
                   {predictions && predictions.map((prediction: any, index: number) => {
                     if(prediction.image_name === selectedImage)
                     return (
-                      <div key={index} >
-                        <Table>
+                        <Table key={index}>
                           <TableHeader className="text-[#fff] bg-black border-none">
                             <TableRow className=" ">
                               <TableHead className="text-[#fff] font-bold">
@@ -78,7 +77,7 @@ export const Findings = ({searchParams}: {searchParams: any}) => {
                           </TableHeader>
                         
                           <TableBody>
-                              {prediction.diagnostic ? prediction.diagnostic.map((diagnostic: any, index: number) => {
+                              {prediction.diagnostic.length > 0 && prediction.diagnostic.map((diagnostic: any, index: number) => {
                                 return (
                                   <TableRow key={index}>
                                     <TableCell>02</TableCell>
@@ -91,10 +90,9 @@ export const Findings = ({searchParams}: {searchParams: any}) => {
                                     </TableCell>
                                   </TableRow>
                                 )
-                              }): (<p>No option available</p>)}
+                              })}
                           </TableBody>
                         </Table>
-                      </div>
                     )
                   
                   })}
