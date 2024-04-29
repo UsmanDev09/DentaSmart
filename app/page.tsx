@@ -31,7 +31,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
 import { cookies } from "next/headers";
 
-export async function Dashboard() {
+export default async function Home() {
   const token = cookies().get("token");
   const response = await fetch(
     "http://103.217.176.51:8000/v1/dentist_dashboard",
@@ -45,13 +45,15 @@ export async function Dashboard() {
     }
   );
   const dashboard = await response.json();
-
+  console.log(dashboard)
   const patients = dashboard.checkup;
   const dentist = dashboard.dentist;
-  const patientsWithDentist = patients.map((patient: any) => ({
+  const patientsWithDentist = patients && patients.map((patient: any) => ({
     ...patient,
     dentist,
   }));
+
+  console.log(patientsWithDentist)
 
   return (
       <div className="flex flex-col gap-y-10 p-10 bg-[#F5F5F5]">
@@ -143,7 +145,7 @@ export async function Dashboard() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {patientsWithDentist.map((patient: any) => {
+              {patientsWithDentist ? patientsWithDentist.map((patient: any) => {
                 return (
                   <TableRow key={patient.checkup_id}>
                     <TableCell>{patient.checkup_id}</TableCell>
@@ -165,7 +167,9 @@ export async function Dashboard() {
                     </TableCell>
                   </TableRow>
                 );
-              })}
+              }) : (
+                <p>No Record found</p>
+              )}
             </TableBody>
           </Table>
         </div>
@@ -193,5 +197,3 @@ export async function Dashboard() {
       </div>
   );
 }
-
-export default Dashboard;

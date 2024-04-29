@@ -1,4 +1,4 @@
-import { Check, Edit, Trash2 } from "lucide-react";
+import { Check, Edit, Trash2, X } from "lucide-react";
 import {
   DiagnosisDialog,
   DiagnosisDialogTrigger,
@@ -14,6 +14,9 @@ interface PatientProblemsEditableProps {
   index: number;
   onDelete: any;
   id: string;
+  onChangeAddProblem: any;
+  onAddProblem: any;
+  onDeleteSpecificProblem: any;
 }
 
 const PatientProblemsEditable = (
@@ -21,7 +24,10 @@ const PatientProblemsEditable = (
     treatments,
     index,
     onDelete,
-    id
+    id,
+    onChangeAddProblem,
+    onAddProblem,
+    onDeleteSpecificProblem
   } : PatientProblemsEditableProps
 ) => {
 
@@ -69,101 +75,35 @@ const PatientProblemsEditable = (
                         </Button>
                       </div>
                       <div>
-                        <input
-                          placeholder="Enter diagnosis"
-                          className="border-2 rounded-3xl w-full px-3 py-2 text-medium my-2"
-                        />
+                        <div className="flex gap-4 items-center">
+                          <input
+                            placeholder="Enter diagnosis"
+                            className="border-2 rounded-3xl w-full px-3 py-2 text-medium my-2"
+                            onChange={onChangeAddProblem}
+                          />
+                          <Button
+                            onClick={() => onAddProblem(index)}
+                            variant="login"
+                            className="px-4 py-2 text-lg rounded-1/2"
+                          >
+                            Add
+                          </Button>
+                        </div>
                         <div className="space-y-3">
-                          <div className="flex items-center space-x-2 border-b-2 border-b-opacity-5 py-2">
-                            <Checkbox id="treatment" />
-                            <label
-                              htmlFor="treatment"
-                              className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                              Removal of causative agent
-                            </label>
-                          </div>
-                          <div className="flex items-center space-x-2 border-b-2 border-b-opacity-5 py-2">
-                            <Checkbox id="treatment" />
-                            <label
-                              htmlFor="treatment"
-                              className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                              Filling
-                            </label>
-                          </div>
-                          <div className="flex items-center space-x-2 border-b-2 border-b-opacity-5 py-2">
-                            <Checkbox id="treatment" />
-                            <label
-                              htmlFor="treatment"
-                              className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                              Repair of existing restoration
-                            </label>
-                          </div>
-                          <div className="flex items-center space-x-2 border-b-2 border-b-opacity-5 py-2">
-                            <Checkbox id="treatment" />
-                            <label
-                              htmlFor="treatment"
-                              className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                              Continue to monitor symptoms
-                            </label>
-                          </div>
-                          <div className="flex items-center space-x-2 border-b-2 border-b-opacity-5 py-2">
-                            <Checkbox id="treatment" />
-                            <label
-                              htmlFor="treatment"
-                              className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                              Visit dentist if symptoms persist or worsen
-                            </label>
-                          </div>
-                          <div className="flex items-center space-x-2 border-b-2 border-b-opacity-5 py-2">
-                            <Checkbox id="treatment" />
-                            <label
-                              htmlFor="treatment"
-                              className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                              Removal of causative agent
-                            </label>
-                          </div>
-                          <div className="flex items-center space-x-2 border-b-2 border-b-opacity-5 py-2">
-                            <Checkbox id="treatment" />
-                            <label
-                              htmlFor="treatment"
-                              className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                              Filling
-                            </label>
-                          </div>
-                          <div className="flex items-center space-x-2 border-b-2 border-b-opacity-5 py-2">
-                            <Checkbox id="treatment" />
-                            <label
-                              htmlFor="treatment"
-                              className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                              Repair of existing restoration
-                            </label>
-                          </div>
-                          <div className="flex items-center space-x-2 border-b-2 border-b-opacity-5 py-2">
-                            <Checkbox id="treatment" />
-                            <label
-                              htmlFor="treatment"
-                              className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                              Continue to monitor symptoms
-                            </label>
-                          </div>
-                          <div className="flex items-center space-x-2 border-b-2 border-b-opacity-5 py-2">
-                            <Checkbox id="treatment" />
-                            <label
-                              htmlFor="treatment"
-                              className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                              Visit dentist if symptoms persist or worsen
-                            </label>
-                          </div>
+                          {treatments && treatments.map((t: any, index: number) => {
+                            return (
+                              <div key={index} className="flex items-center space-x-2 border-b-2 border-b-opacity-5 py-2">
+                                {/* <Checkbox id="treatment" /> */}
+                                <label
+                                  htmlFor="treatment"
+                                  className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                  {t.split(':')[0]}
+                                </label>
+                              </div>
+                            )
+                          })}
+                          
                         </div>
                         <div className="flex justify-center my-5">
                           <Button
@@ -188,13 +128,19 @@ const PatientProblemsEditable = (
         </div>
       </div>
       <div>
-      {treatments.map((options:any, index:number) =>{
-        return(
-          <p className="flex text-sm my-2" key={index}>
-            <Check className="mr-2 w-10 max-w-10 text-[#21B9C6]" />
-            {options}
-          </p>
-          )})}
+        {treatments.map((option:any, problemIndex:number) =>{
+          return(
+            <div key={problemIndex} className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <Check className="mr-2 text-[#21B9C6]" />
+                    <p className="flex text-sm my-2">
+                      {option.split(':')[0]}
+                    </p>
+                </div>
+                <X onClick={() => onDeleteSpecificProblem(index, problemIndex)} className="text-[red] ml-6" />
+                
+            </div>
+        )})}
       </div>
     </div>
   ); else {

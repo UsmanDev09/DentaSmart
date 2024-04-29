@@ -32,7 +32,7 @@ export const Findings = ({searchParams}: {searchParams: any}) => {
                     {imagesData && imagesData.map((imageData: any, index: number) => {
                       
                       return (
-                        <>
+                        <div key={index}>
                         <a target="_blank" href={`/img-tool?image=${imageData.image}&checkupId=${searchParams.checkupId}`} rel="noopener noreferrer">
                         <img
                           src={`http://103.217.176.51:8000/media/${imageData.image}`}
@@ -43,7 +43,7 @@ export const Findings = ({searchParams}: {searchParams: any}) => {
                           alt="x-ray image"
                         />
                          </a>
-                        </>
+                        </div>
                       )
                       })}
                   </Carousel>
@@ -75,9 +75,9 @@ export const Findings = ({searchParams}: {searchParams: any}) => {
                           </TableHeader>
                         
                           <TableBody>
-                              {prediction.diagnostic ? prediction.diagnostic.map((diagnostic: any) => {
+                              {prediction.diagnostic ? prediction.diagnostic.map((diagnostic: any, index: number) => {
                                 return (
-                                  <TableRow>
+                                  <TableRow key={index}>
                                     <TableCell>02</TableCell>
                                     <TableCell>
                                       <Combobox key={diagnostic.class_id} diagnosticFindings={prediction.metadata.modelClasses.diagnostic} diagnosticFinding={diagnostic.class_name}/>
