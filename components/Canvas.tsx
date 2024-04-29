@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import PolygonAnnotation from "./PolygonAnnotation";
-import { Stage, Layer, Image as KonvaImage, Rect, Label, Tag, Text } from "react-konva";
+import { Stage, Layer, Image as KonvaImage, Rect, Label, Tag, Text, Line } from "react-konva";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -13,6 +13,7 @@ import { Tabs, TabsList,TabsContent, TabsTrigger } from "./ui/tabs";
 import { Card, CardDescription, CardTitle } from "./ui/card";
 import { Pencil, RectangleHorizontal, Trash2 } from "lucide-react";
 import { initializePatientAnalysis } from "@/redux/features/patient-analysis-slice";
+import { Combobox } from "./ui/combobox";
 
 const scaleBy = 1.01;
 
@@ -32,11 +33,13 @@ const Canvas = ({
   diagnostic,
   imageData,
   onSave,
+  findings,
 }: {
   imageUrl: string;
   diagnostic: any;
   imageData: any;
   onSave: any;
+  findings: any
 }) => {
   const videoSource = imageUrl;
   const dispatch = useDispatch();
@@ -325,8 +328,8 @@ const Canvas = ({
     lastDist = 0;
   }
 
-  const handlePolygonLabelChange = (e: any) => {
-    setPolygonLabel(e.target.value);
+  const handlePolygonLabelChange = (value: any) => {
+    setPolygonLabel(value);
   }
 
   const handleRectangleLabelChange = (e: any) => {
@@ -364,8 +367,8 @@ const Canvas = ({
     dispatch(removeRectangle(id))
   }
 
-  const handleEditPolygonLabel = (e: any) => {
-    setEditedPolygonLabel(e.target.value)
+  const handleEditPolygonLabel = (value: any) => {
+    setEditedPolygonLabel(value)
   }
 
   const handleEditRectangleLabel = (e: any) => {
@@ -422,6 +425,18 @@ const Canvas = ({
                 height={800}
                 alt=""
               />
+              {state.Line.lines && state.Line.lines.map((line: any, index: number) => {
+                console.log(line.flattenedPoints)
+                return (<Line
+                  points={line.flattenedPoints}
+                  stroke={line.boneloss ? 'red' : 'green'}
+                  strokeWidth={3}
+                  closed={false}
+                  fill="rgb(0,128,0,0.5)"
+                />)
+              })}
+
+
               {drawPolygon && state.Polygon.polygons && 
                 state.Polygon.polygons.map((polygon: any, index: number) => (
                 <>
@@ -547,7 +562,7 @@ const Canvas = ({
                 {polygonLabelActive && (
                   <>
                     <p>Please provide a label to your shape</p>
-                    <input type="text" onChange={handlePolygonLabelChange} className="h-10 border-2"/>
+                    <Combobox diagnosticFindings={findings} diagnosticFinding="" handlePolygonLabelChange={handlePolygonLabelChange}/>
                     <button type="button" onClick={onSavePolygonLabel} >Save</button>
                   </>
                 )}
@@ -558,7 +573,7 @@ const Canvas = ({
                           <CardTitle>
                             {editPolygonLabel && (
                               <>
-                                <input type="text" defaultValue={polygon.label} onChange={(e) => handleEditPolygonLabel(e)}/>
+                                <Combobox diagnosticFindings={findings} diagnosticFinding={polygon.label} handlePolygonLabelChange={handleEditPolygonLabel}/>
                                 <button type="button" onClick={() => saveEditedPolygonLabel(polygon.id)}>Save</button>
                               </>
                             )}

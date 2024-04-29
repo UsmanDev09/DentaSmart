@@ -56,35 +56,35 @@ async function PatientAnalysisPage({ searchParams }: { searchParams: any }) {
       throw new Error('Failed to fetch dentist chat')
     }
   
-  try {
-    const historyResponse = await fetch(
-      `http://103.217.176.51:8000/v1/history`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token?.value}`,
-        },
-        body:JSON.stringify(
-          {
-          args: {
-              start_date: `${formattedStartDate}`,
-              end_date: `${formattedEndDate}`,
-              dentasmart_visit: true,
-              dentist_visit: true,
-              checkup_id: searchParams.checkupId
-            }
-          })
-      });
-      history = await historyResponse.json();
-      } catch (err: unknown) {
-        throw new Error('Failed to fetch history data')
-      }
+  // try {
+  //   const historyResponse = await fetch(
+  //     `http://103.217.176.51:8000/v1/history`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token?.value}`,
+  //       },
+  //       body:JSON.stringify(
+  //         {
+  //         args: {
+  //             start_date: `${formattedStartDate}`,
+  //             end_date: `${formattedEndDate}`,
+  //             dentasmart_visit: true,
+  //             dentist_visit: true,
+  //             checkup_id: searchParams.checkupId
+  //           }
+  //         })
+  //     });
+  //     history = await historyResponse.json();
+  //     } catch (err: unknown) {
+  //       throw new Error('Failed to fetch history data')
+  //     }
       
 
   return (
     <PatientAnalysis  
-      history={history} 
+      history={[]} 
       chat={chat} 
       patientAnalysis={patientAnalysis} 
       searchParams={searchParams} 

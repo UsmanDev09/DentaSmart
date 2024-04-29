@@ -30,7 +30,7 @@ type Finding = {
 };
 
 
-export function Combobox( { diagnosticFindings, diagnosticFinding } : {diagnosticFindings: any, diagnosticFinding: string} ) {
+export function Combobox( { diagnosticFindings, diagnosticFinding, handlePolygonLabelChange } : {diagnosticFindings: any, diagnosticFinding: string, handlePolygonLabelChange: any} ) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState<Finding>({
     value: diagnosticFinding,
@@ -47,7 +47,7 @@ export function Combobox( { diagnosticFindings, diagnosticFinding } : {diagnosti
       }
     )
   })
-  
+  console.log(findings)
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -61,7 +61,7 @@ export function Combobox( { diagnosticFindings, diagnosticFinding } : {diagnosti
             {value ? (
               <>
                 <value.icon className="mr-2 h-6 w-6 shrink-0 text-white bg-blue-600 rounded-full" />
-                {value.label}
+                {value.value}
               </>
             ) : (
               "Select Finding ..."
@@ -77,10 +77,11 @@ export function Combobox( { diagnosticFindings, diagnosticFinding } : {diagnosti
           <CommandGroup>
             {findings.map((finding: any) => (
               <CommandItem
-                key={finding.value}
-                value={finding.value}
+                key={finding.label}
+                value={finding.label}
                 onSelect={(currentValue) => {
-                  setValue(({label: currentValue, value: currentValue, icon: CheckCircle2}))
+                  setValue(({label: finding.label, value: finding.label, icon: CheckCircle2}))
+                  handlePolygonLabelChange(finding.label)
                   setOpen(false)
                 }}
               >
