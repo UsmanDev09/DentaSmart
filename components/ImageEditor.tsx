@@ -3,17 +3,19 @@
 import { addPolygon } from "@/redux/features/polygon-slice";
 import Canvas from "./Canvas"
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { addLine } from "@/redux/features/line-analysis-slice";
+// import toast, { Toaster } from 'react-hot-toast';
 
 
 export const ImageEditor = ({ patientAnalysis, searchParams } : { patientAnalysis : any, searchParams: any }) => {
     const dispatch = useDispatch();
 
     const polygons = useSelector((state: any) => state.Polygon.polygons)
+    const [prediction, setPrediction] = useState(patientAnalysis.data.diagonsis.predictions.filter((prediction: any) => prediction.image_name === searchParams.image ));
+    const [imageData, setImageData] = useState({ imageWidth: prediction[0].metadata.imageWidth, imageHeight: prediction[0].metadata.imageHeight })
+    console.log('prex', prediction)
 
-    const prediction = patientAnalysis.data.diagonsis.predictions.filter((prediction: any) => prediction.image_name === searchParams.image );
-
-    const imageData = { imageWidth: prediction[0].metadata.imageWidth, imageHeight: prediction[0].metadata.imageHeight }
       
     function denormalizePoints(normalizedPoints: any, minX: number, maxX: number, minY: number, maxY: number) {
       return normalizedPoints.map((point: any) => ({
@@ -28,16 +30,15 @@ export const ImageEditor = ({ patientAnalysis, searchParams } : { patientAnalysi
             y: (point.y - minY) / (maxY - minY)
         }));
     }
-    
-    useEffect(() => {
 
+    function initializeState()  {
         prediction[0].diagnostic.map((d: any, index: number) => {
             const points = denormalizePoints(d.mask_points, 0, (imageData.imageWidth / imageData.imageHeight) * 800, 0, 800)
             const flattenedPoints = points
             .map(({ x, y } : { x: any, y: any}) => [x, y])
             .concat()
             .reduce((a: any, b: any) => a.concat(b), []);
-    
+            console.log(flattenedPoints)
             dispatch(addPolygon({
                 shape: 'Polygon',
                 status: 'Completed',
@@ -48,10 +49,30 @@ export const ImageEditor = ({ patientAnalysis, searchParams } : { patientAnalysi
                 flattenedPoints,
             }))
         })
+
+        prediction[0].bone_loss.length > 0 && prediction[0].bone_loss.map((bl: any) => {
+            const points = denormalizePoints([bl.cej_bone_pair.bone_point, bl.cej_bone_pair.enamel_point],0, (imageData.imageWidth / imageData.imageHeight) * 800, 0, 800);
+
+            const flattenedPoints = points
+            .map(({ x, y } : { x: any, y: any}) => [x, y])
+            .concat()
+            .reduce((a: any, b: any) => a.concat(b), []);
+
+            dispatch(addLine({
+                shape: 'Line',
+                status: 'Completed',
+                flattenedPoints,
+                boneloss: bl.boneloss
+            }))
+        })        
+    }
+    
+    useEffect(() => {
+        initializeState()
+        
     }, [])
 
     const onSave = async () => {
-        console.log('saved')
         const diagnosis = 
         polygons.map((polygon: any) => {
             return {
@@ -78,6 +99,8 @@ export const ImageEditor = ({ patientAnalysis, searchParams } : { patientAnalysi
             },
             body: JSON.stringify({ predictions: patientAnalysisCopy.data.diagonsis.predictions, checkup_id: searchParams.checkupId  })
         })
+
+        // toast.success('Successfully saved')
     
         console.log(response);
         console.log('Diagnosis', diagnosis)
@@ -92,6 +115,8 @@ export const ImageEditor = ({ patientAnalysis, searchParams } : { patientAnalysi
             imageUrl={`http://103.217.176.51:8000/media/${searchParams.image}`}
             imageData={imageData}
             diagnostic={prediction[0].diagnostic}
+            findings={prediction[0].metadata.modelClasses.diagnostic}
         />
+
     )
 }

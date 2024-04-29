@@ -31,7 +31,10 @@ export const polygon = createSlice({
   name: "polygon",
   initialState: initialeState,
   reducers: {
+    
     addPolygon: (state, action: PayloadAction<Polygon>) => {
+      const existingPolygon = state.polygons.find(polygon => polygon.id === action.payload.id);
+      if(!existingPolygon)
       state.polygons.push({
         status: "Complete",
         id: action.payload.id,

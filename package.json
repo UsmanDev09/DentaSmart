@@ -42,7 +42,6 @@
     "react-dom": "^18",
     "react-konva": "^18.2.10",
     "react-redux": "^9.1.1",
-    "react-toastify": "^10.0.5",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "utils": "^0.2.2"

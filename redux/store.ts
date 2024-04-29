@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import polygonReducer from "./features/polygon-slice"
 import rectangleReducer from "./features/rectangle-slice";
 import patientAnalaysisReducer from "./features/patient-analysis-slice";
+import lineReducer from "./features/line-analysis-slice";
 
 export const store = configureStore({
     reducer: 
@@ -9,6 +10,7 @@ export const store = configureStore({
             "Polygon": polygonReducer,
             "Rectangle": rectangleReducer,
             "PatientAnalysis": patientAnalaysisReducer,
+            "Line": lineReducer,
         },
 });
 
