@@ -48,7 +48,7 @@ export const PatientAnalysis = ({
 
   const chats = chat.chat  
 
-  // const checkupHistory = history.data;
+  const checkupHistory = history.data;
   
   dispatch(initializePatientAnalysis(patientAnalysis));
 
@@ -122,14 +122,14 @@ export const PatientAnalysis = ({
       <div className="bg-white border pr-1">
         <div className="flex flex-col p-5">
           <h2 className="text-3xl font-bold ">History</h2>
-          {/* <div>
+          <div>
             <Date searchParams={searchParams} startDate={startDate} endDate={endDate}/>
-          </div> */}
-          {/* <div className="gap-y-8 h-full">
+          </div>
+          <div className="gap-y-8 h-full">
             {checkupHistory.checkup.map((history:any, index:number )=>{
               return <ChatCard history={history} key={index}/>
             })}
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
