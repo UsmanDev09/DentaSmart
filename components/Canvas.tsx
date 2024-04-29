@@ -435,7 +435,7 @@ const Canvas = ({
                   handleMouseOutStartPoint={handleMouseOutStartPoint}
                   isFinished={polygon.status === 'Complete'}
                 />
-                {/* <Label x= {polygon.labelCordinates.x - 3} y={polygon.labelCordinates.y - 15}>
+                <Label x= {polygon.points[0].x} y={polygon.points[0].y}>
                   <Tag
                       fill= 'transparent'
                       pointerDirection= 'down'
@@ -446,12 +446,12 @@ const Canvas = ({
                       stroke="white"
                   />
                   <Text
-                  text={polygon.label}
-                  fontSize={15}
-                  padding={5}
-                  fill='white'
+                    text={polygon.label}
+                    fontSize={15}
+                    padding={5}
+                    fill='white'
                   />
-                </Label> */}
+                </Label>
               </>
               ))}
 

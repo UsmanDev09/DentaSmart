@@ -3,7 +3,6 @@
 import { addPolygon } from "@/redux/features/polygon-slice";
 import Canvas from "./Canvas"
 import { useDispatch, useSelector } from "react-redux";
-import { nanoid } from "@reduxjs/toolkit";
 import { useEffect } from "react";
 
 
@@ -13,7 +12,7 @@ export const ImageEditor = ({ patientAnalysis, searchParams } : { patientAnalysi
     const polygons = useSelector((state: any) => state.Polygon.polygons)
 
     const prediction = patientAnalysis.data.diagonsis.predictions.filter((prediction: any) => prediction.image_name === searchParams.image );
-    console.log(patientAnalysis)
+
     const imageData = { imageWidth: prediction[0].metadata.imageWidth, imageHeight: prediction[0].metadata.imageHeight }
       
     function denormalizePoints(normalizedPoints: any, minX: number, maxX: number, minY: number, maxY: number) {

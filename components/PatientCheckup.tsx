@@ -10,6 +10,9 @@ import { useState } from "react";
 const PatientCheckup = ({ report, searchParams, medicalHistory, patient, } : { searchParams : any; report:any; medicalHistory:any; patient:any; }) => {
   const { opg, general } = report.data.diagonsis.diagnosisTreatment;
   const [diagnosisTreatment, setDiagnosisTraeatment] = useState({ opg, general })
+  const [problem, setProblem] = useState();
+
+
   const handleDeleteProblem = (opgIndex: number, diagnosisIndex: number) => {
     const updatedOpg = diagnosisTreatment.opg.map((opgObj: any, index: number) => {
         if (index === opgIndex) {
@@ -47,12 +50,74 @@ const PatientCheckup = ({ report, searchParams, medicalHistory, patient, } : { s
       body: JSON.stringify({ diagnosis_treament: diagnosisTreatment, checkup_id: searchParams.checkupId  })
     })
     
-    console.log(response);
+  }
 
+  const handleDeleteSpecificRisk = (index: number, consequenceIndex: number) => {
+    const updatedOpg = diagnosisTreatment.opg.map((opgObj: any, opgIndex: number) => {
+      if (index === opgIndex) {
+          return {
+              ...opgObj,
+              consequences: opgObj.consequences.filter((c: any, i: number) => i !== consequenceIndex)
+          };
+      }
+      return opgObj;
+    });
+
+    setDiagnosisTraeatment({ opg: updatedOpg, general: diagnosisTreatment.general });
+  }
+
+  const onAddProblem = (opgIndex: number) => {
+    const updatedOpg = diagnosisTreatment.opg.map((opgObj: any, index: number) => {
+      if (index === opgIndex) {
+          return {
+              ...opgObj,
+              differential_diagnosis: [...opgObj.differential_diagnosis, problem] 
+          };
+      }
+      return opgObj;
+    });
+
+    setDiagnosisTraeatment({ opg: updatedOpg, general: diagnosisTreatment.general });
+  }
+
+  const onAddRisk = (opgIndex: number) => {
+    const updatedOpg = diagnosisTreatment.opg.map((opgObj: any, index: number) => {
+      if (index === opgIndex) {
+          return {
+              ...opgObj,
+              consequences: [...opgObj.consequences, problem] 
+          };
+      }
+      return opgObj;
+    });
+
+    setDiagnosisTraeatment({ opg: updatedOpg, general: diagnosisTreatment.general });
+  }
+
+  const onDeleteSpecificProblem = (opgIndex: number, riskIndex: number) => {
+    const updatedOpg = diagnosisTreatment.opg.map((opgObj: any, index: number) => {
+      if (index === opgIndex) {
+          return {
+              ...opgObj,
+              differential_diagnosis: opgObj.differential_diagnosis.filter((c: any, i: number) => i !== riskIndex)
+          };
+      }
+      return opgObj;
+    });
+
+    setDiagnosisTraeatment({ opg: updatedOpg, general: diagnosisTreatment.general });
+  }
+
+  const onChangeAddProblem = (e: any) => {
+    setProblem(e.target.value);
+  }
+
+  const onChangeAddRisk = (e: any) => {
+    setProblem(e.target.value);
   }
 
 
-  console.log(diagnosisTreatment)
+
   return (
     <div className="px-8 py-6">
     <div className="flex justify-between items-center">
@@ -123,13 +188,19 @@ const PatientCheckup = ({ report, searchParams, medicalHistory, patient, } : { s
             return(
               <div key={index} className="flex gap-x-5">
                 <PatientProblemsEditable 
+                  onDeleteSpecificProblem={onDeleteSpecificProblem}
                   onDelete={handleDeleteProblem}
+                  onAddProblem={onAddProblem}
+                  onChangeAddProblem={onChangeAddProblem}
                   treatments = {o.differential_diagnosis}       
                   index={index}
                   id='opg' 
                 />
                 <RiskReports 
                   onDelete={handleDeleteRisks} 
+                  onDeleteSpecificRisk={handleDeleteSpecificRisk}
+                  onAddRisk={onAddRisk}
+                  onChangeAddRisk={onChangeAddRisk}
                   treatments = {o.consequences}
                   index={index} 
                   id='opg'
@@ -143,13 +214,19 @@ const PatientCheckup = ({ report, searchParams, medicalHistory, patient, } : { s
             return(
               <div key={index} className="flex gap-x-5">
                 <PatientProblemsEditable 
+                  onDeleteSpecificProblem={onDeleteSpecificProblem}
+                  onAddProblem={onAddProblem}
+                  onChangeAddProblem={onChangeAddProblem}
                   onDelete={handleDeleteProblem}
                   treatments = {o.differential_diagnosis}       
                   index={index} 
                   id='general'
                 />
                 <RiskReports
+                  onDeleteSpecificRisk={handleDeleteSpecificRisk}
                   onDelete={handleDeleteRisks} 
+                  onAddRisk={onAddRisk}
+                  onChangeAddRisk={onChangeAddRisk}
                   treatments = {o.consequences}
                   index={index} 
                   id='general'
