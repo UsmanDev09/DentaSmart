@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import PolygonAnnotation from "./PolygonAnnotation";
-import { Stage, Layer, Image as KonvaImage, Rect, Label, Tag, Text } from "react-konva";
+import { Stage, Layer, Image as KonvaImage, Rect, Label, Tag, Text, Line } from "react-konva";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -11,8 +11,10 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { nanoid } from "@reduxjs/toolkit";
 import { Tabs, TabsList,TabsContent, TabsTrigger } from "./ui/tabs";
 import { Card, CardDescription, CardTitle } from "./ui/card";
-import { Pencil, RectangleHorizontal, Trash2 } from "lucide-react";
+import { Minus, Pencil, RectangleHorizontal, Trash2 } from "lucide-react";
 import { initializePatientAnalysis } from "@/redux/features/patient-analysis-slice";
+import { Combobox } from "./ui/combobox";
+import { addLine } from "@/redux/features/line-analysis-slice";
 
 const scaleBy = 1.01;
 
@@ -32,11 +34,13 @@ const Canvas = ({
   diagnostic,
   imageData,
   onSave,
+  findings,
 }: {
   imageUrl: string;
   diagnostic: any;
   imageData: any;
   onSave: any;
+  findings: any
 }) => {
   const videoSource = imageUrl;
   const dispatch = useDispatch();
@@ -51,18 +55,24 @@ const Canvas = ({
   const [polygons, setPolygons] = useState<any>([]);
   const [newRectangle, setNewRectangle] = useState<any>([]);
   const [points, setPoints] = useState<any>([]);
+  const [linePoints, setLinePoints] = useState<any>([]);
+
   const [size, setSize] = useState<any>({});
   const [flattenedPoints, setFlattenedPoints] = useState<number[]>([]);
+  const [lineFlattenedPoints, setLineFlattenedPoints] = useState<number[]>([]);
+
   const [position, setPosition] = useState<any>([0, 0]);
   const [isMouseOverPoint, setMouseOverPoint] = useState(false);
   const [isPolyComplete, setPolyComplete] = useState(false);
   const [drawPolygon, setDrawPolygon] = useState(true);
+  const [drawLine, setDrawLine] = useState(false);
   const [drawRectangle, setDrawRectangle] = useState(false);
   const [polygonLabelActive, setPolygonLabelActive] = useState(false);
   const [rectangleLabelActive, setRectangleLabelActive] = useState(false);
   const [editPolygonLabel, setEditPolygonLabel] = useState(false);
   const [editRectangleLabel, setEditRectangleLabel] = useState(false);
-
+  const [startPoint, setStartPoint] = useState<any>();
+  const [endPoint, setEndPoint] = useState<any>();
   const [polygonLabel, setPolygonLabel] = useState('');
   const [rectangleLabel, setRectangleLabel] = useState('');
   const [polygonCoordinates, setPolygonCoordinates] = useState<any>({points:[], label:"", id:""})
@@ -99,6 +109,7 @@ const Canvas = ({
   const getMousePos = (stage: any) => {
     return [stage.getPointerPosition().x, stage.getPointerPosition().y];
   };
+  
 
   const handleMouseDown = (e: any) => {
     if (drawPolygon) {
@@ -112,7 +123,7 @@ const Canvas = ({
         setPolygons([...polygons, { points, id, label: polygonLabel }]);       
         setPolygonLabelActive(true);
       } else {
-        setPoints([...points, {x, y}]);
+        setPoints([...points, { x, y }]);
 
       }
     } else if (drawRectangle) {
@@ -129,7 +140,32 @@ const Canvas = ({
         }
       ]);
       
-    }
+    } else if(drawLine) {
+      if (!startPoint) {
+        const stage = e.target.getStage();
+        const { x, y } = stage.getPointerPosition();
+        setStartPoint({ x, y });
+      }
+      // If start point is set but end point is not, set the end point
+      else if (!endPoint) {
+        const stage = e.target.getStage();
+        const { x, y } = stage.getPointerPosition();
+        setEndPoint({ x, y });
+
+        
+        dispatch(addLine({
+          shape: 'Line',
+          flattenedPoints: [startPoint.x, startPoint.y, x, y],
+          status: 'Completed',
+          boneloss: false,
+          cost: 0,
+          distance: 0
+        }))
+        setStartPoint(null)
+        setEndPoint(null)
+      }
+
+     }
   };
 
   const handleMouseMove = (e: any) => {
@@ -207,11 +243,11 @@ const Canvas = ({
       .concat(isPolyComplete ? [] : [position.x, position.y])
       .reduce((a: any, b: any) => a.concat(b), []);
       setFlattenedPoints(flattened)
+
   }, [points, position, isPolyComplete]);
   
 
   useEffect(() => {
-
   }, [polygonLabelActive])
 
   const undo = () => {
@@ -325,8 +361,8 @@ const Canvas = ({
     lastDist = 0;
   }
 
-  const handlePolygonLabelChange = (e: any) => {
-    setPolygonLabel(e.target.value);
+  const handlePolygonLabelChange = (value: any) => {
+    setPolygonLabel(value);
   }
 
   const handleRectangleLabelChange = (e: any) => {
@@ -364,8 +400,8 @@ const Canvas = ({
     dispatch(removeRectangle(id))
   }
 
-  const handleEditPolygonLabel = (e: any) => {
-    setEditedPolygonLabel(e.target.value)
+  const handleEditPolygonLabel = (value: any) => {
+    setEditedPolygonLabel(value)
   }
 
   const handleEditRectangleLabel = (e: any) => {
@@ -388,12 +424,17 @@ const Canvas = ({
         <Tabs className="flex justify-end ">
           <TabsList className="flex flex-col">
             <TabsTrigger 
-              onClick={()=>{setDrawPolygon(true) , setDrawRectangle(false)}} 
+              onClick={()=>{setDrawPolygon(true) , setDrawRectangle(false), setDrawLine(false)}} 
               value="polygon">
                 <Image src='/polygon.png' alt='Polygon' width={20} height={20}/>
             </TabsTrigger>
             <TabsTrigger 
-              onClick={() =>{ setDrawPolygon(false), setDrawRectangle(true) }}
+              onClick={() =>{ setDrawPolygon(false), setDrawRectangle(false), setDrawLine(true), setPoints([]), setFlattenedPoints([]) }}
+              value="line"> 
+                <Minus/>
+            </TabsTrigger>
+            <TabsTrigger 
+              onClick={() =>{ setDrawPolygon(false), setDrawRectangle(true), setDrawLine(false) }}
               value="rectangle"> 
                 <RectangleHorizontal/>
             </TabsTrigger>
@@ -422,6 +463,27 @@ const Canvas = ({
                 height={800}
                 alt=""
               />
+              {drawLine && state.Line.lines && state.Line.lines.map((line: any, index: number) => {
+                console.log(line)
+                return (<Line
+                    key={index}
+                    points={line.flattenedPoints}
+                    stroke={line.boneloss ? 'red' : 'green'}
+                    strokeWidth={5}
+                    closed={false}
+                    fill="rgb(0,128,0,0.5)"
+                  />)
+              })}
+
+              {startPoint && endPoint && (
+                <Line
+                  points={[startPoint.x, startPoint.y, endPoint.x, endPoint.y]}
+                  stroke="red"
+                  strokeWidth={5}
+                />
+              )}
+
+
               {drawPolygon && state.Polygon.polygons && 
                 state.Polygon.polygons.map((polygon: any, index: number) => (
                 <>
@@ -547,7 +609,7 @@ const Canvas = ({
                 {polygonLabelActive && (
                   <>
                     <p>Please provide a label to your shape</p>
-                    <input type="text" onChange={handlePolygonLabelChange} className="h-10 border-2"/>
+                    <Combobox diagnosticFindings={findings} diagnosticFinding="" handlePolygonLabelChange={handlePolygonLabelChange}/>
                     <button type="button" onClick={onSavePolygonLabel} >Save</button>
                   </>
                 )}
@@ -558,7 +620,7 @@ const Canvas = ({
                           <CardTitle>
                             {editPolygonLabel && (
                               <>
-                                <input type="text" defaultValue={polygon.label} onChange={(e) => handleEditPolygonLabel(e)}/>
+                                <Combobox diagnosticFindings={findings} diagnosticFinding={polygon.label} handlePolygonLabelChange={handleEditPolygonLabel}/>
                                 <button type="button" onClick={() => saveEditedPolygonLabel(polygon.id)}>Save</button>
                               </>
                             )}
@@ -616,7 +678,7 @@ const Canvas = ({
             </Card> */}
           </TabsContent> 
         </Tabs>
-      {(drawPolygon || drawRectangle) &&
+      {(drawPolygon || drawRectangle || drawLine) &&
         <Button className="mt-4 ml-8 w-20" onClick={onSave}>
           Save
         </Button>

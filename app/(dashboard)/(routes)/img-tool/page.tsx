@@ -21,15 +21,12 @@ export default async function ImgTool({searchParams} : {searchParams: any}) {
     } catch (err: unknown) {
         throw new Error('Failed to fetch dentist checkup')
     }
-
-    
+    console.log('dasd')
 
   return (
-    <div >
       <div className="border p-5 ml-5">
           <ImageEditor patientAnalysis={patientAnalysis} searchParams={searchParams} />
       </div>
-    </div>
   
 
   )

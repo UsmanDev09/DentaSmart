@@ -10,8 +10,8 @@ export default function PDFTemplate({ dentaDashboard, dentaReport } : { dentaDas
 
     return (
       <div className="bg-white" >
-        <img src="/0.png" alt="" width="47%" className="relative left-[979px] h-[100px]"/>
-        {/* <Image src="/3.png" width={100} height={100} className=" absolute top-[100px] left-[1748px] h-[1270px]" alt=""/> */}
+        <img src="https://res.cloudinary.com/dpzlhahzg/image/upload/v1714400921/0_da9f7b.png" alt="" width="47%" className="relative left-[979px] h-[100px]"/>
+        <Image src="https://res.cloudinary.com/dpzlhahzg/image/upload/v1714401131/3_j1eddm.webp" width={100} height={100} className=" absolute top-[170px] left-[1740px] h-[1270px]" alt=""/>
         <div className="p1 w-[90%] m-auto">
           {/* <Image src="/1.png" width={100} height={100} alt="" className=" absolute top-[576%] h-[1596px]"/> */}
           <div className='flex justify-center items-center'>
@@ -28,8 +28,8 @@ export default function PDFTemplate({ dentaDashboard, dentaReport } : { dentaDas
           <div className='flex justify-center items-center mt-3 cursor-pointer'>
           </div>
           <div className="pb-10 ">
-            <Table className="w-full bg-white border-black">
-              <TableHeader>
+            <Table className="w-full bg-white">
+              <TableHeader className='border-black border-2'>
                 <TableRow>
                   {/* <TableHead>Patient Id</TableHead> */}
                   <TableHead>Name</TableHead>
@@ -37,7 +37,7 @@ export default function PDFTemplate({ dentaDashboard, dentaReport } : { dentaDas
                   <TableHead>Gender</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody className='border-black border-2'>
                   <TableRow>
                     {/* <TableCell className="bg-white">{patient.checkup_id}</TableCell> */}
                     <TableCell className="bg-white">{dentaReport.data.member.full_name}</TableCell>
@@ -51,7 +51,7 @@ export default function PDFTemplate({ dentaDashboard, dentaReport } : { dentaDas
             <h2 className='text-[#00b7ad]'>Patient&apos;s Address:</h2>
             <p>24 Commerce St 1100 Newark NJ 071020000, NEWARK NJ 07102</p>
           </div>
-          {dentaReport.data.diagonsis.diagnosisTreatment.opg.length > 0 &&
+          {dentaReport.data.diagonsis.diagnosisTreatment.opg && dentaReport.data.diagonsis.diagnosisTreatment.opg.length > 0 &&
             (
               <div className="table2 pb-10">
                 <h2 className=" my-[10px] text-[#00b7ad]">Case history</h2>
@@ -94,7 +94,7 @@ export default function PDFTemplate({ dentaDashboard, dentaReport } : { dentaDas
           <div className="">
             <h3 className="my-[20px] font-bold">1) OPG</h3>
             <Table className="w-full">
-              <TableHeader>
+              <TableHeader className='border-black border-2'>
                 <TableRow>
                   <TableHead>Tooth#</TableHead>
                   <TableHead>Existing procedures</TableHead>
@@ -102,8 +102,8 @@ export default function PDFTemplate({ dentaDashboard, dentaReport } : { dentaDas
                   <TableHead className="border-b-0">Dr. Notes</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                {dentaReport.data.diagonsis.XrayAnalysis.map((xray:any,xrayIndex:any)=>(
+              <TableBody className='border-black border-2'>
+                {dentaReport.data.diagonsis.XrayAnalysis.length > 0 && dentaReport.data.diagonsis.XrayAnalysis.map((xray:any,xrayIndex:any)=>(
                     xray.analysis.map((tooth:any,index:any)=>{
                       return(
                               <TableRow key={`${index}${xrayIndex}`}>
@@ -131,7 +131,7 @@ export default function PDFTemplate({ dentaDashboard, dentaReport } : { dentaDas
           <div className="table3">
             <h3 className=" my-[10px]">2) Bitewing</h3>
             <Table className="w-full">
-              <TableHeader>
+              <TableHeader className='border-black border-2'>
                 <TableRow>
                   <TableHead>Tooth#</TableHead>
                   <TableHead>Existing procedures</TableHead>
@@ -139,7 +139,7 @@ export default function PDFTemplate({ dentaDashboard, dentaReport } : { dentaDas
                   <TableHead className="border-b-0">Dr. Notes</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody className='border-black border-2'>
                 {dentaReport.data.diagonsis.XrayAnalysis.map((xray:any,xrayIndex:any)=>(
                     xray.analysis.map((tooth:any,index:any)=>{
                       return(
@@ -165,9 +165,9 @@ export default function PDFTemplate({ dentaDashboard, dentaReport } : { dentaDas
             ( 
               <>
             <div className="bdrbtm"></div>
-            <img src="/0.png" alt="" width="47%" className="relative left-[979px] h-[100px]"/>
+            <img src="https://res.cloudinary.com/dpzlhahzg/image/upload/v1714400921/0_da9f7b.png" alt="" width="47%" className="relative left-[979px] h-[100px]"/>
             <div className="p3 width-[90%] m-auto" >
-              <img src="/3.png" width={100} height={100} alt="" className="absolute left-[1748px] top-[-19px] h-[1540px]"/>
+              <img src="https://res.cloudinary.com/dpzlhahzg/image/upload/v1714401131/3_j1eddm.webp" width={100} height={100} alt="" className="absolute left-[1748px] top-[-19px] h-[1540px]"/>
                 <div className="table3">
                   <h3 className="my-[10px] text-[#21b9c6] font-medium text-base">Mouth Image Analysis:</h3>
                   <table className="w-full">
@@ -204,8 +204,8 @@ export default function PDFTemplate({ dentaDashboard, dentaReport } : { dentaDas
                   </table>
                 </div>
           </div>
-          <img width={100} height={100} className="w-full h-[400px] relative;" src="/down-img.png" alt=""/>
 
+          <img width={100} height={100} className="w-full h-[400px] relative;" src="https://res.cloudinary.com/dpzlhahzg/image/upload/v1714400444/down-img_t1xrda.png" alt=""/>
           </>
           )
           )}
