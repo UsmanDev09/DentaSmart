@@ -2,12 +2,17 @@
 import { Separator } from "@radix-ui/react-separator";
 import { Check, ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import { Onedoc } from "@onedoc/client";
+import { compile } from "@onedoc/react-print";
 import PatientProblemsEditable from "./patientProblemEditable";
 import RiskReports from "./risks-reports";
 import { Key } from "react";
 import { useState } from "react";
+import PDFTemplate from "./PDFTemplate";
 
-const PatientCheckup = ({ report, searchParams, medicalHistory, patient, } : { searchParams : any; report:any; medicalHistory:any; patient:any; }) => {
+const ONEDOC_API_KEY = "fdcb40ff-b920-488f-9c09-eeff9218d149"; // replace with your api key
+
+const PatientCheckup = ({ dentaDashboard, report, searchParams, medicalHistory, patient, } : { dentaDashboard: any, searchParams : any; report:any; medicalHistory:any; patient:any; }) => {
   const { opg, general } = report.data.diagonsis.diagnosisTreatment;
   const [diagnosisTreatment, setDiagnosisTraeatment] = useState({ opg, general })
   const [problem, setProblem] = useState();
@@ -42,6 +47,22 @@ const PatientCheckup = ({ report, searchParams, medicalHistory, patient, } : { s
   }
 
   const handleSubmit = async () => {
+    // const onedoc = new Onedoc(ONEDOC_API_KEY);
+
+    // let doc = {
+    //   html: await compile(<PDFTemplate dentaDashboard={dentaDashboard} dentaReport={report} />),
+    //   title: "Hello",
+    //   test: false, // if true, produce a PDF in test mode with a Onedoc's watermark
+    //   save: false, // if true, host the document and provide a download link in the console and your Onedoc's dashboard
+    //   expiresIn: 30, // the number of day you want to host your document
+    //   assets: [
+  
+    //   ],
+    // };
+  
+    // const { file, link, error, info } = await onedoc.render(doc);
+    // console.log('FILE', typeof file, file)
+
     const response  = await fetch(`http://localhost:3000/api/diagnosisTreatment`, {
       method: 'POST',
       headers: {
@@ -115,8 +136,6 @@ const PatientCheckup = ({ report, searchParams, medicalHistory, patient, } : { s
   const onChangeAddRisk = (e: any) => {
     setProblem(e.target.value);
   }
-
-
 
   return (
     <div className="px-8 py-6">

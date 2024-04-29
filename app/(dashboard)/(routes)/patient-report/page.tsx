@@ -11,7 +11,7 @@ import PatientCheckup from "@/components/PatientCheckup";
 
 async function PatientCheckupPage({ searchParams }: { searchParams: any }) {
   const token = cookies().get("token");
-  let report;
+  let dentaReport;
 
   try {
   const response = await fetch(
@@ -25,19 +25,33 @@ async function PatientCheckupPage({ searchParams }: { searchParams: any }) {
     }
   );
 
-    report = await response.json();
+  dentaReport = await response.json();
   } catch(err: unknown) {
     throw new Error('Failed to fetch dentist checkup')
   }
-
-  const patient = report.data.member;
-  const medicalHistory = report.data.medical_history;
+    
+  const response = await fetch(
+    "http://103.217.176.51:8000/v1/dentist_dashboard",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token?.value}`,
+      },
+      body: JSON.stringify({ args: { checkup_type: "" } }),
+    }
+  );
+  const dentaDashboard = await response.json();
+  
+  const patient = dentaReport.data.member;
+  const medicalHistory = dentaReport.data.medical_history;
   
   return (
     <PatientCheckup 
       patient={patient} 
       medicalHistory={medicalHistory}
-      report={report} 
+      report={dentaReport} 
+      dentaDashboard={dentaDashboard}
       searchParams={searchParams} 
     />
   );

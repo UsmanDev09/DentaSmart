@@ -12,6 +12,8 @@ export const ImageEditor = ({ patientAnalysis, searchParams } : { patientAnalysi
     const dispatch = useDispatch();
 
     const polygons = useSelector((state: any) => state.Polygon.polygons)
+    const lines = useSelector((state: any) => state.Line.lines)
+
     const [prediction, setPrediction] = useState(patientAnalysis.data.diagonsis.predictions.filter((prediction: any) => prediction.image_name === searchParams.image ));
     const [imageData, setImageData] = useState({ imageWidth: prediction[0].metadata.imageWidth, imageHeight: prediction[0].metadata.imageHeight })
     console.log('prex', prediction)
@@ -30,6 +32,24 @@ export const ImageEditor = ({ patientAnalysis, searchParams } : { patientAnalysi
             y: (point.y - minY) / (maxY - minY)
         }));
     }
+
+    function normalizeLinePoints(points: number[], minX: number, maxX: number, minY: number, maxY: number) {
+        const normalizedPoints: number[] = [];
+        
+        // Iterate over the points array in pairs
+        for (let i = 0; i < points.length; i += 2) {
+            const x = points[i];
+            const y = points[i + 1];
+            // Normalize x and y coordinates and push them to the normalizedPoints array
+            normalizedPoints.push(
+                (x - minX) / (maxX - minX),  // Normalized x coordinate
+                (y - minY) / (maxY - minY)   // Normalized y coordinate
+            );
+        }
+        
+        return normalizedPoints;
+    }
+    
 
     function initializeState()  {
         prediction[0].diagnostic.map((d: any, index: number) => {
@@ -57,19 +77,21 @@ export const ImageEditor = ({ patientAnalysis, searchParams } : { patientAnalysi
             .map(({ x, y } : { x: any, y: any}) => [x, y])
             .concat()
             .reduce((a: any, b: any) => a.concat(b), []);
-
+            console.log('bl', bl)
             dispatch(addLine({
                 shape: 'Line',
                 status: 'Completed',
                 flattenedPoints,
-                boneloss: bl.boneloss
+                boneloss: bl.boneloss,
+                cost: bl.cost || 0,
+                distance:bl.distance
             }))
         })        
     }
     
     useEffect(() => {
         initializeState()
-        
+    
     }, [])
 
     const onSave = async () => {
@@ -84,11 +106,34 @@ export const ImageEditor = ({ patientAnalysis, searchParams } : { patientAnalysi
 
         })
 
+        const bone_loss = 
+        lines.map((line: any) => {
+            const points = normalizeLinePoints(line.flattenedPoints, 0, (imageData.imageWidth / imageData.imageHeight) * 800, 0, 800 )
+            return {
+                boneloss: line.boneloss,
+                cej_bone_pair: {
+                    bone_point: {
+                        x: points[0],
+                        y: points[1]
+                    },
+                    enamel_point: {
+                        x: points[2],
+                        y: points[3]
+                    }
+                },
+                cost: line.cost,
+                distance: line.distance
+            }
+        })  
+
+        console.log(bone_loss)
+
         const patientAnalysisCopy = patientAnalysis;
         patientAnalysisCopy.data.diagonsis.predictions.forEach((prediction: any) => {
             if(prediction.image_name === searchParams.image) {
                 console.log('found')
                 prediction.diagnostic = diagnosis;
+                prediction.bone_loss = bone_loss;
             }
         })
 

@@ -14,7 +14,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["103.217.176.51"],
+    domains: ["103.217.176.51", "res.cloudinary.com"],
     // remotePatterns: [
     //   {
     //     protocol: "http",

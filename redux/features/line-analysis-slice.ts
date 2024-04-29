@@ -4,7 +4,9 @@ type Line = {
   status: string;
   shape: string;
   flattenedPoints: number[];
-  boneloss: boolean
+  boneloss: boolean;
+  cost: number;
+  distance: number;
 };
 
 type LinesState = {
@@ -24,7 +26,9 @@ export const line = createSlice({
         status: "Complete",
         shape: "Line",
         flattenedPoints: action.payload.flattenedPoints,
-        boneloss: action.payload.boneloss
+        boneloss: action.payload.boneloss,
+        cost: action.payload.cost,
+        distance: action.payload.distance
       });
     }
   },
